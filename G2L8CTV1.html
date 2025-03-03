@@ -63,7 +63,7 @@
       margin-top: 140px; /* space for fixed header */
     }
     
-    /* Vertical navigation pane - hidden by default */
+    /* Vertical navigation pane - hidden by default (toggle with button) */
     #verticalNav {
       width: 220px;
       background-color: #fff;
@@ -72,7 +72,7 @@
       box-shadow: 2px 0 5px rgba(0,0,0,0.05);
       overflow-y: auto;
       height: calc(100vh - 140px);
-      display: none;
+      display: none; /* Hidden by default */
     }
     #verticalNav h4 {
       margin: 10px 0 5px;
@@ -210,10 +210,12 @@
         <span style="color:blue;">Blue = Unanswered</span>
       </span>
     </div>
-    <!-- New Toggle Nav Button -->
+    <!-- Toggle Nav Button -->
     <button id="toggleNavBtn">Toggle Nav</button>
     <button id="analysisReportBtn">Show Analysis Report</button>
     <button id="restartExamBtn">Restart Exam</button>
+    <!-- New "End Exam" Button -->
+    <button id="endExamBtn">End Exam</button>
   </div>
   
   <div id="mainContainer">
@@ -257,11 +259,13 @@
     let questionTimesFlat = [];
     let currentQuestionIndex = 0;
 
-    // Build exam data.
+    // Full exam data with 5 categories, but the Nonverbal Shape category
+    // now has only 10 unique questions (no repeats).
     const examData = [
       {
         category: "Logical Reasoning",
         questions: [
+          // 30 questions for Logical Reasoning
           { 
             question: "Which one is not an animal: dog, cat, bird, carrot?",
             answer: "carrot",
@@ -447,6 +451,7 @@
       {
         category: "Mathematics",
         questions: [
+          // 30 questions for Mathematics
           { 
             question: "Tom has 2 apples and his friend gives him 3 more. How many apples does Tom have now?",
             answer: "5",
@@ -632,6 +637,7 @@
       {
         category: "Verbal Reasoning",
         questions: [
+          // 30 questions for Verbal Reasoning
           { 
             question: "What is a synonym for 'happy'?",
             answer: "joyful",
@@ -813,10 +819,142 @@
             options: ["kind", "selfish", "stingy", "miserly"]
           }
         ]
+      },
+      {
+        category: "Nonverbal Shape",
+        questions: [
+          // 10 unique Nonverbal shape questions with new explanations
+          {
+            question: "Which shape does NOT belong?",
+            answer: "A",
+            explanation: "The triangle (🔺) has 3 sides, while the others have 4 sides.",
+            options: ["A) 🔺", "B) 🔶", "C) 🟪", "D) 🟦"]
+          },
+          {
+            question: "A square paper is folded and a hole is cut. When unfolded, how many holes?",
+            answer: "C",
+            explanation: "Folding a square in half and cutting one hole creates 2 holes upon unfolding. Folding again doubles them, resulting in 4 holes.",
+            options: ["A) 1", "B) 2", "C) 4", "D) 8"]
+          },
+          {
+            question: "Which shape completes the pattern?",
+            answer: "B",
+            explanation: "The pattern alternates between different colored squares. The missing one is 🟥.",
+            options: ["A) 🟨", "B) 🟥", "C) 🟩", "D) ⬛"]
+          },
+          {
+            question: "If a circle turns into an oval, a square will turn into ____?",
+            answer: "B",
+            explanation: "A circle stretches into an oval in one dimension, so a square becomes a rectangle.",
+            options: ["A) Triangle", "B) Rectangle", "C) Hexagon", "D) Trapezoid"]
+          },
+          {
+            question: "Which image follows the sequence?",
+            answer: "D",
+            explanation: "Observing the sequence: black square, black outline square, blue circle... next is green square (🟩).",
+            options: ["A) ⬛", "B) 🔲", "C) 🔵", "D) 🟩"]
+          },
+          {
+            question: "Which shape is symmetrical?",
+            answer: "C",
+            explanation: "A circle is symmetrical around its center; star and triangle have fewer symmetrical lines.",
+            options: ["A) Star", "B) Triangle", "C) Circle", "D) None"]
+          },
+          {
+            question: "What happens when a triangle is rotated 180°?",
+            answer: "C",
+            explanation: "Rotating a triangle 180° flips it upside down.",
+            options: ["A) It disappears", "B) Stays the same", "C) Flips upside down", "D) Changes size"]
+          },
+          {
+            question: "Which pattern comes next?",
+            answer: "A",
+            explanation: "The pattern cycles among shapes, so the next shape is a triangle (🔺).",
+            options: ["A) 🔺", "B) 🔷", "C) 🟥", "D) 🟩"]
+          },
+          {
+            question: "Which object has a different orientation?",
+            answer: "C",
+            explanation: "↗, ↖, and ↙ are diagonal directions, while → is horizontal and thus different.",
+            options: ["A) ↗", "B) ↖", "C) →", "D) ↙"]
+          },
+          {
+            question: "How many lines of symmetry does a square have?",
+            answer: "C",
+            explanation: "A square has 4 lines of symmetry (2 diagonals + 2 medians).",
+            options: ["A) 1", "B) 2", "C) 4", "D) 6"]
+          }
+        ]
+      },
+      {
+        category: "Quantitative Maths",
+        questions: [
+          // 10 new "Quantitative Maths" questions
+          {
+            question: "What comes next in the pattern? 2, 4, 8, 16, __?",
+            answer: "C",
+            explanation: "The sequence doubles each time: 2 → 4 → 8 → 16 → 32.",
+            options: ["A) 20", "B) 24", "C) 32", "D) 18"]
+          },
+          {
+            question: "6 is to 36 as 7 is to __?",
+            answer: "B",
+            explanation: "6 × 6 = 36, so 7 × 7 = 49.",
+            options: ["A) 42", "B) 49", "C) 56", "D) 63"]
+          },
+          {
+            question: "If 5 + □ = 12, what is the missing number?",
+            answer: "B",
+            explanation: "12 − 5 = 7.",
+            options: ["A) 5", "B) 7", "C) 12", "D) 8"]
+          },
+          {
+            question: "What is half of 16?",
+            answer: "C",
+            explanation: "Half of 16 is 8.",
+            options: ["A) 4", "B) 6", "C) 8", "D) 12"]
+          },
+          {
+            question: "Which number is the largest?",
+            answer: "B",
+            explanation: "25, 37, 19, 12 → 37 is the largest.",
+            options: ["A) 25", "B) 37", "C) 19", "D) 12"]
+          },
+          {
+            question: "If 3 × 3 = 9, then 4 × 4 = __?",
+            answer: "C",
+            explanation: "4 × 4 = 16.",
+            options: ["A) 12", "B) 14", "C) 16", "D) 18"]
+          },
+          {
+            question: "Which number is missing? 10, 20, __, 40, 50",
+            answer: "B",
+            explanation: "The pattern increases by 10 each time: 10, 20, 30, 40, 50.",
+            options: ["A) 25", "B) 30", "C) 35", "D) 45"]
+          },
+          {
+            question: "What is the sum of 8 + 5?",
+            answer: "C",
+            explanation: "8 + 5 = 13.",
+            options: ["A) 10", "B) 12", "C) 13", "D) 15"]
+          },
+          {
+            question: "Which number is even?",
+            answer: "C",
+            explanation: "16 is even, while 7, 11, 21 are odd.",
+            options: ["A) 7", "B) 11", "C) 16", "D) 21"]
+          },
+          {
+            question: "If a clock shows 9:00 AM, what time is it 3 hours later?",
+            answer: "C",
+            explanation: "9:00 AM + 3 hours = 12:00 PM (noon).",
+            options: ["A) 10:00 AM", "B) 11:00 AM", "C) 12:00 PM", "D) 1:00 PM"]
+          }
+        ]
       }
     ];
 
-    // Flatten examData into questionsFlat and initialize tracking.
+    // Flatten examData into questionsFlat and initialize tracking arrays.
     function flattenQuestions() {
       questionsFlat = [];
       examData.forEach(category => {
@@ -838,7 +976,7 @@
       }));
     }
 
-    // Update the live timer in the header.
+    // Update the live timer in the header every second.
     function updateTimer() {
       const now = Date.now();
       const elapsedSeconds = Math.floor((now - examStartTime) / 1000);
@@ -860,13 +998,17 @@
         const catHeader = document.createElement('h4');
         catHeader.textContent = category.category;
         navContainer.appendChild(catHeader);
+        
         const btnContainer = document.createElement('div');
         btnContainer.className = "qButtons";
+        
         category.questions.forEach((q, index) => {
           const btn = document.createElement('button');
           btn.textContent = "Q" + (index + 1);
           let gIdx = globalIndex + index;
           const qt = questionTimesFlat[gIdx];
+          
+          // Color the button based on attempts/answered status
           if (qt) {
             if (qt.answered) {
               btn.style.backgroundColor = "green";
@@ -882,18 +1024,20 @@
             btn.style.backgroundColor = "blue";
             btn.style.color = "#fff";
           }
+          
           btn.onclick = function() {
             currentQuestionIndex = gIdx;
             renderQuestion();
           };
           btnContainer.appendChild(btn);
         });
+        
         navContainer.appendChild(btnContainer);
         globalIndex += category.questions.length;
       });
     }
 
-    // Render the current question page along with a per-question 20 sec timer.
+    // Render the current question page with a per-question 20 second timer.
     function renderQuestion() {
       // Clear any existing question timer.
       if (currentQuestionTimer) {
@@ -904,24 +1048,28 @@
       const container = document.getElementById('questionContainer');
       container.innerHTML = "";
       
-      // Create header div holding the navigation buttons (Back/Next aligned left).
+      // Create header div holding the navigation buttons
       const headerNavDiv = document.createElement('div');
       headerNavDiv.id = "headerNavDiv";
       headerNavDiv.style.display = "flex";
-      headerNavDiv.style.justifyContent = "flex-start"; // Align buttons to left
+      headerNavDiv.style.justifyContent = "flex-start";
       headerNavDiv.style.alignItems = "center";
       headerNavDiv.style.marginBottom = "15px";
       
+      // Navigation buttons
       const navDiv = document.createElement('div');
       navDiv.className = "navButtons";
+      
       const backBtn = document.createElement('button');
       backBtn.textContent = "Back";
       backBtn.onclick = prevQuestion;
       backBtn.disabled = (currentQuestionIndex === 0);
+      
       const nextBtn = document.createElement('button');
       nextBtn.textContent = "Next";
       nextBtn.onclick = nextQuestion;
       nextBtn.disabled = (currentQuestionIndex === questionsFlat.length - 1);
+      
       navDiv.appendChild(backBtn);
       navDiv.appendChild(nextBtn);
       headerNavDiv.appendChild(navDiv);
@@ -937,14 +1085,13 @@
       qText.textContent = questionsFlat[currentQuestionIndex].question;
       container.appendChild(qText);
       
-      // Add per-question timer display.
+      // Per-question 20 second countdown timer
       const timerDiv = document.createElement('div');
       timerDiv.id = "questionTimer";
       timerDiv.style.fontSize = "14px";
       timerDiv.style.marginBottom = "10px";
       container.appendChild(timerDiv);
       
-      // Start the 20-second countdown.
       let countdown = 20;
       timerDiv.textContent = "Time Remaining: " + countdown + " sec";
       currentQuestionTimer = setInterval(() => {
@@ -953,26 +1100,29 @@
         if (countdown <= 0) {
           clearInterval(currentQuestionTimer);
           currentQuestionTimer = null;
-          // If the question is not already answered, mark it as incorrect due to timeout.
+          
+          // If not answered, mark it as incorrect (timeout).
           const qTrack = questionTimesFlat[currentQuestionIndex];
           if (!qTrack.answered) {
             if (qTrack.attempts === 0) {
               totalAnswered++;
             }
-            qTrack.attempts = 3;  // Mark as final attempt
+            qTrack.attempts = 3;  // final attempt
             qTrack.timeTaken = 20;
+            
             const radios = document.getElementsByName("q" + currentQuestionIndex);
             radios.forEach(radio => radio.disabled = true);
             const feedback = document.getElementById("feedback_q" + currentQuestionIndex);
             feedback.textContent = "Time's up! (Time: 20 sec, Attempts: " + qTrack.attempts + ") All attempts used. Correct answer: " + questionsFlat[currentQuestionIndex].answer + ". Explanation: " + questionsFlat[currentQuestionIndex].explanation;
             feedback.style.color = "red";
+            
             updateScoreDisplay();
             updateVerticalNav();
           }
         }
       }, 1000);
       
-      // Display question options (radio buttons).
+      // Display question options (radio buttons)
       const optionsDiv = document.createElement('div');
       optionsDiv.className = "options";
       questionsFlat[currentQuestionIndex].options.forEach((opt, index) => {
@@ -982,28 +1132,34 @@
         radioInput.name = "q" + currentQuestionIndex;
         radioInput.value = opt;
         radioInput.id = radioId;
-        if (questionTimesFlat[currentQuestionIndex].answered || questionTimesFlat[currentQuestionIndex].attempts >= 3) {
+        
+        // If already answered or used all attempts, disable the radio
+        const qTrack = questionTimesFlat[currentQuestionIndex];
+        if (qTrack.answered || qTrack.attempts >= 3) {
           radioInput.disabled = true;
         }
+        
         radioInput.addEventListener("change", function() {
           checkAnswer(currentQuestionIndex);
           updateVerticalNav();
         });
+        
         const radioLabel = document.createElement('label');
         radioLabel.htmlFor = radioId;
         radioLabel.textContent = opt;
+        
         optionsDiv.appendChild(radioInput);
         optionsDiv.appendChild(radioLabel);
       });
       container.appendChild(optionsDiv);
       
-      // Feedback message.
+      // Feedback message area
       const feedbackSpan = document.createElement('span');
       feedbackSpan.id = "feedback_q" + currentQuestionIndex;
       feedbackSpan.className = "feedback";
       container.appendChild(feedbackSpan);
       
-      // If revisiting a question, display current attempt information.
+      // If revisiting a question, show the current status
       const qTrack = questionTimesFlat[currentQuestionIndex];
       if (qTrack.attempts > 0) {
         if (qTrack.answered) {
@@ -1019,7 +1175,7 @@
       }
     }
 
-    // Check answer for the current question.
+    // Check the selected answer for the current question.
     function checkAnswer(qIndex) {
       const radios = document.getElementsByName("q" + qIndex);
       let selectedValue = "";
@@ -1035,20 +1191,31 @@
       if (!qTrack.start) {
         qTrack.start = Date.now();
       }
-      // Increase attempt count.
       qTrack.attempts++;
-      const attempts = qTrack.attempts;
       const now = Date.now();
       qTrack.timeTaken = Math.floor((now - qTrack.start) / 1000);
       
-      if (selectedValue.toLowerCase() === qObj.answer.toLowerCase()) {
+      // The "answer" property might be a single letter or a full string
+      const correctAnswer = (typeof qObj.answer === "string") ? qObj.answer.trim().toLowerCase() : "";
+      const userSelected = selectedValue.trim().toLowerCase();
+      
+      let isCorrect = false;
+      // If the correctAnswer is a single letter (like "C"), compare with the first letter of userSelectedValue (e.g. "C) 32")
+      if (correctAnswer.length === 1) {
+        isCorrect = userSelected.charAt(0) === correctAnswer;
+      } else {
+        // Otherwise, compare entire string ignoring case
+        isCorrect = (userSelected === correctAnswer);
+      }
+      
+      if (isCorrect) {
         if (!qTrack.answered) {
           totalAnswered++;
           totalCorrect++;
           qTrack.answered = true;
           updateScoreDisplay();
         }
-        feedback.textContent = "Correct! (Time: " + qTrack.timeTaken + " sec, Attempts: " + attempts + ") Explanation: " + qObj.explanation;
+        feedback.textContent = "Correct! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ") Explanation: " + qObj.explanation;
         feedback.style.color = "green";
         radios.forEach(radio => radio.disabled = true);
         if (currentQuestionTimer) {
@@ -1056,25 +1223,27 @@
           currentQuestionTimer = null;
         }
       } else {
-        if (!qTrack.answered && attempts === 1) {
+        // If first attempt is wrong, count as answered
+        if (!qTrack.answered && qTrack.attempts === 1) {
           totalAnswered++;
           updateScoreDisplay();
         }
-        if (attempts >= 3) {
+        if (qTrack.attempts >= 3 && !qTrack.answered) {
           radios.forEach(radio => radio.disabled = true);
-          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + attempts + ") All attempts used. Correct answer: " + qObj.answer + ". Explanation: " + qObj.explanation;
+          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ") All attempts used. Correct answer: " + qObj.answer + ". Explanation: " + qObj.explanation;
           feedback.style.color = "red";
           if (currentQuestionTimer) {
             clearInterval(currentQuestionTimer);
             currentQuestionTimer = null;
           }
         } else {
-          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + attempts + ")";
+          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ")";
+          feedback.style.color = "red";
         }
       }
     }
 
-    // Navigation functions.
+    // Navigation: Previous / Next question
     function prevQuestion() {
       if (currentQuestionIndex > 0) {
         currentQuestionIndex--;
@@ -1088,23 +1257,24 @@
       }
     }
     
-    // Jump to a category based on its name.
+    // Jump to a category by name.
     function jumpToCategory(category) {
-      if (category === "Logical Reasoning") {
-        currentQuestionIndex = 0;
-      } else if (category === "Mathematics") {
-        currentQuestionIndex = examData[0].questions.length; // after Logical Reasoning
-      } else if (category === "Verbal Reasoning") {
-        currentQuestionIndex = examData[0].questions.length + examData[1].questions.length;
+      const catIndex = examData.findIndex(cat => cat.category === category);
+      if (catIndex >= 0) {
+        let offset = 0;
+        for (let i = 0; i < catIndex; i++) {
+          offset += examData[i].questions.length;
+        }
+        currentQuestionIndex = offset;
+        renderQuestion();
       }
-      renderQuestion();
     }
     
-    // Open analysis report in a new window.
-    function showAnalysisReport() {
+    // Show analysis report in a new window
+    // "mode" param will decide which button to show at the bottom: "Back to Exam" or "Restart Exam"
+    function showAnalysisReport(mode = "normal") {
       let correctCount = 0, incorrectCount = 0, unansweredCount = 0, totalTime = 0;
       let totalAttempts = 0;
-      
       for (let i = 0; i < questionTimesFlat.length; i++) {
         const q = questionTimesFlat[i];
         if (q.attempts === 0) {
@@ -1128,13 +1298,23 @@
       let percentIncorrect = totalQuestions > 0 ? ((incorrectCount / totalQuestions) * 100).toFixed(2) : 0;
       let percentUnanswered = totalQuestions > 0 ? ((unansweredCount / totalQuestions) * 100).toFixed(2) : 0;
       
-      let overallScoreHTML = `<p style="text-align:center; font-weight:bold;">
-        Total Questions: ${totalQuestions} &nbsp;&nbsp; Answered: ${answeredQuestions} &nbsp;&nbsp; Correct: <span style="color:green;">${correctCount}</span> &nbsp;&nbsp; Incorrect: <span style="color:red;">${incorrectCount}</span> &nbsp;&nbsp; Unanswered: <span style="color:blue;">${unansweredCount}</span>
-      </p>
-      <p style="text-align:center; font-weight:bold;">Total Time Taken: ${totalTime} sec</p>
-      <p style="text-align:center;">Average Time per Answered Question: ${avgTime} sec</p>
-      <p style="text-align:center;">Average Attempts per Answered Question: ${avgAttempts}</p>
-      <p style="text-align:center;">Correct Percentage: ${percentCorrect}% &nbsp;&nbsp; Incorrect Percentage: ${percentIncorrect}% &nbsp;&nbsp; Unanswered Percentage: ${percentUnanswered}%</p>`;
+      let overallScoreHTML = `
+        <p style="text-align:center; font-weight:bold;">
+          Total Questions: ${totalQuestions} &nbsp;&nbsp; 
+          Answered: ${answeredQuestions} &nbsp;&nbsp; 
+          Correct: <span style="color:green;">${correctCount}</span> &nbsp;&nbsp; 
+          Incorrect: <span style="color:red;">${incorrectCount}</span> &nbsp;&nbsp; 
+          Unanswered: <span style="color:blue;">${unansweredCount}</span>
+        </p>
+        <p style="text-align:center; font-weight:bold;">Total Time Taken: ${totalTime} sec</p>
+        <p style="text-align:center;">Average Time per Answered Question: ${avgTime} sec</p>
+        <p style="text-align:center;">Average Attempts per Answered Question: ${avgAttempts}</p>
+        <p style="text-align:center;">
+          Correct Percentage: ${percentCorrect}% &nbsp;&nbsp; 
+          Incorrect Percentage: ${percentIncorrect}% &nbsp;&nbsp; 
+          Unanswered Percentage: ${percentUnanswered}%
+        </p>
+      `;
       
       let reportHTML = `
         <html>
@@ -1146,7 +1326,18 @@
               .questionReport { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
               .correct { color: green; }
               .wrong { color: red; }
-              button { background-color: #007BFF; color: #fff; border: none; border-radius: 4px; padding: 8px 16px; margin-top: 20px; display: block; margin-left: auto; margin-right: auto; cursor: pointer; }
+              button { 
+                background-color: #007BFF; 
+                color: #fff; 
+                border: none; 
+                border-radius: 4px; 
+                padding: 8px 16px; 
+                margin-top: 20px; 
+                display: block; 
+                margin-left: auto; 
+                margin-right: auto; 
+                cursor: pointer; 
+              }
               button:hover { background-color: #0056b3; }
             </style>
           </head>
@@ -1154,32 +1345,49 @@
             <h1>Analysis Report for ${userName}</h1>
             ${overallScoreHTML}
       `;
-      questionsFlat.forEach((qObj, idx) => {
+      // Only include answered questions
+      for (let idx = 0; idx < questionsFlat.length; idx++) {
         const qt = questionTimesFlat[idx];
         if (qt && qt.attempts > 0) {
+          const qObj = questionsFlat[idx];
           let status = qt.answered ? "Correct" : "Incorrect";
           let colorClass = qt.answered ? "correct" : "wrong";
           reportHTML += `
             <div class="questionReport">
               <p><strong>Question ${idx + 1}:</strong> ${qObj.question}</p>
               <p class="${colorClass}"><strong>Status:</strong> ${status}</p>
-              <p><strong>Time Taken:</strong> ${qt.timeTaken ? qt.timeTaken + " sec" : "N/A"}</p>
+              <p><strong>Time Taken:</strong> ${qt.timeTaken} sec</p>
               <p><strong>Attempts:</strong> ${qt.attempts}</p>
               <p><strong>Explanation:</strong> ${qObj.explanation}</p>
             </div>
           `;
         }
-      });
-      reportHTML += `<button onclick="window.close()">Back to Exam</button>`;
+      }
+      
+      // Decide which button to show at the bottom:
+      if (mode === "endExam") {
+        // Show "Restart Exam" button
+        reportHTML += `<button onclick="window.opener.restartExam(); window.close();">Restart Exam</button>`;
+      } else {
+        // Show "Back to Exam" button
+        reportHTML += `<button onclick="window.close()">Back to Exam</button>`;
+      }
       reportHTML += `</body></html>`;
+      
       const reportWindow = window.open("", "_blank");
       reportWindow.document.open();
       reportWindow.document.write(reportHTML);
       reportWindow.document.close();
     }
-    
-    document.getElementById('analysisReportBtn').addEventListener('click', showAnalysisReport);
-    
+
+    document.getElementById('analysisReportBtn').addEventListener('click', () => showAnalysisReport("normal"));
+
+    // End Exam: directly show analysis report with "Restart Exam" button
+    function endExam() {
+      showAnalysisReport("endExam");
+    }
+    document.getElementById('endExamBtn').addEventListener('click', endExam);
+
     // Restart exam: reset all variables and reload exam.
     function restartExam() {
       if (confirm("Are you sure you want to restart the exam?")) {
@@ -1193,10 +1401,9 @@
         updateVerticalNav();
       }
     }
-    
     document.getElementById('restartExamBtn').addEventListener('click', restartExam);
     
-    // Initialize exam.
+    // Initialize exam
     flattenQuestions();
     renderQuestion();
     updateVerticalNav();
