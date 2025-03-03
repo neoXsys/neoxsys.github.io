@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cognitive Test Online Exam</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+    }
+    /* Fixed header with smaller fonts */
+    #fixedHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border-bottom: 1px solid #ccc;
+      padding: 5px 10px;
+      z-index: 1000;
+      text-align: center;
+    }
+    #fixedHeader h1 {
+      font-size: 18px;
+      margin: 3px 0;
+    }
+    #fixedHeader h2 {
+      font-size: 14px;
+      margin: 2px 0;
+    }
+    #fixedHeader #timer,
+    #fixedHeader #score,
+    #fixedHeader button {
+      font-size: 12px;
+      margin: 2px 5px;
+    }
+    /* Main container with vertical nav and content area */
+    #mainContainer {
+      display: flex;
+      margin-top: 140px; /* space for fixed header */
+    }
+    /* Vertical navigation pane */
+    #verticalNav {
+      width: 200px;
+      background-color: #fff;
+      border-right: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+      overflow-y: auto;
+      height: calc(100vh - 140px);
+    }
+    #verticalNav h4 {
+      margin: 10px 0 5px;
+      font-size: 14px;
+      text-align: center;
+    }
+    #verticalNav .qButtons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #verticalNav .qButtons button {
+      width: 40px;
+      height: 30px;
+      margin: 2px;
+      font-size: 12px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+    }
+    /* Content area for question */
+    #contentArea {
+      flex: 1;
+      padding: 20px;
+    }
+    /* Center question container vertically */
+    #questionWrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+    }
+    /* Question container styling with embedded header */
+    #questionContainer {
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    /* Header div inside question container holding legend and nav buttons */
+    #headerNavDiv {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    /* Legend styling */
+    #headerNavDiv .legend {
+      font-size: 12px;
+    }
+    #headerNavDiv .legend span {
+      display: inline-block;
+      padding: 2px 6px;
+      margin-right: 5px;
+      border-radius: 4px;
+      color: white;
+    }
+    #headerNavDiv .legend .correct { background-color: green; }
+    #headerNavDiv .legend .wrong { background-color: red; }
+    #headerNavDiv .legend .unanswered { background-color: blue; }
+    /* Navigation buttons beside legend */
+    #headerNavDiv .navButtons button {
+      padding: 6px 12px;
+      margin-left: 5px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    /* MCQ Options styling */
+    .options {
+      margin: 10px 0;
+    }
+    .options label {
+      margin-right: 15px;
+      cursor: pointer;
+    }
+    /* Feedback message styling */
+    .feedback {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="fixedHeader">
+    <h1 id="examTitle">Cognitive Test Online Exam</h1>
+    <h2>2nd Grade Level 8</h2>
+    <div id="timer">Timer: 0 sec</div>
+    <div id="score">Score: 0/0</div>
+    <button id="analysisReportBtn">Show Analysis Report</button>
+    <button id="restartExamBtn">Restart Exam</button>
+  </div>
+  
+  <div id="mainContainer">
+    <!-- Vertical Navigation Pane -->
+    <div id="verticalNav"></div>
+    <!-- Content Area -->
+    <div id="contentArea">
+      <div id="questionWrapper">
+        <div id="questionContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Prompt the user for their name.
+    let userName = prompt("Please enter your name:");
+    if (!userName) userName = "User";
+    document.title = "Cognitive Test Online Exam for " + userName + " - 2nd Grade Level 8";
+    document.getElementById("examTitle").textContent = "Cognitive Test Online Exam for " + userName;
+    
+    // Global exam start time and score tracking.
+    let examStartTime = Date.now();
+    let totalCorrect = 0;
+    let totalAnswered = 0;
+    let currentQuestionTimer = null;  // Holds the per-question timer interval
+
+    // Flattened list of questions and tracking data.
+    let questionsFlat = [];
+    let questionTimesFlat = [];
+    let currentQuestionIndex = 0;
+
+    // Build exam data.
+    const examData = [
+      {
+        category: "Logical Reasoning",
+        questions: [
+          { 
+            question: "Which one is not an animal: dog, cat, bird, carrot?",
+            answer: "carrot",
+            explanation: "Carrot is a vegetable, while dog, cat, and bird are animals.",
+            options: ["dog", "cat", "bird", "carrot"]
+          },
+          { 
+            question: "Which object does not belong: pencil, pen, eraser, apple?",
+            answer: "apple",
+            explanation: "Apple is a fruit, while the others are writing tools.",
+            options: ["pencil", "pen", "eraser", "apple"]
+          },
+          { 
+            question: "Which one is a tool: hammer, table, chair, window?",
+            answer: "hammer",
+            explanation: "Hammer is used for building; the others are furniture or structures.",
+            options: ["hammer", "table", "chair", "window"]
+          },
+          { 
+            question: "Which one is not a liquid: water, milk, juice, rock?",
+            answer: "rock",
+            explanation: "Rock is a solid; the others are liquids.",
+            options: ["water", "milk", "juice", "rock"]
+          },
+          { 
+            question: "Which item is used for cutting: scissors, fork, spoon, plate?",
+            answer: "scissors",
+            explanation: "Scissors have sharp blades for cutting.",
+            options: ["scissors", "fork", "spoon", "plate"]
+          },
+          { 
+            question: "Which one does not belong: apple, banana, carrot, grape?",
+            answer: "carrot",
+            explanation: "Carrot is a vegetable; the others are fruits.",
+            options: ["apple", "banana", "carrot", "grape"]
+          },
+          { 
+            question: "Which one is the smallest: mouse, elephant, lion, tiger?",
+            answer: "mouse",
+            explanation: "A mouse is much smaller than an elephant, lion, or tiger.",
+            options: ["mouse", "elephant", "lion", "tiger"]
+          },
+          { 
+            question: "Which one is not a fruit: tomato, banana, apple, grape?",
+            answer: "tomato",
+            explanation: "Tomato is commonly considered a vegetable.",
+            options: ["tomato", "banana", "apple", "grape"]
+          },
+          { 
+            question: "Which one is used for writing: pencil, eraser, ruler, book?",
+            answer: "pencil",
+            explanation: "A pencil is used to write.",
+            options: ["pencil", "eraser", "ruler", "book"]
+          },
+          { 
+            question: "Which one is not a mode of transportation: car, bicycle, airplane, tree?",
+            answer: "tree",
+            explanation: "Tree is not used for transportation.",
+            options: ["car", "bicycle", "airplane", "tree"]
+          },
+          { 
+            question: "Which one is not found in a kitchen: spoon, fork, chair, plate?",
+            answer: "chair",
+            explanation: "A chair is not typically a kitchen utensil.",
+            options: ["spoon", "fork", "chair", "plate"]
+          },
+          { 
+            question: "Which one is not a color: red, blue, green, circle?",
+            answer: "circle",
+            explanation: "Circle is a shape, not a color.",
+            options: ["red", "blue", "green", "circle"]
+          },
+          { 
+            question: "Which one is the odd one out: fish, bird, whale, apple?",
+            answer: "apple",
+            explanation: "Apple is a fruit; the others are animals.",
+            options: ["fish", "bird", "whale", "apple"]
+          },
+          { 
+            question: "Which one is used for hearing: ear, eye, nose, mouth?",
+            answer: "ear",
+            explanation: "The ear is used for hearing.",
+            options: ["ear", "eye", "nose", "mouth"]
+          },
+          { 
+            question: "Which one is not a shape: circle, square, triangle, apple?",
+            answer: "apple",
+            explanation: "Apple is not a geometric shape.",
+            options: ["circle", "square", "triangle", "apple"]
+          },
+          { 
+            question: "Which one is not a drink: water, juice, milk, bread?",
+            answer: "bread",
+            explanation: "Bread is a food item, not a beverage.",
+            options: ["water", "juice", "milk", "bread"]
+          },
+          { 
+            question: "Which one is used to measure time: clock, ruler, scale, thermometer?",
+            answer: "clock",
+            explanation: "A clock measures time.",
+            options: ["clock", "ruler", "scale", "thermometer"]
+          },
+          { 
+            question: "Which one is not an insect: butterfly, ant, spider, cow?",
+            answer: "cow",
+            explanation: "Cow is a mammal, not an insect.",
+            options: ["butterfly", "ant", "spider", "cow"]
+          },
+          { 
+            question: "Which one is not a season: summer, winter, autumn, morning?",
+            answer: "morning",
+            explanation: "Morning is a time of day, not a season.",
+            options: ["summer", "winter", "autumn", "morning"]
+          },
+          { 
+            question: "Which one is not a natural resource: tree, water, plastic, sunlight?",
+            answer: "plastic",
+            explanation: "Plastic is man-made, unlike tree, water, or sunlight.",
+            options: ["tree", "water", "plastic", "sunlight"]
+          },
+          { 
+            question: "Which one is the odd one out: book, magazine, newspaper, pencil?",
+            answer: "pencil",
+            explanation: "Pencil is a writing tool; the others are reading materials.",
+            options: ["book", "magazine", "newspaper", "pencil"]
+          },
+          { 
+            question: "Which one is used for cutting paper: scissors, fork, spoon, pen?",
+            answer: "scissors",
+            explanation: "Scissors are used to cut paper.",
+            options: ["scissors", "fork", "spoon", "pen"]
+          },
+          { 
+            question: "Which one does not belong: apple, banana, carrot, grape?",
+            answer: "carrot",
+            explanation: "Carrot is a vegetable; the others are fruits.",
+            options: ["apple", "banana", "carrot", "grape"]
+          },
+          { 
+            question: "Which one is not a common pet: dog, cat, parrot, lion?",
+            answer: "lion",
+            explanation: "Lion is not typically kept as a pet.",
+            options: ["dog", "cat", "parrot", "lion"]
+          },
+          { 
+            question: "Which one is not used for cleaning: broom, mop, vacuum, bed?",
+            answer: "bed",
+            explanation: "Bed is not a cleaning tool.",
+            options: ["broom", "mop", "vacuum", "bed"]
+          },
+          { 
+            question: "Which one is not a weather condition: sunny, rainy, cloudy, loud?",
+            answer: "loud",
+            explanation: "Loud describes sound, not weather.",
+            options: ["sunny", "rainy", "cloudy", "loud"]
+          },
+          { 
+            question: "Which one is not a number: one, two, three, apple?",
+            answer: "apple",
+            explanation: "Apple is not a number.",
+            options: ["one", "two", "three", "apple"]
+          },
+          { 
+            question: "Which one is not a body part: hand, foot, head, table?",
+            answer: "table",
+            explanation: "Table is an object, not a body part.",
+            options: ["hand", "foot", "head", "table"]
+          },
+          { 
+            question: "Which one is not a tool: hammer, screwdriver, wrench, flower?",
+            answer: "flower",
+            explanation: "Flower is a plant, not a tool.",
+            options: ["hammer", "screwdriver", "wrench", "flower"]
+          },
+          { 
+            question: "Which one does not belong: circle, square, triangle, apple?",
+            answer: "apple",
+            explanation: "Apple is a fruit; the others are shapes.",
+            options: ["circle", "square", "triangle", "apple"]
+          }
+        ]
+      },
+      {
+        category: "Mathematics",
+        questions: [
+          { 
+            question: "Tom has 2 apples and his friend gives him 3 more. How many apples does Tom have now?",
+            answer: "5",
+            explanation: "2 apples + 3 apples = 5 apples.",
+            options: ["4", "5", "6", "7"]
+          },
+          { 
+            question: "There are 8 birds on a tree. If 3 fly away, how many birds remain?",
+            answer: "5",
+            explanation: "8 - 3 = 5 birds.",
+            options: ["4", "5", "6", "7"]
+          },
+          { 
+            question: "Sara has 4 candies. She buys 3 more. How many candies does she have now?",
+            answer: "7",
+            explanation: "4 + 3 = 7 candies.",
+            options: ["6", "7", "8", "9"]
+          },
+          { 
+            question: "A basket contains 10 oranges. If you remove 4, how many oranges are left?",
+            answer: "6",
+            explanation: "10 - 4 = 6 oranges.",
+            options: ["5", "6", "7", "8"]
+          },
+          { 
+            question: "There are 6 pencils. If you add 2 more, how many pencils do you have?",
+            answer: "8",
+            explanation: "6 + 2 = 8 pencils.",
+            options: ["7", "8", "9", "10"]
+          },
+          { 
+            question: "John has 5 toy cars and his brother gives him 2 more. How many toy cars are there now?",
+            answer: "7",
+            explanation: "5 + 2 = 7 toy cars.",
+            options: ["6", "7", "8", "9"]
+          },
+          { 
+            question: "A farmer has 9 chickens and 1 flies away. How many chickens remain?",
+            answer: "8",
+            explanation: "9 - 1 = 8 chickens.",
+            options: ["7", "8", "9", "10"]
+          },
+          { 
+            question: "If you share 12 cookies equally among 4 friends, how many cookies does each friend get?",
+            answer: "3",
+            explanation: "12 ÷ 4 = 3 cookies per friend.",
+            options: ["2", "3", "4", "5"]
+          },
+          { 
+            question: "Mia has 7 balloons and loses 2. How many balloons remain?",
+            answer: "5",
+            explanation: "7 - 2 = 5 balloons.",
+            options: ["4", "5", "6", "7"]
+          },
+          { 
+            question: "A class has 10 students. If 3 are absent, how many students are present?",
+            answer: "7",
+            explanation: "10 - 3 = 7 students.",
+            options: ["6", "7", "8", "9"]
+          },
+          { 
+            question: "Liam has 3 marbles, and his friend gives him the same amount. How many marbles does he have?",
+            answer: "6",
+            explanation: "3 doubled is 6 marbles.",
+            options: ["5", "6", "7", "8"]
+          },
+          { 
+            question: "A baker bakes 8 cupcakes and sells 5. How many cupcakes are left?",
+            answer: "3",
+            explanation: "8 - 5 = 3 cupcakes remaining.",
+            options: ["2", "3", "4", "5"]
+          },
+          { 
+            question: "If Emma buys 2 toys that each cost 4 dollars, how much does she spend?",
+            answer: "8",
+            explanation: "2 x 4 = 8 dollars.",
+            options: ["6", "7", "8", "9"]
+          },
+          { 
+            question: "If you have 10 candies and eat 4, how many remain?",
+            answer: "6",
+            explanation: "10 - 4 = 6 candies.",
+            options: ["5", "6", "7", "8"]
+          },
+          { 
+            question: "There are 5 trees in a park. If 2 more trees are planted, how many trees are there now?",
+            answer: "7",
+            explanation: "5 + 2 = 7 trees.",
+            options: ["6", "7", "8", "9"]
+          },
+          { 
+            question: "When you combine two groups of 4 apples, how many apples are there altogether?",
+            answer: "8",
+            explanation: "4 + 4 = 8 apples.",
+            options: ["7", "8", "9", "10"]
+          },
+          { 
+            question: "A train leaves with 7 passengers and picks up 3 more. How many passengers are on the train?",
+            answer: "10",
+            explanation: "7 + 3 = 10 passengers.",
+            options: ["9", "10", "11", "12"]
+          },
+          { 
+            question: "A jar had 9 marbles, and 3 were removed. How many remain?",
+            answer: "6",
+            explanation: "9 - 3 = 6 marbles.",
+            options: ["5", "6", "7", "8"]
+          },
+          { 
+            question: "Lily has 6 stickers and buys 4 more. How many stickers does she have in total?",
+            answer: "10",
+            explanation: "6 + 4 = 10 stickers.",
+            options: ["9", "10", "11", "12"]
+          },
+          { 
+            question: "If 12 apples are divided equally among 3 children, how many apples does each child get?",
+            answer: "4",
+            explanation: "12 ÷ 3 = 4 apples per child.",
+            options: ["3", "4", "5", "6"]
+          },
+          { 
+            question: "There are 2 bags with 5 oranges in each. How many oranges are there in total?",
+            answer: "10",
+            explanation: "2 x 5 = 10 oranges.",
+            options: ["8", "9", "10", "11"]
+          },
+          { 
+            question: "James has 3 cookies and his friend gives him 2 more. How many cookies does he have?",
+            answer: "5",
+            explanation: "3 + 2 = 5 cookies.",
+            options: ["4", "5", "6", "7"]
+          },
+          { 
+            question: "If you have 7 crayons and lose 2, how many remain?",
+            answer: "5",
+            explanation: "7 - 2 = 5 crayons.",
+            options: ["4", "5", "6", "7"]
+          },
+          { 
+            question: "Sarah collects 3 red beads and 4 blue beads. How many beads does she have?",
+            answer: "7",
+            explanation: "3 + 4 = 7 beads.",
+            options: ["6", "7", "8", "9"]
+          },
+          { 
+            question: "There are 8 kids playing and 2 join them. How many kids are playing now?",
+            answer: "10",
+            explanation: "8 + 2 = 10 kids.",
+            options: ["9", "10", "11", "12"]
+          },
+          { 
+            question: "A farmer has 9 apples and gives 3 to a friend. How many are left?",
+            answer: "6",
+            explanation: "9 - 3 = 6 apples.",
+            options: ["5", "6", "7", "8"]
+          },
+          { 
+            question: "If you have 4 flowers and someone gives you the same number, how many do you have?",
+            answer: "8",
+            explanation: "4 doubled is 8 flowers.",
+            options: ["7", "8", "9", "10"]
+          },
+          { 
+            question: "If 6 birds fly into a tree and 2 fly away, how many birds are in the tree?",
+            answer: "4",
+            explanation: "6 - 2 = 4 birds.",
+            options: ["3", "4", "5", "6"]
+          },
+          { 
+            question: "A jar contains 15 candies and you eat 5. How many candies remain?",
+            answer: "10",
+            explanation: "15 - 5 = 10 candies.",
+            options: ["9", "10", "11", "12"]
+          },
+          { 
+            question: "If you have 5 oranges and your friend gives you 5 more, how many oranges do you have?",
+            answer: "10",
+            explanation: "5 + 5 = 10 oranges.",
+            options: ["9", "10", "11", "12"]
+          }
+        ]
+      },
+      {
+        category: "Verbal Reasoning",
+        questions: [
+          { 
+            question: "What is a synonym for 'happy'?",
+            answer: "joyful",
+            explanation: "'Joyful' means happy.",
+            options: ["joyful", "sad", "angry", "tired"]
+          },
+          { 
+            question: "What is the antonym of 'hot'?",
+            answer: "cold",
+            explanation: "'Cold' is the opposite of 'hot'.",
+            options: ["cold", "warm", "boiling", "tepid"]
+          },
+          { 
+            question: "Which word means the same as 'big'?",
+            answer: "large",
+            explanation: "'Large' means big.",
+            options: ["large", "tiny", "small", "narrow"]
+          },
+          { 
+            question: "What is a synonym for 'smart'?",
+            answer: "intelligent",
+            explanation: "'Intelligent' means smart.",
+            options: ["intelligent", "dull", "lazy", "slow"]
+          },
+          { 
+            question: "What is the antonym of 'easy'?",
+            answer: "difficult",
+            explanation: "'Difficult' is the opposite of 'easy'.",
+            options: ["difficult", "simple", "clear", "smooth"]
+          },
+          { 
+            question: "Which word is similar in meaning to 'brave'?",
+            answer: "courageous",
+            explanation: "'Courageous' means brave.",
+            options: ["courageous", "scared", "nervous", "timid"]
+          },
+          { 
+            question: "What does 'tiny' mean?",
+            answer: "very small",
+            explanation: "'Tiny' means very small.",
+            options: ["very small", "enormous", "huge", "massive"]
+          },
+          { 
+            question: "What is a synonym for 'quick'?",
+            answer: "fast",
+            explanation: "'Fast' means quick.",
+            options: ["fast", "slow", "sluggish", "lethargic"]
+          },
+          { 
+            question: "What is the opposite of 'loud'?",
+            answer: "quiet",
+            explanation: "'Quiet' is the opposite of 'loud'.",
+            options: ["quiet", "noisy", "boisterous", "clamorous"]
+          },
+          { 
+            question: "Which word means the same as 'angry'?",
+            answer: "mad",
+            explanation: "'Mad' means angry.",
+            options: ["mad", "happy", "calm", "joyful"]
+          },
+          { 
+            question: "What does 'ancient' mean?",
+            answer: "very old",
+            explanation: "'Ancient' means very old.",
+            options: ["very old", "modern", "recent", "new"]
+          },
+          { 
+            question: "What is a synonym for 'rich'?",
+            answer: "wealthy",
+            explanation: "'Wealthy' means rich.",
+            options: ["wealthy", "poor", "needy", "sparse"]
+          },
+          { 
+            question: "What is the antonym of 'dark'?",
+            answer: "light",
+            explanation: "'Light' is the opposite of 'dark'.",
+            options: ["light", "shadow", "gloom", "dim"]
+          },
+          { 
+            question: "Which word is similar to 'funny'?",
+            answer: "amusing",
+            explanation: "'Amusing' means funny.",
+            options: ["amusing", "serious", "somber", "dull"]
+          },
+          { 
+            question: "What does 'silent' mean?",
+            answer: "quiet",
+            explanation: "'Silent' means quiet.",
+            options: ["quiet", "loud", "noisy", "boisterous"]
+          },
+          { 
+            question: "What is a synonym for 'tired'?",
+            answer: "exhausted",
+            explanation: "'Exhausted' means very tired.",
+            options: ["exhausted", "energetic", "lively", "alert"]
+          },
+          { 
+            question: "What is the antonym of 'full'?",
+            answer: "empty",
+            explanation: "'Empty' is the opposite of 'full'.",
+            options: ["empty", "full", "complete", "packed"]
+          },
+          { 
+            question: "Which word means the same as 'clean'?",
+            answer: "spotless",
+            explanation: "'Spotless' means very clean.",
+            options: ["spotless", "dirty", "messy", "grimy"]
+          },
+          { 
+            question: "What does 'noisy' mean?",
+            answer: "loud",
+            explanation: "'Noisy' means loud.",
+            options: ["loud", "quiet", "calm", "soft"]
+          },
+          { 
+            question: "What is a synonym for 'dull'?",
+            answer: "boring",
+            explanation: "'Boring' means dull.",
+            options: ["boring", "exciting", "vivid", "sparkling"]
+          },
+          { 
+            question: "What is the antonym of 'strong'?",
+            answer: "weak",
+            explanation: "'Weak' is the opposite of 'strong'.",
+            options: ["weak", "powerful", "mighty", "sturdy"]
+          },
+          { 
+            question: "Which word means the same as 'calm'?",
+            answer: "peaceful",
+            explanation: "'Peaceful' means calm.",
+            options: ["peaceful", "agitated", "restless", "anxious"]
+          },
+          { 
+            question: "What does 'cheerful' mean?",
+            answer: "happy",
+            explanation: "'Cheerful' means happy.",
+            options: ["happy", "sad", "angry", "mournful"]
+          },
+          { 
+            question: "What is a synonym for 'quickly'?",
+            answer: "rapidly",
+            explanation: "'Rapidly' means quickly.",
+            options: ["rapidly", "slowly", "lethargically", "gradually"]
+          },
+          { 
+            question: "Which word is an antonym of 'early'?",
+            answer: "late",
+            explanation: "'Late' is the opposite of 'early'.",
+            options: ["late", "early", "prompt", "timely"]
+          },
+          { 
+            question: "What does 'gloomy' mean?",
+            answer: "sad",
+            explanation: "'Gloomy' means sad.",
+            options: ["sad", "happy", "excited", "joyful"]
+          },
+          { 
+            question: "What is a synonym for 'curious'?",
+            answer: "inquisitive",
+            explanation: "'Inquisitive' means curious.",
+            options: ["inquisitive", "indifferent", "apathetic", "bored"]
+          },
+          { 
+            question: "Which word means the same as 'honest'?",
+            answer: "truthful",
+            explanation: "'Truthful' means honest.",
+            options: ["truthful", "deceitful", "dishonest", "corrupt"]
+          },
+          { 
+            question: "What is the antonym of 'simple'?",
+            answer: "complex",
+            explanation: "'Complex' is the opposite of 'simple'.",
+            options: ["complex", "simple", "plain", "basic"]
+          },
+          { 
+            question: "What does 'generous' mean?",
+            answer: "kind",
+            explanation: "'Kind' means generous.",
+            options: ["kind", "selfish", "stingy", "miserly"]
+          }
+        ]
+      }
+    ];
+
+    // Flatten examData into questionsFlat and initialize tracking.
+    function flattenQuestions() {
+      questionsFlat = [];
+      examData.forEach(category => {
+        category.questions.forEach(q => {
+          questionsFlat.push({
+            category: category.category,
+            question: q.question,
+            answer: q.answer,
+            explanation: q.explanation,
+            options: q.options
+          });
+        });
+      });
+      questionTimesFlat = Array(questionsFlat.length).fill(null).map(() => ({
+        start: null,
+        timeTaken: 0,
+        answered: false,
+        attempts: 0
+      }));
+    }
+
+    // Update the live timer in the header.
+    function updateTimer() {
+      const now = Date.now();
+      const elapsedSeconds = Math.floor((now - examStartTime) / 1000);
+      document.getElementById('timer').textContent = "Timer: " + elapsedSeconds + " sec";
+    }
+    setInterval(updateTimer, 1000);
+
+    // Update the score display.
+    function updateScoreDisplay() {
+      document.getElementById('score').textContent = "Score: " + totalCorrect + "/" + totalAnswered;
+    }
+
+    // Render the vertical navigation pane with question buttons.
+    function updateVerticalNav() {
+      const navContainer = document.getElementById('verticalNav');
+      navContainer.innerHTML = "";
+      let globalIndex = 0;
+      examData.forEach(category => {
+        const catHeader = document.createElement('h4');
+        catHeader.textContent = category.category;
+        navContainer.appendChild(catHeader);
+        const btnContainer = document.createElement('div');
+        btnContainer.className = "qButtons";
+        category.questions.forEach((q, index) => {
+          const btn = document.createElement('button');
+          btn.textContent = "Q" + (index + 1);
+          let gIdx = globalIndex + index;
+          const qt = questionTimesFlat[gIdx];
+          if (qt) {
+            if (qt.answered) {
+              btn.style.backgroundColor = "green";
+              btn.style.color = "white";
+            } else if (qt.attempts >= 3 && !qt.answered) {
+              btn.style.backgroundColor = "red";
+              btn.style.color = "white";
+            } else {
+              btn.style.backgroundColor = "blue";
+              btn.style.color = "white";
+            }
+          } else {
+            btn.style.backgroundColor = "blue";
+            btn.style.color = "white";
+          }
+          btn.onclick = function() {
+            currentQuestionIndex = gIdx;
+            renderQuestion();
+          };
+          btnContainer.appendChild(btn);
+        });
+        navContainer.appendChild(btnContainer);
+        globalIndex += category.questions.length;
+      });
+    }
+
+    // Render the current question page along with a per-question 20 sec timer.
+    function renderQuestion() {
+      // Clear any existing question timer.
+      if (currentQuestionTimer) {
+        clearInterval(currentQuestionTimer);
+        currentQuestionTimer = null;
+      }
+      
+      const container = document.getElementById('questionContainer');
+      container.innerHTML = "";
+      
+      // Create header div holding the legend and navigation buttons.
+      const headerNavDiv = document.createElement('div');
+      headerNavDiv.id = "headerNavDiv";
+      headerNavDiv.style.display = "flex";
+      headerNavDiv.style.justifyContent = "space-between";
+      headerNavDiv.style.alignItems = "center";
+      
+      // Legend div.
+      const legendDiv = document.createElement('div');
+      legendDiv.className = "legend";
+      legendDiv.innerHTML = '<span class="correct">Green = Correct</span><span class="wrong">Red = Wrong</span><span class="unanswered">Blue = Unanswered</span>';
+      
+      // Navigation buttons div.
+      const navDiv = document.createElement('div');
+      navDiv.className = "navButtons";
+      const backBtn = document.createElement('button');
+      backBtn.textContent = "Back";
+      backBtn.onclick = prevQuestion;
+      backBtn.disabled = (currentQuestionIndex === 0);
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = "Next";
+      nextBtn.onclick = nextQuestion;
+      nextBtn.disabled = (currentQuestionIndex === questionsFlat.length - 1);
+      navDiv.appendChild(backBtn);
+      navDiv.appendChild(nextBtn);
+      
+      headerNavDiv.appendChild(legendDiv);
+      headerNavDiv.appendChild(navDiv);
+      container.appendChild(headerNavDiv);
+      
+      // Display question header (category and question number).
+      const header = document.createElement('h3');
+      header.textContent = questionsFlat[currentQuestionIndex].category + " - Question " + (currentQuestionIndex + 1) + " of " + questionsFlat.length;
+      container.appendChild(header);
+      
+      // Display question text.
+      const qText = document.createElement('p');
+      qText.textContent = questionsFlat[currentQuestionIndex].question;
+      container.appendChild(qText);
+      
+      // Add per-question timer display.
+      const timerDiv = document.createElement('div');
+      timerDiv.id = "questionTimer";
+      timerDiv.style.fontSize = "14px";
+      timerDiv.style.marginBottom = "10px";
+      container.appendChild(timerDiv);
+      
+      // Start the 20-second countdown.
+      let countdown = 20;
+      timerDiv.textContent = "Time Remaining: " + countdown + " sec";
+      currentQuestionTimer = setInterval(() => {
+        countdown--;
+        timerDiv.textContent = "Time Remaining: " + countdown + " sec";
+        if (countdown <= 0) {
+          clearInterval(currentQuestionTimer);
+          currentQuestionTimer = null;
+          // If the question is not already answered, mark it as incorrect due to timeout.
+          const qTrack = questionTimesFlat[currentQuestionIndex];
+          if (!qTrack.answered) {
+            if (qTrack.attempts === 0) {
+              totalAnswered++;
+            }
+            qTrack.attempts = 3;  // Mark as final attempt
+            qTrack.timeTaken = 20;
+            const radios = document.getElementsByName("q" + currentQuestionIndex);
+            radios.forEach(radio => radio.disabled = true);
+            const feedback = document.getElementById("feedback_q" + currentQuestionIndex);
+            feedback.textContent = "Time's up! (Time: 20 sec, Attempts: " + qTrack.attempts + ") All attempts used. Correct answer: " + questionsFlat[currentQuestionIndex].answer + ". Explanation: " + questionsFlat[currentQuestionIndex].explanation;
+            feedback.style.color = "red";
+            updateScoreDisplay();
+            updateVerticalNav();
+          }
+        }
+      }, 1000);
+      
+      // Display question options (radio buttons).
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = "options";
+      questionsFlat[currentQuestionIndex].options.forEach((opt, index) => {
+        const radioId = "q" + currentQuestionIndex + "_opt" + index;
+        const radioInput = document.createElement('input');
+        radioInput.type = "radio";
+        radioInput.name = "q" + currentQuestionIndex;
+        radioInput.value = opt;
+        radioInput.id = radioId;
+        if (questionTimesFlat[currentQuestionIndex].answered || questionTimesFlat[currentQuestionIndex].attempts >= 3) {
+          radioInput.disabled = true;
+        }
+        radioInput.addEventListener("change", function() {
+          checkAnswer(currentQuestionIndex);
+          updateVerticalNav();
+        });
+        const radioLabel = document.createElement('label');
+        radioLabel.htmlFor = radioId;
+        radioLabel.textContent = opt;
+        optionsDiv.appendChild(radioInput);
+        optionsDiv.appendChild(radioLabel);
+      });
+      container.appendChild(optionsDiv);
+      
+      // Feedback message.
+      const feedbackSpan = document.createElement('span');
+      feedbackSpan.id = "feedback_q" + currentQuestionIndex;
+      feedbackSpan.className = "feedback";
+      container.appendChild(feedbackSpan);
+      
+      // If revisiting a question, display current attempt information.
+      const qTrack = questionTimesFlat[currentQuestionIndex];
+      if (qTrack.attempts > 0) {
+        if (qTrack.answered) {
+          feedbackSpan.textContent = "Correct! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ") Explanation: " + questionsFlat[currentQuestionIndex].explanation;
+          feedbackSpan.style.color = "green";
+        } else if (qTrack.attempts >= 3 && !qTrack.answered) {
+          feedbackSpan.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ") All attempts used. Correct answer: " + questionsFlat[currentQuestionIndex].answer + ". Explanation: " + questionsFlat[currentQuestionIndex].explanation;
+          feedbackSpan.style.color = "red";
+        } else {
+          feedbackSpan.textContent = "Attempts so far: " + qTrack.attempts;
+          feedbackSpan.style.color = "black";
+        }
+      }
+    }
+
+    // Check answer for the current question.
+    function checkAnswer(qIndex) {
+      const radios = document.getElementsByName("q" + qIndex);
+      let selectedValue = "";
+      radios.forEach(radio => {
+        if (radio.checked) {
+          selectedValue = radio.value;
+        }
+      });
+      const qObj = questionsFlat[qIndex];
+      const qTrack = questionTimesFlat[qIndex];
+      const feedback = document.getElementById("feedback_q" + qIndex);
+      
+      if (!qTrack.start) {
+        qTrack.start = Date.now();
+      }
+      // Increase attempt count.
+      qTrack.attempts++;
+      const attempts = qTrack.attempts;
+      const now = Date.now();
+      qTrack.timeTaken = Math.floor((now - qTrack.start) / 1000);
+      
+      if (selectedValue.toLowerCase() === qObj.answer.toLowerCase()) {
+        if (!qTrack.answered) {
+          totalAnswered++;
+          totalCorrect++;
+          qTrack.answered = true;
+          updateScoreDisplay();
+        }
+        feedback.textContent = "Correct! (Time: " + qTrack.timeTaken + " sec, Attempts: " + attempts + ") Explanation: " + qObj.explanation;
+        feedback.style.color = "green";
+        radios.forEach(radio => radio.disabled = true);
+        if (currentQuestionTimer) {
+          clearInterval(currentQuestionTimer);
+          currentQuestionTimer = null;
+        }
+      } else {
+        if (!qTrack.answered && attempts === 1) {
+          totalAnswered++;
+          updateScoreDisplay();
+        }
+        if (attempts >= 3) {
+          radios.forEach(radio => radio.disabled = true);
+          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + attempts + ") All attempts used. Correct answer: " + qObj.answer + ". Explanation: " + qObj.explanation;
+          feedback.style.color = "red";
+          if (currentQuestionTimer) {
+            clearInterval(currentQuestionTimer);
+            currentQuestionTimer = null;
+          }
+        } else {
+          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + attempts + ")";
+        }
+      }
+    }
+
+    // Navigation functions.
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+      }
+    }
+    function nextQuestion() {
+      if (currentQuestionIndex < questionsFlat.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      }
+    }
+    
+    // Jump to a category based on its name.
+    function jumpToCategory(category) {
+      if (category === "Logical Reasoning") {
+        currentQuestionIndex = 0;
+      } else if (category === "Mathematics") {
+        currentQuestionIndex = examData[0].questions.length; // after Logical Reasoning
+      } else if (category === "Verbal Reasoning") {
+        currentQuestionIndex = examData[0].questions.length + examData[1].questions.length;
+      }
+      renderQuestion();
+    }
+    
+    // Open analysis report in a new window.
+    function showAnalysisReport() {
+      let correctCount = 0, incorrectCount = 0, unansweredCount = 0, totalTime = 0;
+      let totalAttempts = 0;
+      for (let i = 0; i < questionTimesFlat.length; i++) {
+        const q = questionTimesFlat[i];
+        if (q.attempts === 0) {
+          unansweredCount++;
+        } else if (q.answered) {
+          correctCount++;
+        } else {
+          incorrectCount++;
+        }
+        totalTime += q.timeTaken;
+        if(q.attempts > 0) {
+          totalAttempts += q.attempts;
+        }
+      }
+      let answeredQuestions = correctCount + incorrectCount;
+      let avgTime = answeredQuestions > 0 ? (totalTime / answeredQuestions).toFixed(2) : 0;
+      let successRate = answeredQuestions > 0 ? ((correctCount / answeredQuestions) * 100).toFixed(2) : 0;
+      let avgAttempts = answeredQuestions > 0 ? (totalAttempts / answeredQuestions).toFixed(2) : 0;
+      
+      let overallScoreHTML = `<p style="text-align:center; font-weight:bold;">
+        Total Questions: ${questionsFlat.length} &nbsp;&nbsp; Answered: ${answeredQuestions} &nbsp;&nbsp; Correct: <span style="color:green;">${correctCount}</span> &nbsp;&nbsp; Incorrect: <span style="color:red;">${incorrectCount}</span> &nbsp;&nbsp; Unanswered: <span style="color:blue;">${unansweredCount}</span>
+      </p>
+      <p style="text-align:center; font-weight:bold;">Total Time Taken: ${totalTime} sec</p>
+      <p style="text-align:center;">Average Time per Answered Question: ${avgTime} sec</p>
+      <p style="text-align:center;">Success Rate: ${successRate}%</p>
+      <p style="text-align:center;">Average Attempts per Answered Question: ${avgAttempts}</p>`;
+      
+      let reportHTML = `
+        <html>
+          <head>
+            <title>Analysis Report for ${userName}</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+              h1, h3 { text-align: center; }
+              .questionReport { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+              .correct { color: green; }
+              .wrong { color: red; }
+              button { padding: 8px 16px; margin-top: 20px; display: block; margin-left: auto; margin-right: auto; }
+            </style>
+          </head>
+          <body>
+            <h1>Analysis Report for ${userName}</h1>
+            ${overallScoreHTML}
+      `;
+      questionsFlat.forEach((qObj, idx) => {
+        const qt = questionTimesFlat[idx];
+        if (qt && qt.attempts > 0) {
+          let status = qt.answered ? "Correct" : "Incorrect";
+          let colorClass = qt.answered ? "correct" : "wrong";
+          reportHTML += `
+            <div class="questionReport">
+              <p><strong>Question ${idx + 1}:</strong> ${qObj.question}</p>
+              <p class="${colorClass}"><strong>Status:</strong> ${status}</p>
+              <p><strong>Time Taken:</strong> ${qt.timeTaken ? qt.timeTaken + " sec" : "N/A"}</p>
+              <p><strong>Attempts:</strong> ${qt.attempts}</p>
+              <p><strong>Explanation:</strong> ${qObj.explanation}</p>
+            </div>
+          `;
+        }
+      });
+      reportHTML += `<button onclick="window.close()">Back to Exam</button>`;
+      reportHTML += `</body></html>`;
+      const reportWindow = window.open("", "_blank");
+      reportWindow.document.open();
+      reportWindow.document.write(reportHTML);
+      reportWindow.document.close();
+    }
+    
+    document.getElementById('analysisReportBtn').addEventListener('click', showAnalysisReport);
+    
+    // Restart exam: reset all variables and reload exam.
+    function restartExam() {
+      if (confirm("Are you sure you want to restart the exam?")) {
+        examStartTime = Date.now();
+        totalCorrect = 0;
+        totalAnswered = 0;
+        currentQuestionIndex = 0;
+        flattenQuestions();
+        updateScoreDisplay();
+        renderQuestion();
+        updateVerticalNav();
+      }
+    }
+    
+    document.getElementById('restartExamBtn').addEventListener('click', restartExam);
+    
+    // Initialize exam.
+    flattenQuestions();
+    renderQuestion();
+    updateVerticalNav();
+  </script>
+</body>
+</html>
