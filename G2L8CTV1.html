@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cognitive Test Online Exam</title>
+  <title>Grade 2 Cognitive Exam for User</title>
   <style>
+    /* Base Reset and Body Styles */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -12,40 +13,59 @@
       background-color: #f9f9f9;
       line-height: 1.6;
     }
-    /* Fixed header with smaller fonts */
+    
+    /* Enhanced Button Styling */
+    button {
+      background-color: #007BFF; /* Bold blue for contrast */
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      cursor: pointer;
+      margin: 4px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    
+    /* Fixed header styling */
     #fixedHeader {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       background-color: #fff;
-      border-bottom: 1px solid #ccc;
-      padding: 5px 10px;
+      border-bottom: 2px solid #ccc;
+      padding: 10px 15px;
       z-index: 1000;
       text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     #fixedHeader h1 {
-      font-size: 18px;
-      margin: 3px 0;
+      font-size: 20px;
+      margin: 5px 0;
     }
-    #fixedHeader h2 {
+    /* Combined Timer, Score and Legend on one line */
+    #timerScore {
       font-size: 14px;
-      margin: 2px 0;
+      margin: 4px 0;
     }
-    #fixedHeader #timer,
-    #fixedHeader #score,
-    #fixedHeader button {
-      font-size: 12px;
-      margin: 2px 5px;
+    /* Legend with color-coded text */
+    #legend {
+      margin-left: 10px;
+      font-weight: bold;
     }
+    
     /* Main container with vertical nav and content area */
     #mainContainer {
       display: flex;
       margin-top: 140px; /* space for fixed header */
     }
+    
     /* Vertical navigation pane */
     #verticalNav {
-      width: 200px;
+      width: 220px;
       background-color: #fff;
       border-right: 1px solid #ccc;
       padding: 10px;
@@ -55,7 +75,7 @@
     }
     #verticalNav h4 {
       margin: 10px 0 5px;
-      font-size: 14px;
+      font-size: 16px;
       text-align: center;
     }
     #verticalNav .qButtons {
@@ -66,17 +86,18 @@
     #verticalNav .qButtons button {
       width: 40px;
       height: 30px;
-      margin: 2px;
       font-size: 12px;
-      cursor: pointer;
       border: none;
       border-radius: 4px;
+      margin: 3px;
     }
+    
     /* Content area for question */
     #contentArea {
       flex: 1;
       padding: 20px;
     }
+    
     /* Center question container vertically */
     #questionWrapper {
       display: flex;
@@ -84,67 +105,109 @@
       align-items: center;
       min-height: 70vh;
     }
-    /* Question container styling with embedded header */
+    
+    /* Improved Question Container Styling */
     #questionContainer {
       background-color: #fff;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      max-width: 600px;
-      width: 90%;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      position: relative;
+      padding: 25px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      max-width: 700px;
+      width: 95%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin: auto;
     }
-    /* Header div inside question container holding legend and nav buttons */
+    
+    /* Header div inside question container with navigation on left */
     #headerNavDiv {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start; /* Align navigation buttons to left */
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
-    /* Legend styling */
-    #headerNavDiv .legend {
-      font-size: 12px;
-    }
-    #headerNavDiv .legend span {
-      display: inline-block;
-      padding: 2px 6px;
-      margin-right: 5px;
-      border-radius: 4px;
-      color: white;
-    }
-    #headerNavDiv .legend .correct { background-color: green; }
-    #headerNavDiv .legend .wrong { background-color: red; }
-    #headerNavDiv .legend .unanswered { background-color: blue; }
-    /* Navigation buttons beside legend */
     #headerNavDiv .navButtons button {
       padding: 6px 12px;
-      margin-left: 5px;
-      font-size: 12px;
-      cursor: pointer;
+      font-size: 14px;
+      margin-right: 5px;
     }
-    /* MCQ Options styling */
+    
+    /* MCQ Options Styling */
     .options {
-      margin: 10px 0;
+      margin: 15px 0;
     }
     .options label {
       margin-right: 15px;
       cursor: pointer;
+      font-size: 14px;
     }
-    /* Feedback message styling */
+    
+    /* Feedback Message Styling */
     .feedback {
       display: block;
-      margin-top: 10px;
+      margin-top: 12px;
       font-weight: bold;
+      font-size: 14px;
+    }
+    
+    /* Tablet Friendly: Up to 768px */
+    @media (max-width: 768px) {
+      #mainContainer {
+        flex-direction: column;
+      }
+      #verticalNav {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+      }
+      #contentArea {
+        padding: 10px;
+      }
+      #questionContainer {
+        width: 100%;
+        padding: 15px;
+      }
+      #headerNavDiv {
+        justify-content: flex-start;
+        width: 100%;
+      }
+      #headerNavDiv .navButtons {
+        margin-top: 10px;
+        width: auto;
+      }
+    }
+    
+    /* Mobile Friendly: Up to 480px */
+    @media (max-width: 480px) {
+      #fixedHeader h1 {
+        font-size: 18px;
+      }
+      #timerScore {
+        font-size: 12px;
+      }
+      button {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      #headerNavDiv .navButtons button {
+        font-size: 12px;
+        padding: 4px 8px;
+      }
     }
   </style>
 </head>
 <body>
   <div id="fixedHeader">
-    <h1 id="examTitle">Cognitive Test Online Exam</h1>
-    <h2>2nd Grade Level 8</h2>
-    <div id="timer">Timer: 0 sec</div>
-    <div id="score">Score: 0/0</div>
+    <h1 id="examTitle">Grade 2 Cognitive Exam for <span id="userNameDisplay">User</span></h1>
+    <!-- Combined Timer, Score, and Legend on one line -->
+    <div id="timerScore">
+      <span id="timer">Timer: 0 sec</span> | <span id="score">Score: 0/0</span>
+      <span id="legend">
+        | <span style="color:green;">Green = Correct</span> | 
+        <span style="color:red;">Red = Wrong</span> | 
+        <span style="color:blue;">Blue = Unanswered</span>
+      </span>
+    </div>
     <button id="analysisReportBtn">Show Analysis Report</button>
     <button id="restartExamBtn">Restart Exam</button>
   </div>
@@ -164,8 +227,9 @@
     // Prompt the user for their name.
     let userName = prompt("Please enter your name:");
     if (!userName) userName = "User";
-    document.title = "Cognitive Test Online Exam for " + userName + " - 2nd Grade Level 8";
-    document.getElementById("examTitle").textContent = "Cognitive Test Online Exam for " + userName;
+    // Update title and header with username.
+    document.title = "Grade 2 Cognitive Exam for " + userName;
+    document.getElementById("examTitle").innerHTML = "Grade 2 Cognitive Exam for <span id='userNameDisplay'>" + userName + "</span>";
     
     // Global exam start time and score tracking.
     let examStartTime = Date.now();
@@ -791,17 +855,17 @@
           if (qt) {
             if (qt.answered) {
               btn.style.backgroundColor = "green";
-              btn.style.color = "white";
+              btn.style.color = "#fff";
             } else if (qt.attempts >= 3 && !qt.answered) {
               btn.style.backgroundColor = "red";
-              btn.style.color = "white";
+              btn.style.color = "#fff";
             } else {
               btn.style.backgroundColor = "blue";
-              btn.style.color = "white";
+              btn.style.color = "#fff";
             }
           } else {
             btn.style.backgroundColor = "blue";
-            btn.style.color = "white";
+            btn.style.color = "#fff";
           }
           btn.onclick = function() {
             currentQuestionIndex = gIdx;
@@ -825,19 +889,14 @@
       const container = document.getElementById('questionContainer');
       container.innerHTML = "";
       
-      // Create header div holding the legend and navigation buttons.
+      // Create header div holding the navigation buttons (Back/Next aligned left).
       const headerNavDiv = document.createElement('div');
       headerNavDiv.id = "headerNavDiv";
       headerNavDiv.style.display = "flex";
-      headerNavDiv.style.justifyContent = "space-between";
+      headerNavDiv.style.justifyContent = "flex-start"; // Align buttons to left
       headerNavDiv.style.alignItems = "center";
+      headerNavDiv.style.marginBottom = "15px";
       
-      // Legend div.
-      const legendDiv = document.createElement('div');
-      legendDiv.className = "legend";
-      legendDiv.innerHTML = '<span class="correct">Green = Correct</span><span class="wrong">Red = Wrong</span><span class="unanswered">Blue = Unanswered</span>';
-      
-      // Navigation buttons div.
       const navDiv = document.createElement('div');
       navDiv.className = "navButtons";
       const backBtn = document.createElement('button');
@@ -850,8 +909,6 @@
       nextBtn.disabled = (currentQuestionIndex === questionsFlat.length - 1);
       navDiv.appendChild(backBtn);
       navDiv.appendChild(nextBtn);
-      
-      headerNavDiv.appendChild(legendDiv);
       headerNavDiv.appendChild(navDiv);
       container.appendChild(headerNavDiv);
       
@@ -1032,6 +1089,7 @@
     function showAnalysisReport() {
       let correctCount = 0, incorrectCount = 0, unansweredCount = 0, totalTime = 0;
       let totalAttempts = 0;
+      
       for (let i = 0; i < questionTimesFlat.length; i++) {
         const q = questionTimesFlat[i];
         if (q.attempts === 0) {
@@ -1048,16 +1106,20 @@
       }
       let answeredQuestions = correctCount + incorrectCount;
       let avgTime = answeredQuestions > 0 ? (totalTime / answeredQuestions).toFixed(2) : 0;
-      let successRate = answeredQuestions > 0 ? ((correctCount / answeredQuestions) * 100).toFixed(2) : 0;
       let avgAttempts = answeredQuestions > 0 ? (totalAttempts / answeredQuestions).toFixed(2) : 0;
       
+      let totalQuestions = questionsFlat.length;
+      let percentCorrect = totalQuestions > 0 ? ((correctCount / totalQuestions) * 100).toFixed(2) : 0;
+      let percentIncorrect = totalQuestions > 0 ? ((incorrectCount / totalQuestions) * 100).toFixed(2) : 0;
+      let percentUnanswered = totalQuestions > 0 ? ((unansweredCount / totalQuestions) * 100).toFixed(2) : 0;
+      
       let overallScoreHTML = `<p style="text-align:center; font-weight:bold;">
-        Total Questions: ${questionsFlat.length} &nbsp;&nbsp; Answered: ${answeredQuestions} &nbsp;&nbsp; Correct: <span style="color:green;">${correctCount}</span> &nbsp;&nbsp; Incorrect: <span style="color:red;">${incorrectCount}</span> &nbsp;&nbsp; Unanswered: <span style="color:blue;">${unansweredCount}</span>
+        Total Questions: ${totalQuestions} &nbsp;&nbsp; Answered: ${answeredQuestions} &nbsp;&nbsp; Correct: <span style="color:green;">${correctCount}</span> &nbsp;&nbsp; Incorrect: <span style="color:red;">${incorrectCount}</span> &nbsp;&nbsp; Unanswered: <span style="color:blue;">${unansweredCount}</span>
       </p>
       <p style="text-align:center; font-weight:bold;">Total Time Taken: ${totalTime} sec</p>
       <p style="text-align:center;">Average Time per Answered Question: ${avgTime} sec</p>
-      <p style="text-align:center;">Success Rate: ${successRate}%</p>
-      <p style="text-align:center;">Average Attempts per Answered Question: ${avgAttempts}</p>`;
+      <p style="text-align:center;">Average Attempts per Answered Question: ${avgAttempts}</p>
+      <p style="text-align:center;">Correct Percentage: ${percentCorrect}% &nbsp;&nbsp; Incorrect Percentage: ${percentIncorrect}% &nbsp;&nbsp; Unanswered Percentage: ${percentUnanswered}%</p>`;
       
       let reportHTML = `
         <html>
@@ -1069,7 +1131,8 @@
               .questionReport { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
               .correct { color: green; }
               .wrong { color: red; }
-              button { padding: 8px 16px; margin-top: 20px; display: block; margin-left: auto; margin-right: auto; }
+              button { background-color: #007BFF; color: #fff; border: none; border-radius: 4px; padding: 8px 16px; margin-top: 20px; display: block; margin-left: auto; margin-right: auto; cursor: pointer; }
+              button:hover { background-color: #0056b3; }
             </style>
           </head>
           <body>
