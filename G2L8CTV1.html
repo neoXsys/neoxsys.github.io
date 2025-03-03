@@ -63,7 +63,7 @@
       margin-top: 140px; /* space for fixed header */
     }
     
-    /* Vertical navigation pane */
+    /* Vertical navigation pane - hidden by default */
     #verticalNav {
       width: 220px;
       background-color: #fff;
@@ -72,6 +72,7 @@
       box-shadow: 2px 0 5px rgba(0,0,0,0.05);
       overflow-y: auto;
       height: calc(100vh - 140px);
+      display: none;
     }
     #verticalNav h4 {
       margin: 10px 0 5px;
@@ -96,6 +97,7 @@
     #contentArea {
       flex: 1;
       padding: 20px;
+      transition: margin-left 0.3s ease;
     }
     
     /* Center question container vertically */
@@ -121,7 +123,7 @@
     /* Header div inside question container with navigation on left */
     #headerNavDiv {
       display: flex;
-      justify-content: flex-start; /* Align navigation buttons to left */
+      justify-content: flex-start; /* Navigation buttons on left */
       align-items: center;
       margin-bottom: 15px;
     }
@@ -208,6 +210,8 @@
         <span style="color:blue;">Blue = Unanswered</span>
       </span>
     </div>
+    <!-- New Toggle Nav Button -->
+    <button id="toggleNavBtn">Toggle Nav</button>
     <button id="analysisReportBtn">Show Analysis Report</button>
     <button id="restartExamBtn">Restart Exam</button>
   </div>
@@ -230,6 +234,17 @@
     // Update title and header with username.
     document.title = "Grade 2 Cognitive Exam for " + userName;
     document.getElementById("examTitle").innerHTML = "Grade 2 Cognitive Exam for <span id='userNameDisplay'>" + userName + "</span>";
+    
+    // Toggle vertical navigation pane functionality.
+    const toggleNavBtn = document.getElementById("toggleNavBtn");
+    const verticalNav = document.getElementById("verticalNav");
+    toggleNavBtn.addEventListener("click", function() {
+      if (verticalNav.style.display === "none" || verticalNav.style.display === "") {
+        verticalNav.style.display = "block";
+      } else {
+        verticalNav.style.display = "none";
+      }
+    });
     
     // Global exam start time and score tracking.
     let examStartTime = Date.now();
