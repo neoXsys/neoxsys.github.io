@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grade 2 Cognitive Exam for User</title>
+  <style>
+    /* Base Reset and Body Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+    }
+    
+    /* Enhanced Button Styling */
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      cursor: pointer;
+      margin: 4px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    
+    /* Fixed header styling */
+    #fixedHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border-bottom: 2px solid #ccc;
+      padding: 10px 15px;
+      z-index: 1000;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    #fixedHeader h1 {
+      font-size: 20px;
+      margin: 5px 0;
+    }
+    /* Version info in header */
+    #versionInfo {
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    /* Combined Timer, Score and Legend on one line */
+    #timerScore {
+      font-size: 14px;
+      margin: 4px 0;
+    }
+    /* Legend with color-coded text */
+    #legend {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+    
+    /* Main container with vertical nav and content area */
+    #mainContainer {
+      display: flex;
+      margin-top: 160px; /* Extra space for header+version */
+    }
+    
+    /* Vertical navigation pane - hidden by default */
+    #verticalNav {
+      width: 220px;
+      background-color: #fff;
+      border-right: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+      overflow-y: auto;
+      height: calc(100vh - 160px);
+      display: none;
+    }
+    #verticalNav h4 {
+      margin: 10px 0 5px;
+      font-size: 16px;
+      text-align: center;
+    }
+    #verticalNav .qButtons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #verticalNav .qButtons button {
+      width: 40px;
+      height: 30px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      margin: 3px;
+    }
+    
+    /* Content area for question */
+    #contentArea {
+      flex: 1;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+    
+    /* Center question container vertically */
+    #questionWrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+    }
+    
+    /* Improved Question Container Styling */
+    #questionContainer {
+      background-color: #fff;
+      padding: 25px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      max-width: 700px;
+      width: 95%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin: auto;
+    }
+    
+    /* Header div inside question container with navigation on left */
+    #headerNavDiv {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    #headerNavDiv .navButtons button {
+      padding: 6px 12px;
+      font-size: 14px;
+      margin-right: 5px;
+    }
+    
+    /* MCQ Options Styling */
+    .options {
+      margin: 15px 0;
+    }
+    .options label {
+      margin-right: 15px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    /* Feedback Message Styling */
+    .feedback {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    /* Tablet Friendly: Up to 768px */
+    @media (max-width: 768px) {
+      #mainContainer {
+        flex-direction: column;
+      }
+      #verticalNav {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+      }
+      #contentArea {
+        padding: 10px;
+      }
+      #questionContainer {
+        width: 100%;
+        padding: 15px;
+      }
+      #headerNavDiv {
+        justify-content: flex-start;
+        width: 100%;
+      }
+      #headerNavDiv .navButtons {
+        margin-top: 10px;
+        width: auto;
+      }
+    }
+    
+    /* Mobile Friendly: Up to 480px */
+    @media (max-width: 480px) {
+      #fixedHeader h1 {
+        font-size: 18px;
+      }
+      #timerScore {
+        font-size: 12px;
+      }
+      button {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      #headerNavDiv .navButtons button {
+        font-size: 12px;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="fixedHeader">
+    <h1 id="examTitle">Grade 2 Cognitive Exam for <span id="userNameDisplay">User</span></h1>
+    <div id="versionInfo">Version: 1.4.0</div>
+    <div id="timerScore">
+      <span id="timer">Timer: 0 sec</span> | <span id="score">Score: 0/0</span>
+      <span id="legend">
+        | <span style="color:green;">Green = Correct</span> | 
+        <span style="color:red;">Red = Wrong</span> | 
+        <span style="color:blue;">Blue = Unanswered</span>
+      </span>
+    </div>
+    <button id="toggleNavBtn">Toggle Nav</button>
+    <button id="analysisReportBtn">Show Analysis Report</button>
+    <button id="restartExamBtn">Restart Exam</button>
+    <button id="endExamBtn">End Exam</button>
+  </div>
+  
+  <div id="mainContainer">
+    <div id="verticalNav"></div>
+    <div id="contentArea">
+      <div id="questionWrapper">
+        <div id="questionContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Prompt for username.
+    let userName = prompt("Please enter your name:");
+    if (!userName) userName = "User";
+    document.title = "Grade 2 Cognitive Exam for " + userName;
+    document.getElementById("examTitle").innerHTML = "Grade 2 Cognitive Exam for <span id='userNameDisplay'>" + userName + "</span>";
+    
+    // Toggle vertical nav.
+    const toggleNavBtn = document.getElementById("toggleNavBtn");
+    const verticalNav = document.getElementById("verticalNav");
+    toggleNavBtn.addEventListener("click", function() {
+      verticalNav.style.display = (verticalNav.style.display === "block") ? "none" : "block";
+    });
+    
+    let examStartTime = Date.now();
+    let totalCorrect = 0;
+    let totalAnswered = 0;
+    let currentQuestionTimer = null;
+    
+    let questionsFlat = [];
+    let questionTimesFlat = [];
+    let currentQuestionIndex = 0;
+    
+    // New unique question banks for Grade 2 CogAT Level 8.
+    const examData = [
+      {
+        category: "Logical Reasoning",
+        questions: [
+          {
+            question: "Which item does not fit: pencil, marker, eraser, backpack?",
+            answer: "backpack",
+            explanation: "Backpack is used for carrying items, while the others are writing instruments.",
+            options: ["A) pencil", "B) marker", "C) eraser", "D) backpack"]
+          },
+          {
+            question: "If all flowers are plants and a rose is a flower, then a rose is a ___?",
+            answer: "plant",
+            explanation: "A rose is a type of flower, and all flowers are plants.",
+            options: ["A) tree", "B) plant", "C) shrub", "D) herb"]
+          },
+          {
+            question: "Which one is not a kitchen tool: spatula, knife, plate, whisk?",
+            answer: "plate",
+            explanation: "Plate is used for holding food, not for preparing it.",
+            options: ["A) spatula", "B) knife", "C) plate", "D) whisk"]
+          },
+          {
+            question: "Which one is the odd one out: summer, winter, rain, autumn?",
+            answer: "rain",
+            explanation: "Rain is a weather phenomenon, while summer, winter, and autumn are seasons.",
+            options: ["A) summer", "B) winter", "C) rain", "D) autumn"]
+          },
+          {
+            question: "Which item does not belong: bicycle, scooter, car, television?",
+            answer: "television",
+            explanation: "Television is an electronic device, not a vehicle.",
+            options: ["A) bicycle", "B) scooter", "C) car", "D) television"]
+          },
+          {
+            question: "If you mix red and blue, what color do you get?",
+            answer: "purple",
+            explanation: "Red and blue combine to make purple.",
+            options: ["A) green", "B) purple", "C) orange", "D) brown"]
+          },
+          {
+            question: "Which word is not like the others: quick, rapid, sluggish, fast?",
+            answer: "sluggish",
+            explanation: "Sluggish means slow, while the others mean fast.",
+            options: ["A) quick", "B) rapid", "C) sluggish", "D) fast"]
+          },
+          {
+            question: "Which one is a liquid: juice, bread, apple, carrot?",
+            answer: "juice",
+            explanation: "Juice is a liquid, while the others are solids.",
+            options: ["A) juice", "B) bread", "C) apple", "D) carrot"]
+          },
+          {
+            question: "Which of these is not an animal: frog, bird, tree, fish?",
+            answer: "tree",
+            explanation: "Tree is a plant, not an animal.",
+            options: ["A) frog", "B) bird", "C) tree", "D) fish"]
+          },
+          {
+            question: "Which one is not a musical instrument: violin, piano, guitar, book?",
+            answer: "book",
+            explanation: "Book is not a musical instrument.",
+            options: ["A) violin", "B) piano", "C) guitar", "D) book"]
+          }
+        ]
+      },
+      {
+        category: "Mathematics",
+        questions: [
+          {
+            question: "What is 3 + 9?",
+            answer: "12",
+            explanation: "3 plus 9 equals 12.",
+            options: ["10", "11", "12", "13"]
+          },
+          {
+            question: "What is 17 - 8?",
+            answer: "9",
+            explanation: "17 minus 8 equals 9.",
+            options: ["7", "8", "9", "10"]
+          },
+          {
+            question: "What is 5 × 4?",
+            answer: "20",
+            explanation: "5 times 4 equals 20.",
+            options: ["18", "19", "20", "21"]
+          },
+          {
+            question: "What is 24 ÷ 6?",
+            answer: "4",
+            explanation: "24 divided by 6 equals 4.",
+            options: ["3", "4", "5", "6"]
+          },
+          {
+            question: "What is 6 + 6?",
+            answer: "12",
+            explanation: "6 plus 6 equals 12.",
+            options: ["10", "11", "12", "13"]
+          },
+          {
+            question: "What is 14 - 6?",
+            answer: "8",
+            explanation: "14 minus 6 equals 8.",
+            options: ["7", "8", "9", "10"]
+          },
+          {
+            question: "What is 3 × 5?",
+            answer: "15",
+            explanation: "3 multiplied by 5 equals 15.",
+            options: ["13", "14", "15", "16"]
+          },
+          {
+            question: "What is 30 ÷ 5?",
+            answer: "6",
+            explanation: "30 divided by 5 equals 6.",
+            options: ["5", "6", "7", "8"]
+          },
+          {
+            question: "What is 8 - 3?",
+            answer: "5",
+            explanation: "8 minus 3 equals 5.",
+            options: ["4", "5", "6", "7"]
+          },
+          {
+            question: "What is 7 × 3?",
+            answer: "21",
+            explanation: "7 multiplied by 3 equals 21.",
+            options: ["20", "21", "22", "23"]
+          }
+        ]
+      },
+      {
+        category: "Verbal Reasoning",
+        questions: [
+          {
+            question: "What is a synonym for 'brave'?",
+            answer: "courageous",
+            explanation: "Courageous means brave.",
+            options: ["timid", "courageous", "scared", "nervous"]
+          },
+          {
+            question: "What is the antonym of 'noisy'?",
+            answer: "silent",
+            explanation: "Silent means not noisy.",
+            options: ["loud", "noisy", "silent", "boisterous"]
+          },
+          {
+            question: "What is a synonym for 'sad'?",
+            answer: "melancholy",
+            explanation: "Melancholy means very sad.",
+            options: ["happy", "joyful", "melancholy", "excited"]
+          },
+          {
+            question: "What is the antonym of 'strong'?",
+            answer: "weak",
+            explanation: "Weak is the opposite of strong.",
+            options: ["powerful", "strong", "weak", "mighty"]
+          },
+          {
+            question: "Which word means 'intelligent'?",
+            answer: "clever",
+            explanation: "Clever means intelligent.",
+            options: ["foolish", "clever", "dull", "clumsy"]
+          },
+          {
+            question: "What is a synonym for 'funny'?",
+            answer: "amusing",
+            explanation: "Amusing means funny.",
+            options: ["serious", "amusing", "grim", "somber"]
+          },
+          {
+            question: "What is the antonym of 'clean'?",
+            answer: "dirty",
+            explanation: "Dirty means not clean.",
+            options: ["neat", "tidy", "clean", "dirty"]
+          },
+          {
+            question: "Which word means the same as 'kind'?",
+            answer: "nice",
+            explanation: "Nice means kind.",
+            options: ["mean", "cruel", "nice", "harsh"]
+          },
+          {
+            question: "What is a synonym for 'small'?",
+            answer: "little",
+            explanation: "Little means small.",
+            options: ["huge", "massive", "little", "gigantic"]
+          },
+          {
+            question: "What is the antonym of 'old'?",
+            answer: "young",
+            explanation: "Young is the opposite of old.",
+            options: ["ancient", "old", "young", "elderly"]
+          }
+        ]
+      },
+      {
+        category: "Non Verbal Reasoning (Shapes)",
+        questions: [
+          {
+            question: "Which shape has no corners?",
+            answer: "Circle",
+            explanation: "A circle has no corners because it is a continuous curve.",
+            options: ["Circle", "Triangle", "Square", "Rectangle"]
+          },
+          {
+            question: "Which shape is defined by three straight sides?",
+            answer: "Triangle",
+            explanation: "A triangle is a polygon with three sides and three angles.",
+            options: ["Triangle", "Square", "Pentagon", "Hexagon"]
+          },
+          {
+            question: "Which shape has four sides of equal length and four right angles?",
+            answer: "Square",
+            explanation: "A square has four equal sides and every angle is 90 degrees.",
+            options: ["Square", "Rectangle", "Diamond", "Circle"]
+          },
+          {
+            question: "Which shape is characterized by a long form with two pairs of parallel sides?",
+            answer: "Rectangle",
+            explanation: "A rectangle has two pairs of parallel sides with opposite sides equal.",
+            options: ["Triangle", "Rectangle", "Square", "Circle"]
+          },
+          {
+            question: "Which shape has five sides?",
+            answer: "Pentagon",
+            explanation: "A pentagon is a five-sided polygon.",
+            options: ["Pentagon", "Hexagon", "Square", "Triangle"]
+          },
+          {
+            question: "Which shape has six sides?",
+            answer: "Hexagon",
+            explanation: "A hexagon is a six-sided polygon.",
+            options: ["Hexagon", "Pentagon", "Square", "Circle"]
+          },
+          {
+            question: "Which shape has eight sides?",
+            answer: "Octagon",
+            explanation: "An octagon is an eight-sided polygon.",
+            options: ["Octagon", "Hexagon", "Pentagon", "Square"]
+          },
+          {
+            question: "Which shape is defined as a quadrilateral with only one pair of parallel sides?",
+            answer: "Trapezoid",
+            explanation: "A trapezoid has one pair of parallel sides.",
+            options: ["Trapezoid", "Square", "Rectangle", "Triangle"]
+          },
+          {
+            question: "Which shape is a regular polygon with seven sides?",
+            answer: "Heptagon",
+            explanation: "A heptagon is a seven-sided polygon.",
+            options: ["Heptagon", "Hexagon", "Pentagon", "Octagon"]
+          },
+          {
+            question: "Which shape is a quadrilateral with four right angles but unequal adjacent sides?",
+            answer: "Rectangle",
+            explanation: "A rectangle has four right angles, with opposite sides equal but adjacent sides may differ.",
+            options: ["Rectangle", "Square", "Rhombus", "Trapezoid"]
+          }
+        ]
+      },
+      {
+        category: "Quantitative Mathematics",
+        questions: [
+          {
+            question: "If 4x + 2 = 18, what is x?",
+            answer: "4",
+            explanation: "Subtract 2 to get 4x = 16, then x = 16/4 = 4.",
+            options: ["3", "4", "5", "6"]
+          },
+          {
+            question: "If x + 7 = 15, what is x?",
+            answer: "8",
+            explanation: "Subtract 7 from 15 to get x = 8.",
+            options: ["6", "7", "8", "9"]
+          },
+          {
+            question: "Solve 2x = 14. What is x?",
+            answer: "7",
+            explanation: "Divide 14 by 2 to get x = 7.",
+            options: ["5", "6", "7", "8"]
+          },
+          {
+            question: "If 3x - 1 = 8, what is x?",
+            answer: "3",
+            explanation: "Add 1 to get 3x = 9, so x = 9/3 = 3.",
+            options: ["2", "3", "4", "5"]
+          },
+          {
+            question: "If x / 3 = 4, what is x?",
+            answer: "12",
+            explanation: "Multiply 4 by 3 to get x = 12.",
+            options: ["9", "10", "11", "12"]
+          },
+          {
+            question: "If 5x + 5 = 30, what is x?",
+            answer: "5",
+            explanation: "Subtract 5 to get 5x = 25, so x = 25/5 = 5.",
+            options: ["4", "5", "6", "7"]
+          },
+          {
+            question: "What number is 3 more than 10?",
+            answer: "13",
+            explanation: "10 plus 3 equals 13.",
+            options: ["12", "13", "14", "15"]
+          },
+          {
+            question: "If 2x + 2 = 10, what is x?",
+            answer: "4",
+            explanation: "Subtract 2 to get 2x = 8, so x = 4.",
+            options: ["3", "4", "5", "6"]
+          },
+          {
+            question: "If x + x = 10, what is x?",
+            answer: "5",
+            explanation: "2x = 10, so x = 5.",
+            options: ["4", "5", "6", "7"]
+          },
+          {
+            question: "If 4x = 20, what is x?",
+            answer: "5",
+            explanation: "Divide 20 by 4 to get x = 5.",
+            options: ["4", "5", "6", "7"]
+          }
+        ]
+      }
+    ];
+    
+    function flattenQuestions() {
+      questionsFlat = [];
+      examData.forEach(category => {
+        category.questions.forEach(q => {
+          questionsFlat.push({
+            category: category.category,
+            question: q.question,
+            answer: q.answer,
+            explanation: q.explanation,
+            options: q.options
+          });
+        });
+      });
+      questionTimesFlat = Array(questionsFlat.length).fill(null).map(() => ({
+        start: null,
+        timeTaken: 0,
+        answered: false,
+        attempts: 0
+      }));
+    }
+    
+    function updateTimer() {
+      const now = Date.now();
+      const elapsedSeconds = Math.floor((now - examStartTime) / 1000);
+      document.getElementById('timer').textContent = "Timer: " + elapsedSeconds + " sec";
+    }
+    setInterval(updateTimer, 1000);
+    
+    function updateScoreDisplay() {
+      document.getElementById('score').textContent = "Score: " + totalCorrect + "/" + totalAnswered;
+    }
+    
+    function updateVerticalNav() {
+      const navContainer = document.getElementById('verticalNav');
+      navContainer.innerHTML = "";
+      let globalIndex = 0;
+      examData.forEach(category => {
+        const catHeader = document.createElement('h4');
+        catHeader.textContent = category.category;
+        navContainer.appendChild(catHeader);
+        
+        const btnContainer = document.createElement('div');
+        btnContainer.className = "qButtons";
+        
+        category.questions.forEach((q, index) => {
+          const btn = document.createElement('button');
+          btn.textContent = "Q" + (index + 1);
+          let gIdx = globalIndex + index;
+          const qt = questionTimesFlat[gIdx];
+          if (qt) {
+            if (qt.answered) {
+              btn.style.backgroundColor = "green";
+              btn.style.color = "#fff";
+            } else if (qt.attempts >= 3 && !qt.answered) {
+              btn.style.backgroundColor = "red";
+              btn.style.color = "#fff";
+            } else {
+              btn.style.backgroundColor = "blue";
+              btn.style.color = "#fff";
+            }
+          } else {
+            btn.style.backgroundColor = "blue";
+            btn.style.color = "#fff";
+          }
+          btn.onclick = function() {
+            currentQuestionIndex = gIdx;
+            renderQuestion();
+          };
+          btnContainer.appendChild(btn);
+        });
+        
+        navContainer.appendChild(btnContainer);
+        globalIndex += category.questions.length;
+      });
+    }
+    
+    function renderQuestion() {
+      if (currentQuestionTimer) {
+        clearInterval(currentQuestionTimer);
+        currentQuestionTimer = null;
+      }
+      
+      const container = document.getElementById('questionContainer');
+      container.innerHTML = "";
+      
+      const headerNavDiv = document.createElement('div');
+      headerNavDiv.id = "headerNavDiv";
+      headerNavDiv.style.display = "flex";
+      headerNavDiv.style.justifyContent = "flex-start";
+      headerNavDiv.style.alignItems = "center";
+      headerNavDiv.style.marginBottom = "15px";
+      
+      const navDiv = document.createElement('div');
+      navDiv.className = "navButtons";
+      
+      const backBtn = document.createElement('button');
+      backBtn.textContent = "Back";
+      backBtn.onclick = prevQuestion;
+      backBtn.disabled = (currentQuestionIndex === 0);
+      
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = "Next";
+      nextBtn.onclick = nextQuestion;
+      nextBtn.disabled = (currentQuestionIndex === questionsFlat.length - 1);
+      
+      navDiv.appendChild(backBtn);
+      navDiv.appendChild(nextBtn);
+      headerNavDiv.appendChild(navDiv);
+      container.appendChild(headerNavDiv);
+      
+      const header = document.createElement('h3');
+      header.textContent = questionsFlat[currentQuestionIndex].category + " - Question " + (currentQuestionIndex + 1) + " of " + questionsFlat.length;
+      container.appendChild(header);
+      
+      const qText = document.createElement('p');
+      qText.textContent = questionsFlat[currentQuestionIndex].question;
+      container.appendChild(qText);
+      
+      const timerDiv = document.createElement('div');
+      timerDiv.id = "questionTimer";
+      timerDiv.style.fontSize = "14px";
+      timerDiv.style.marginBottom = "10px";
+      container.appendChild(timerDiv);
+      
+      let countdown = 20;
+      timerDiv.textContent = "Time Remaining: " + countdown + " sec";
+      currentQuestionTimer = setInterval(() => {
+        countdown--;
+        timerDiv.textContent = "Time Remaining: " + countdown + " sec";
+        if (countdown <= 0) {
+          clearInterval(currentQuestionTimer);
+          currentQuestionTimer = null;
+          const qTrack = questionTimesFlat[currentQuestionIndex];
+          if (!qTrack.answered) {
+            if (qTrack.attempts === 0) totalAnswered++;
+            qTrack.attempts = 3;
+            qTrack.timeTaken = 20;
+            const radios = document.getElementsByName("q" + currentQuestionIndex);
+            radios.forEach(radio => radio.disabled = true);
+            const feedback = document.getElementById("feedback_q" + currentQuestionIndex);
+            feedback.textContent = "Time's up! (Time: 20 sec, Attempts: " + qTrack.attempts + 
+              ") All attempts used. Correct answer: " + questionsFlat[currentQuestionIndex].answer + ". Explanation: " + questionsFlat[currentQuestionIndex].explanation;
+            feedback.style.color = "red";
+            updateScoreDisplay();
+            updateVerticalNav();
+          }
+        }
+      }, 1000);
+      
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = "options";
+      questionsFlat[currentQuestionIndex].options.forEach((opt, index) => {
+        const radioId = "q" + currentQuestionIndex + "_opt" + index;
+        const radioInput = document.createElement('input');
+        radioInput.type = "radio";
+        radioInput.name = "q" + currentQuestionIndex;
+        radioInput.value = opt;
+        radioInput.id = radioId;
+        
+        const qTrack = questionTimesFlat[currentQuestionIndex];
+        if (qTrack.answered || qTrack.attempts >= 3) radioInput.disabled = true;
+        
+        radioInput.addEventListener("change", function() {
+          checkAnswer(currentQuestionIndex);
+          updateVerticalNav();
+        });
+        
+        const radioLabel = document.createElement('label');
+        radioLabel.htmlFor = radioId;
+        radioLabel.textContent = opt;
+        
+        optionsDiv.appendChild(radioInput);
+        optionsDiv.appendChild(radioLabel);
+      });
+      container.appendChild(optionsDiv);
+      
+      const feedbackSpan = document.createElement('span');
+      feedbackSpan.id = "feedback_q" + currentQuestionIndex;
+      feedbackSpan.className = "feedback";
+      container.appendChild(feedbackSpan);
+      
+      const qTrackAgain = questionTimesFlat[currentQuestionIndex];
+      if (qTrackAgain.attempts > 0) {
+        if (qTrackAgain.answered) {
+          feedbackSpan.textContent = "Correct! (Time: " + qTrackAgain.timeTaken + " sec, Attempts: " + qTrackAgain.attempts + ") Explanation: " 
+            + questionsFlat[currentQuestionIndex].explanation;
+          feedbackSpan.style.color = "green";
+        } else if (qTrackAgain.attempts >= 3 && !qTrackAgain.answered) {
+          feedbackSpan.textContent = "Incorrect! (Time: " + qTrackAgain.timeTaken + " sec, Attempts: " + qTrackAgain.attempts + ") All attempts used. Correct answer: " 
+            + questionsFlat[currentQuestionIndex].answer + ". Explanation: " + questionsFlat[currentQuestionIndex].explanation;
+          feedbackSpan.style.color = "red";
+        } else {
+          feedbackSpan.textContent = "Attempts so far: " + qTrackAgain.attempts;
+          feedbackSpan.style.color = "black";
+        }
+      }
+    }
+    
+    function checkAnswer(qIndex) {
+      const radios = document.getElementsByName("q" + qIndex);
+      let selectedValue = "";
+      radios.forEach(radio => {
+        if (radio.checked) selectedValue = radio.value;
+      });
+      const qObj = questionsFlat[qIndex];
+      const qTrack = questionTimesFlat[qIndex];
+      const feedback = document.getElementById("feedback_q" + qIndex);
+      
+      if (!qTrack.start) qTrack.start = Date.now();
+      qTrack.attempts++;
+      const now = Date.now();
+      qTrack.timeTaken = Math.floor((now - qTrack.start) / 1000);
+      
+      // Normalize answer if option starts with a letter prefix
+      function normalize(ans) {
+        return ans.replace(/^[A-Za-z]\)\s*/, "").trim().toLowerCase();
+      }
+      
+      let normalizedUserSelected = selectedValue.trim().toLowerCase();
+      let normalizedCorrect = qObj.answer.trim().toLowerCase();
+      if (/^[A-Za-z]\)/.test(selectedValue)) {
+        normalizedUserSelected = normalize(selectedValue);
+      }
+      
+      let isCorrect = (normalizedUserSelected === normalizedCorrect);
+      
+      if (isCorrect) {
+        if (!qTrack.answered) {
+          totalAnswered++;
+          totalCorrect++;
+          qTrack.answered = true;
+          updateScoreDisplay();
+        }
+        feedback.textContent = "Correct! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ") Explanation: " 
+          + qObj.explanation;
+        feedback.style.color = "green";
+        radios.forEach(radio => radio.disabled = true);
+        if (currentQuestionTimer) {
+          clearInterval(currentQuestionTimer);
+          currentQuestionTimer = null;
+        }
+      } else {
+        if (!qTrack.answered && qTrack.attempts === 1) {
+          totalAnswered++;
+          updateScoreDisplay();
+        }
+        if (qTrack.attempts >= 3 && !qTrack.answered) {
+          radios.forEach(radio => radio.disabled = true);
+          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + 
+            ") All attempts used. Correct answer: " + qObj.answer + ". Explanation: " + qObj.explanation;
+          feedback.style.color = "red";
+          if (currentQuestionTimer) {
+            clearInterval(currentQuestionTimer);
+            currentQuestionTimer = null;
+          }
+        } else {
+          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ")";
+          feedback.style.color = "red";
+        }
+      }
+    }
+    
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+      }
+    }
+    function nextQuestion() {
+      if (currentQuestionIndex < questionsFlat.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      }
+    }
+    
+    function jumpToCategory(category) {
+      const catIndex = examData.findIndex(cat => cat.category === category);
+      if (catIndex >= 0) {
+        let offset = 0;
+        for (let i = 0; i < catIndex; i++) {
+          offset += examData[i].questions.length;
+        }
+        currentQuestionIndex = offset;
+        renderQuestion();
+      }
+    }
+    
+    function showAnalysisReport(mode = "normal") {
+      let correctCount = 0, incorrectCount = 0, unansweredCount = 0, totalTime = 0;
+      let totalAttempts = 0;
+      for (let i = 0; i < questionTimesFlat.length; i++) {
+        const q = questionTimesFlat[i];
+        if (q.attempts === 0) unansweredCount++;
+        else if (q.answered) correctCount++;
+        else incorrectCount++;
+        totalTime += q.timeTaken;
+        if(q.attempts > 0) totalAttempts += q.attempts;
+      }
+      const totalQuestions = questionsFlat.length;
+      const answeredQuestions = correctCount + incorrectCount;
+      const avgTime = answeredQuestions > 0 ? (totalTime / answeredQuestions).toFixed(2) : 0;
+      const avgAttempts = answeredQuestions > 0 ? (totalAttempts / answeredQuestions).toFixed(2) : 0;
+      
+      let overallScoreHTML = `
+        <p style="text-align:center; font-weight:bold;">
+          Overall Score: ${correctCount} out of ${totalQuestions}
+        </p>
+        <p style="text-align:center; font-weight:bold;">
+          Answered: ${answeredQuestions} &nbsp;&nbsp; Incorrect: ${incorrectCount} &nbsp;&nbsp; Unanswered: ${totalQuestions - answeredQuestions}
+        </p>
+        <p style="text-align:center; font-weight:bold;">Total Time Taken: ${totalTime} sec</p>
+        <p style="text-align:center;">Average Time per Answered Question: ${avgTime} sec</p>
+        <p style="text-align:center;">Average Attempts per Answered Question: ${avgAttempts}</p>
+        <p style="text-align:center;">
+          Correct Percentage: ${((correctCount/totalQuestions)*100).toFixed(2)}% &nbsp;&nbsp;
+          Incorrect Percentage: ${((incorrectCount/totalQuestions)*100).toFixed(2)}% &nbsp;&nbsp;
+          Unanswered Percentage: ${((((totalQuestions - answeredQuestions)/totalQuestions))*100).toFixed(2)}%
+        </p>
+      `;
+      
+      let reportHTML = `
+        <html>
+          <head>
+            <title>Analysis Report for ${userName}</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+              h1, h3 { text-align: center; }
+              .questionReport { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+              .correct { color: green; }
+              .wrong { color: red; }
+              button { 
+                background-color: #007BFF; 
+                color: #fff; 
+                border: none; 
+                border-radius: 4px; 
+                padding: 8px 16px; 
+                margin-top: 20px; 
+                display: block; 
+                margin-left: auto; 
+                margin-right: auto; 
+                cursor: pointer; 
+              }
+              button:hover { background-color: #0056b3; }
+            </style>
+          </head>
+          <body>
+            <h1>Analysis Report for ${userName}</h1>
+            ${overallScoreHTML}
+      `;
+      for (let idx = 0; idx < questionsFlat.length; idx++) {
+        const qt = questionTimesFlat[idx];
+        if (qt && qt.attempts > 0) {
+          const qObj = questionsFlat[idx];
+          const status = qt.answered ? "Correct" : "Incorrect";
+          const colorClass = qt.answered ? "correct" : "wrong";
+          reportHTML += `
+            <div class="questionReport">
+              <p><strong>Question ${idx + 1}:</strong> ${qObj.question}</p>
+              <p class="${colorClass}"><strong>Status:</strong> ${status}</p>
+              <p><strong>Time Taken:</strong> ${qt.timeTaken} sec</p>
+              <p><strong>Attempts:</strong> ${qt.attempts}</p>
+              <p><strong>Explanation:</strong> ${qObj.explanation}</p>
+            </div>
+          `;
+        }
+      }
+      
+      if (mode === "endExam") {
+        reportHTML += `<button onclick="if(window.opener && window.opener.restartExam){window.opener.restartExam();} else {location.reload();} window.close();">Restart Exam</button>`;
+      } else {
+        reportHTML += `<button onclick="window.close()">Back to Exam</button>`;
+      }
+      reportHTML += `</body></html>`;
+      
+      const reportWindow = window.open("", "_blank");
+      reportWindow.document.open();
+      reportWindow.document.write(reportHTML);
+      reportWindow.document.close();
+    }
+    
+    document.getElementById('analysisReportBtn').addEventListener('click', () => showAnalysisReport("normal"));
+    function endExam() {
+      showAnalysisReport("endExam");
+    }
+    document.getElementById('endExamBtn').addEventListener('click', endExam);
+    
+    function restartExam() {
+      if (confirm("Are you sure you want to restart the exam?")) {
+        examStartTime = Date.now();
+        totalCorrect = 0;
+        totalAnswered = 0;
+        currentQuestionIndex = 0;
+        flattenQuestions();
+        updateScoreDisplay();
+        renderQuestion();
+        updateVerticalNav();
+      }
+    }
+    window.restartExam = restartExam;
+    document.getElementById('restartExamBtn').addEventListener('click', restartExam);
+    
+    flattenQuestions();
+    renderQuestion();
+    updateVerticalNav();
+  </script>
+</body>
+</html>
