@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grade 2 Cognitive Exam for User</title>
+  <style>
+    /* Base Reset and Body Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      line-height: 1.6;
+    }
+    /* Enhanced Button Styling */
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      cursor: pointer;
+      margin: 4px;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    /* Fixed header styling */
+    #fixedHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border-bottom: 2px solid #ccc;
+      padding: 10px 15px;
+      z-index: 1000;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    #fixedHeader h1 {
+      font-size: 20px;
+      margin: 5px 0;
+    }
+    /* Version info in header */
+    #versionInfo {
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 5px;
+    }
+    /* Combined Timer, Score and Legend on one line */
+    #timerScore {
+      font-size: 14px;
+      margin: 4px 0;
+    }
+    /* Legend with color-coded text */
+    #legend {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+    /* Main container with vertical nav and content area */
+    #mainContainer {
+      display: flex;
+      margin-top: 160px; /* Extra space for header+version info */
+    }
+    /* Vertical navigation pane - hidden by default */
+    #verticalNav {
+      width: 220px;
+      background-color: #fff;
+      border-right: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+      overflow-y: auto;
+      height: calc(100vh - 160px);
+      display: none;
+    }
+    #verticalNav h4 {
+      margin: 10px 0 5px;
+      font-size: 16px;
+      text-align: center;
+    }
+    #verticalNav .qButtons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    #verticalNav .qButtons button {
+      width: 40px;
+      height: 30px;
+      font-size: 12px;
+      border: none;
+      border-radius: 4px;
+      margin: 3px;
+    }
+    /* Content area for question */
+    #contentArea {
+      flex: 1;
+      padding: 20px;
+      transition: margin-left 0.3s ease;
+    }
+    /* Center question container vertically */
+    #questionWrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 70vh;
+    }
+    /* Improved Question Container Styling */
+    #questionContainer {
+      background-color: #fff;
+      padding: 25px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      max-width: 700px;
+      width: 95%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin: auto;
+    }
+    /* Header div inside question container */
+    #headerNavDiv {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    #headerNavDiv .navButtons button {
+      padding: 6px 12px;
+      font-size: 14px;
+      margin-right: 5px;
+    }
+    /* MCQ Options Styling */
+    .options {
+      margin: 15px 0;
+    }
+    .options label {
+      margin-right: 15px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    /* Feedback Message Styling */
+    .feedback {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    /* Tablet Friendly: Up to 768px */
+    @media (max-width: 768px) {
+      #mainContainer {
+        flex-direction: column;
+      }
+      #verticalNav {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+      }
+      #contentArea {
+        padding: 10px;
+      }
+      #questionContainer {
+        width: 100%;
+        padding: 15px;
+      }
+      #headerNavDiv {
+        justify-content: flex-start;
+        width: 100%;
+      }
+      #headerNavDiv .navButtons {
+        margin-top: 10px;
+        width: auto;
+      }
+    }
+    /* Mobile Friendly: Up to 480px */
+    @media (max-width: 480px) {
+      #fixedHeader h1 {
+        font-size: 18px;
+      }
+      #timerScore {
+        font-size: 12px;
+      }
+      button {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+      #headerNavDiv .navButtons button {
+        font-size: 12px;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="fixedHeader">
+    <h1 id="examTitle">Grade 2 Cognitive Exam for <span id="userNameDisplay">User</span></h1>
+    <div id="versionInfo">Version: 1.7.0</div>
+    <div id="timerScore">
+      <span id="timer">Timer: 0 sec</span> | <span id="score">Score: 0/0</span>
+      <span id="legend">
+        | <span style="color:green;">Green = Correct</span> | 
+        <span style="color:red;">Red = Wrong</span> | 
+        <span style="color:blue;">Blue = Unanswered</span>
+      </span>
+    </div>
+    <!-- Updated toggle button text -->
+    <button id="toggleNavBtn">Show/Hide Question</button>
+    <button id="analysisReportBtn">Show Analysis Report</button>
+    <button id="restartExamBtn">Restart Exam</button>
+    <button id="endExamBtn">End Exam</button>
+  </div>
+  
+  <div id="mainContainer">
+    <div id="verticalNav"></div>
+    <div id="contentArea">
+      <div id="questionWrapper">
+        <div id="questionContainer"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Ask user for name
+    let userName = prompt("Please enter your name:");
+    if (!userName) userName = "User";
+    
+    // Ask for timer configuration for each question.
+    // Enter time in seconds for each question (0 for no timer)
+    let timeInput = prompt("Enter the time in seconds for each question (Enter 0 for no timer):", "20");
+    let questionTimeConfig = parseInt(timeInput) || 0;
+    
+    document.title = "Grade 2 Cognitive Exam for " + userName;
+    document.getElementById("examTitle").innerHTML = "Grade 2 Cognitive Exam for <span id='userNameDisplay'>" + userName + "</span>";
+    
+    // Toggle vertical nav (button now reads Show/Hide Question)
+    const toggleNavBtn = document.getElementById("toggleNavBtn");
+    const verticalNav = document.getElementById("verticalNav");
+    toggleNavBtn.addEventListener("click", function() {
+      verticalNav.style.display = (verticalNav.style.display === "block") ? "none" : "block";
+    });
+    
+    let examStartTime = Date.now();
+    let totalCorrect = 0;
+    let totalAnswered = 0;
+    let currentQuestionTimer = null;
+    
+    let questionsFlat = [];
+    let questionTimesFlat = [];
+    let currentQuestionIndex = 0;
+    
+    /* New Unique Question Banks for Grade 2 Cognitive Abilities Test Level 9.
+       Five distinct categories with 10 completely new questions each.
+    */
+    const examData = [
+      {
+        category: "Logical Reasoning",
+        questions: [
+          {
+            question: "Which item does not belong: bicycle, motorcycle, car, airplane?",
+            answer: "airplane",
+            explanation: "Airplane travels in the air; the others travel on the ground.",
+            options: ["A) bicycle", "B) motorcycle", "C) car", "D) airplane"]
+          },
+          {
+            question: "If all roses are flowers and some flowers are red, can a rose be red?",
+            answer: "Yes",
+            explanation: "Since roses are flowers and some flowers are red, a rose can be red.",
+            options: ["A) Yes", "B) No", "C) Possibly", "D) Always"]
+          },
+          {
+            question: "Which does not belong: triangle, rectangle, circle, oval?",
+            answer: "rectangle",
+            explanation: "Rectangle has right angles; the others do not share that property.",
+            options: ["A) triangle", "B) rectangle", "C) circle", "D) oval"]
+          },
+          {
+            question: "Which utensil is not used for eating: fork, spoon, knife, bowl?",
+            answer: "bowl",
+            explanation: "A bowl holds food; it isn’t used to eat food directly.",
+            options: ["A) fork", "B) spoon", "C) knife", "D) bowl"]
+          },
+          {
+            question: "If A is heavier than B and B is heavier than C, is A heavier than C?",
+            answer: "Yes",
+            explanation: "By transitivity, A is heavier than C.",
+            options: ["A) Yes", "B) No", "C) Uncertain", "D) Depends"]
+          },
+          {
+            question: "Which one is not a mode of transportation: train, bicycle, car, refrigerator?",
+            answer: "refrigerator",
+            explanation: "A refrigerator is an appliance, not a transportation method.",
+            options: ["A) train", "B) bicycle", "C) car", "D) refrigerator"]
+          },
+          {
+            question: "Which is not used for writing: pencil, pen, marker, eraser?",
+            answer: "eraser",
+            explanation: "An eraser is used to correct writing, not to write.",
+            options: ["A) pencil", "B) pen", "C) marker", "D) eraser"]
+          },
+          {
+            question: "Which instrument measures time?",
+            answer: "clock",
+            explanation: "A clock measures time.",
+            options: ["A) clock", "B) ruler", "C) scale", "D) thermometer"]
+          },
+          {
+            question: "Which does not belong: cat, dog, rabbit, tree?",
+            answer: "tree",
+            explanation: "Tree is a plant; the others are animals.",
+            options: ["A) cat", "B) dog", "C) rabbit", "D) tree"]
+          },
+          {
+            question: "Which word does not describe speed: brisk, rapid, sluggish, swift?",
+            answer: "sluggish",
+            explanation: "Sluggish means slow, while the others indicate speed.",
+            options: ["A) brisk", "B) rapid", "C) sluggish", "D) swift"]
+          }
+        ]
+      },
+      {
+        category: "Mathematics",
+        questions: [
+          {
+            question: "What is 16 + 12?",
+            answer: "28",
+            explanation: "16 plus 12 equals 28.",
+            options: ["26", "27", "28", "29"]
+          },
+          {
+            question: "What is 34 - 19?",
+            answer: "15",
+            explanation: "34 minus 19 equals 15.",
+            options: ["14", "15", "16", "17"]
+          },
+          {
+            question: "What is 8 × 9?",
+            answer: "72",
+            explanation: "8 multiplied by 9 equals 72.",
+            options: ["70", "71", "72", "73"]
+          },
+          {
+            question: "What is 84 ÷ 7?",
+            answer: "12",
+            explanation: "84 divided by 7 equals 12.",
+            options: ["10", "11", "12", "13"]
+          },
+          {
+            question: "What is 27 + 33?",
+            answer: "60",
+            explanation: "27 plus 33 equals 60.",
+            options: ["58", "59", "60", "61"]
+          },
+          {
+            question: "What is 50 - 22?",
+            answer: "28",
+            explanation: "50 minus 22 equals 28.",
+            options: ["26", "27", "28", "29"]
+          },
+          {
+            question: "What is 9 × 5?",
+            answer: "45",
+            explanation: "9 multiplied by 5 equals 45.",
+            options: ["44", "45", "46", "47"]
+          },
+          {
+            question: "What is 64 ÷ 8?",
+            answer: "8",
+            explanation: "64 divided by 8 equals 8.",
+            options: ["7", "8", "9", "10"]
+          },
+          {
+            question: "What is 11 + 19?",
+            answer: "30",
+            explanation: "11 plus 19 equals 30.",
+            options: ["28", "29", "30", "31"]
+          },
+          {
+            question: "What is 35 - 14?",
+            answer: "21",
+            explanation: "35 minus 14 equals 21.",
+            options: ["20", "21", "22", "23"]
+          }
+        ]
+      },
+      {
+        category: "Verbal Reasoning",
+        questions: [
+          {
+            question: "What is a synonym for 'inquisitive'?",
+            answer: "curious",
+            explanation: "Inquisitive means curious.",
+            options: ["apathetic", "curious", "indifferent", "bored"]
+          },
+          {
+            question: "What is the antonym of 'vibrant'?",
+            answer: "dull",
+            explanation: "Dull means lacking brightness or energy.",
+            options: ["sparkling", "dull", "lively", "vivid"]
+          },
+          {
+            question: "Which word means 'brief'?",
+            answer: "concise",
+            explanation: "Concise means brief and to the point.",
+            options: ["verbose", "long-winded", "concise", "rambling"]
+          },
+          {
+            question: "What is a synonym for 'swift'?",
+            answer: "rapid",
+            explanation: "Swift means rapid.",
+            options: ["sluggish", "lethargic", "rapid", "slow"]
+          },
+          {
+            question: "What does 'optimistic' mean?",
+            answer: "hopeful",
+            explanation: "Optimistic means having a positive outlook or being hopeful.",
+            options: ["pessimistic", "gloomy", "hopeful", "dismal"]
+          },
+          {
+            question: "Which word means 'confused'?",
+            answer: "perplexed",
+            explanation: "Perplexed means confused or puzzled.",
+            options: ["clear", "certain", "perplexed", "focused"]
+          },
+          {
+            question: "What is the opposite of 'noisy'?",
+            answer: "quiet",
+            explanation: "Quiet means not noisy.",
+            options: ["loud", "raucous", "noisy", "quiet"]
+          },
+          {
+            question: "What does 'meticulous' mean?",
+            answer: "precise",
+            explanation: "Meticulous means very careful and precise.",
+            options: ["careless", "precise", "sloppy", "hasty"]
+          },
+          {
+            question: "What is a synonym for 'cheerful'?",
+            answer: "jovial",
+            explanation: "Jovial means cheerful and friendly.",
+            options: ["sullen", "jovial", "mournful", "somber"]
+          },
+          {
+            question: "Which word means 'brilliant'?",
+            answer: "luminous",
+            explanation: "Luminous means brilliantly bright.",
+            options: ["dim", "dull", "luminous", "faded"]
+          }
+        ]
+      },
+      {
+        category: "Verbal Analogies",
+        questions: [
+          {
+            question: "Pen is to paper as brush is to ___?",
+            answer: "canvas",
+            explanation: "A brush is typically used on a canvas.",
+            options: ["fabric", "canvas", "board", "wall"]
+          },
+          {
+            question: "Glove is to hand as sock is to ___?",
+            answer: "foot",
+            explanation: "A sock is worn on the foot.",
+            options: ["head", "foot", "arm", "leg"]
+          },
+          {
+            question: "Book is to read as television is to ___?",
+            answer: "watch",
+            explanation: "You watch television just as you read a book.",
+            options: ["listen", "watch", "play", "observe"]
+          },
+          {
+            question: "Seed is to plant as larva is to ___?",
+            answer: "butterfly",
+            explanation: "A larva eventually becomes a butterfly.",
+            options: ["moth", "butterfly", "caterpillar", "insect"]
+          },
+          {
+            question: "Ink is to pen as battery is to ___?",
+            answer: "device",
+            explanation: "A battery powers a device.",
+            options: ["gadget", "device", "machine", "tool"]
+          },
+          {
+            question: "Key is to lock as password is to ___?",
+            answer: "account",
+            explanation: "A password secures an account, just as a key opens a lock.",
+            options: ["account", "door", "safe", "vault"]
+          },
+          {
+            question: "Car is to road as ship is to ___?",
+            answer: "ocean",
+            explanation: "A ship sails on the ocean.",
+            options: ["land", "ocean", "sky", "rail"]
+          },
+          {
+            question: "Tree is to forest as fish is to ___?",
+            answer: "school",
+            explanation: "A group of fish is called a school.",
+            options: ["herd", "flock", "school", "pod"]
+          },
+          {
+            question: "Fire is to heat as ice is to ___?",
+            answer: "cold",
+            explanation: "Ice produces cold, the opposite of heat.",
+            options: ["warm", "hot", "cold", "boiling"]
+          },
+          {
+            question: "Sun is to day as moon is to ___?",
+            answer: "night",
+            explanation: "The moon is visible at night.",
+            options: ["dawn", "noon", "night", "evening"]
+          }
+        ]
+      },
+      {
+        category: "Number Analogies",
+        questions: [
+          {
+            question: "3 is to 9 as 4 is to ___?",
+            answer: "16",
+            explanation: "3² = 9; 4² = 16.",
+            options: ["14", "15", "16", "17"]
+          },
+          {
+            question: "2 is to 8 as 3 is to ___?",
+            answer: "12",
+            explanation: "2×4 = 8; 3×4 = 12.",
+            options: ["10", "11", "12", "13"]
+          },
+          {
+            question: "5 is to 25 as 6 is to ___?",
+            answer: "36",
+            explanation: "5² = 25; 6² = 36.",
+            options: ["34", "35", "36", "37"]
+          },
+          {
+            question: "8 is to 4 as 10 is to ___?",
+            answer: "5",
+            explanation: "8 divided by 2 equals 4; 10 divided by 2 equals 5.",
+            options: ["4", "5", "6", "7"]
+          },
+          {
+            question: "4 is to 8 as 7 is to ___?",
+            answer: "14",
+            explanation: "Double 4 gives 8; double 7 gives 14.",
+            options: ["12", "13", "14", "15"]
+          },
+          {
+            question: "9 is to 3 as 15 is to ___?",
+            answer: "5",
+            explanation: "15 divided by 3 equals 5.",
+            options: ["4", "5", "6", "7"]
+          },
+          {
+            question: "7 is to 49 as 8 is to ___?",
+            answer: "64",
+            explanation: "7² = 49; 8² = 64.",
+            options: ["62", "63", "64", "65"]
+          },
+          {
+            question: "10 is to 5 as 14 is to ___?",
+            answer: "7",
+            explanation: "10 divided by 2 equals 5; 14 divided by 2 equals 7.",
+            options: ["6", "7", "8", "9"]
+          },
+          {
+            question: "6 is to 12 as 8 is to ___?",
+            answer: "16",
+            explanation: "6×2 = 12; 8×2 = 16.",
+            options: ["14", "15", "16", "17"]
+          },
+          {
+            question: "5 is to 20 as 7 is to ___?",
+            answer: "28",
+            explanation: "5×4 = 20; 7×4 = 28.",
+            options: ["26", "27", "28", "29"]
+          }
+        ]
+      }
+    ];
+    
+    function flattenQuestions() {
+      questionsFlat = [];
+      examData.forEach(category => {
+        category.questions.forEach(q => {
+          questionsFlat.push({
+            category: category.category,
+            question: q.question,
+            answer: q.answer,
+            explanation: q.explanation,
+            options: q.options
+          });
+        });
+      });
+      questionTimesFlat = Array(questionsFlat.length).fill(null).map(() => ({
+        start: null,
+        timeTaken: 0,
+        answered: false,
+        attempts: 0
+      }));
+    }
+    
+    function updateTimer() {
+      const now = Date.now();
+      const elapsedSeconds = Math.floor((now - examStartTime) / 1000);
+      document.getElementById('timer').textContent = "Timer: " + elapsedSeconds + " sec";
+    }
+    setInterval(updateTimer, 1000);
+    
+    function updateScoreDisplay() {
+      document.getElementById('score').textContent = "Score: " + totalCorrect + "/" + totalAnswered;
+    }
+    
+    function updateVerticalNav() {
+      const navContainer = document.getElementById('verticalNav');
+      navContainer.innerHTML = "";
+      let globalIndex = 0;
+      examData.forEach(category => {
+        const catHeader = document.createElement('h4');
+        catHeader.textContent = category.category;
+        navContainer.appendChild(catHeader);
+        const btnContainer = document.createElement('div');
+        btnContainer.className = "qButtons";
+        category.questions.forEach((q, index) => {
+          const btn = document.createElement('button');
+          btn.textContent = "Q" + (index + 1);
+          let gIdx = globalIndex + index;
+          const qt = questionTimesFlat[gIdx];
+          if (qt) {
+            if (qt.answered) {
+              btn.style.backgroundColor = "green";
+              btn.style.color = "#fff";
+            } else if (qt.attempts >= 2 && !qt.answered) {
+              btn.style.backgroundColor = "red";
+              btn.style.color = "#fff";
+            } else {
+              btn.style.backgroundColor = "blue";
+              btn.style.color = "#fff";
+            }
+          } else {
+            btn.style.backgroundColor = "blue";
+            btn.style.color = "#fff";
+          }
+          btn.onclick = function() {
+            currentQuestionIndex = gIdx;
+            renderQuestion();
+          };
+          btnContainer.appendChild(btn);
+        });
+        navContainer.appendChild(btnContainer);
+        globalIndex += category.questions.length;
+      });
+    }
+    
+    // Function to render a question and set its timer (if configured)
+    function renderQuestion() {
+      // Clear previous timer if exists and reset start time for current question
+      if (currentQuestionTimer) {
+        clearInterval(currentQuestionTimer);
+        currentQuestionTimer = null;
+      }
+      questionTimesFlat[currentQuestionIndex].start = Date.now();
+      
+      const container = document.getElementById('questionContainer');
+      container.innerHTML = "";
+      
+      const headerNavDiv = document.createElement('div');
+      headerNavDiv.id = "headerNavDiv";
+      headerNavDiv.style.display = "flex";
+      headerNavDiv.style.justifyContent = "flex-start";
+      headerNavDiv.style.alignItems = "center";
+      headerNavDiv.style.marginBottom = "15px";
+      
+      const navDiv = document.createElement('div');
+      navDiv.className = "navButtons";
+      
+      const backBtn = document.createElement('button');
+      backBtn.textContent = "Back";
+      backBtn.onclick = prevQuestion;
+      backBtn.disabled = (currentQuestionIndex === 0);
+      
+      const nextBtn = document.createElement('button');
+      nextBtn.textContent = "Next";
+      nextBtn.onclick = nextQuestion;
+      nextBtn.disabled = (currentQuestionIndex === questionsFlat.length - 1);
+      
+      navDiv.appendChild(backBtn);
+      navDiv.appendChild(nextBtn);
+      headerNavDiv.appendChild(navDiv);
+      
+      container.appendChild(headerNavDiv);
+      
+      const header = document.createElement('h3');
+      header.textContent = questionsFlat[currentQuestionIndex].category + " - Question " + (currentQuestionIndex + 1) + " of " + questionsFlat.length;
+      container.appendChild(header);
+      
+      const qObj = questionsFlat[currentQuestionIndex];
+      const qText = document.createElement('p');
+      qText.innerHTML = qObj.question;
+      container.appendChild(qText);
+      
+      const timerDiv = document.createElement('div');
+      timerDiv.id = "questionTimer";
+      timerDiv.style.fontSize = "14px";
+      timerDiv.style.marginBottom = "10px";
+      container.appendChild(timerDiv);
+      
+      // If timer is set (questionTimeConfig > 0), initialize countdown; otherwise, show "No Timer"
+      if (questionTimeConfig > 0) {
+        let countdown = questionTimeConfig;
+        timerDiv.textContent = "Time Remaining: " + countdown + " sec";
+        currentQuestionTimer = setInterval(() => {
+          countdown--;
+          timerDiv.textContent = "Time Remaining: " + countdown + " sec";
+          if (countdown <= 0) {
+            clearInterval(currentQuestionTimer);
+            currentQuestionTimer = null;
+            const qTrack = questionTimesFlat[currentQuestionIndex];
+            if (!qTrack.answered) {
+              if (qTrack.attempts === 0) totalAnswered++;
+              qTrack.attempts = 2;
+              qTrack.timeTaken = questionTimeConfig;
+              const radios = document.getElementsByName("q" + currentQuestionIndex);
+              radios.forEach(radio => radio.disabled = true);
+              const feedback = document.getElementById("feedback_q" + currentQuestionIndex);
+              feedback.textContent = "Time's up! (Time: " + questionTimeConfig + " sec, Attempts: " + qTrack.attempts + ") All attempts used. Correct answer: " + qObj.answer + ". Explanation: " + qObj.explanation;
+              feedback.style.color = "red";
+              updateScoreDisplay();
+              updateVerticalNav();
+            }
+          }
+        }, 1000);
+      } else {
+        timerDiv.textContent = "No Timer for this question";
+      }
+      
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = "options";
+      qObj.options.forEach((opt, index) => {
+        const radioId = "q" + currentQuestionIndex + "_opt" + index;
+        const radioInput = document.createElement('input');
+        radioInput.type = "radio";
+        radioInput.name = "q" + currentQuestionIndex;
+        radioInput.value = opt;
+        radioInput.id = radioId;
+        const qTrack = questionTimesFlat[currentQuestionIndex];
+        if (qTrack.answered || qTrack.attempts >= 2) radioInput.disabled = true;
+        radioInput.addEventListener("change", function() {
+          checkAnswer(currentQuestionIndex);
+          updateVerticalNav();
+        });
+        const radioLabel = document.createElement('label');
+        radioLabel.htmlFor = radioId;
+        radioLabel.textContent = opt;
+        optionsDiv.appendChild(radioInput);
+        optionsDiv.appendChild(radioLabel);
+      });
+      container.appendChild(optionsDiv);
+      
+      const feedbackSpan = document.createElement('span');
+      feedbackSpan.id = "feedback_q" + currentQuestionIndex;
+      feedbackSpan.className = "feedback";
+      container.appendChild(feedbackSpan);
+      
+      const qTrackAgain = questionTimesFlat[currentQuestionIndex];
+      if (qTrackAgain.attempts > 0) {
+        if (qTrackAgain.answered) {
+          feedbackSpan.textContent = "Correct! (Time: " + qTrackAgain.timeTaken + " sec, Attempts: " + qTrackAgain.attempts + ") Explanation: " + qObj.explanation;
+          feedbackSpan.style.color = "green";
+        } else if (qTrackAgain.attempts >= 2 && !qTrackAgain.answered) {
+          feedbackSpan.textContent = "Incorrect! (Time: " + qTrackAgain.timeTaken + " sec, Attempts: " + qTrackAgain.attempts + ") All attempts used. Correct answer: " + qObj.answer + ". Explanation: " + qObj.explanation;
+          feedbackSpan.style.color = "red";
+        } else {
+          feedbackSpan.textContent = "Attempts so far: " + qTrackAgain.attempts;
+          feedbackSpan.style.color = "black";
+        }
+      }
+    }
+    
+    function checkAnswer(qIndex) {
+      const radios = document.getElementsByName("q" + qIndex);
+      let selectedValue = "";
+      radios.forEach(radio => {
+        if (radio.checked) {
+          selectedValue = radio.value;
+        }
+      });
+      const qObj = questionsFlat[qIndex];
+      const qTrack = questionTimesFlat[qIndex];
+      const feedback = document.getElementById("feedback_q" + qIndex);
+      if (!qTrack.start) qTrack.start = Date.now();
+      qTrack.attempts++;
+      const now = Date.now();
+      qTrack.timeTaken = Math.floor((now - qTrack.start) / 1000);
+      function normalize(ans) {
+        return ans.replace(/^[A-Za-z]\)\s*/, "").trim().toLowerCase();
+      }
+      let normalizedUserSelected = selectedValue.trim().toLowerCase();
+      let normalizedCorrect = qObj.answer.trim().toLowerCase();
+      if (/^[A-Za-z]\)/.test(selectedValue)) {
+        normalizedUserSelected = normalize(selectedValue);
+      }
+      let isCorrect = (normalizedUserSelected === normalizedCorrect);
+      if (isCorrect) {
+        if (!qTrack.answered) {
+          totalAnswered++;
+          totalCorrect++;
+          qTrack.answered = true;
+          updateScoreDisplay();
+        }
+        feedback.textContent = "Correct! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ") Explanation: " + qObj.explanation;
+        feedback.style.color = "green";
+        radios.forEach(radio => radio.disabled = true);
+        if (currentQuestionTimer) {
+          clearInterval(currentQuestionTimer);
+          currentQuestionTimer = null;
+        }
+      } else {
+        if (!qTrack.answered && qTrack.attempts === 1) {
+          totalAnswered++;
+          updateScoreDisplay();
+        }
+        if (qTrack.attempts >= 2 && !qTrack.answered) {
+          radios.forEach(radio => radio.disabled = true);
+          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ") All attempts used. Correct answer: " + qObj.answer + ". Explanation: " + qObj.explanation;
+          feedback.style.color = "red";
+          if (currentQuestionTimer) {
+            clearInterval(currentQuestionTimer);
+            currentQuestionTimer = null;
+          }
+        } else {
+          feedback.textContent = "Incorrect! (Time: " + qTrack.timeTaken + " sec, Attempts: " + qTrack.attempts + ")";
+          feedback.style.color = "red";
+        }
+      }
+    }
+    
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion();
+      }
+    }
+    function nextQuestion() {
+      if (currentQuestionIndex < questionsFlat.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+      }
+    }
+    
+    function jumpToCategory(category) {
+      const catIndex = examData.findIndex(cat => cat.category === category);
+      if (catIndex >= 0) {
+        let offset = 0;
+        for (let i = 0; i < catIndex; i++) {
+          offset += examData[i].questions.length;
+        }
+        currentQuestionIndex = offset;
+        renderQuestion();
+      }
+    }
+    
+    function showAnalysisReport(mode = "normal") {
+      let correctCount = 0, incorrectCount = 0, unansweredCount = 0, totalTime = 0;
+      let totalAttempts = 0;
+      for (let i = 0; i < questionTimesFlat.length; i++) {
+        const q = questionTimesFlat[i];
+        if (q.attempts === 0) {
+          unansweredCount++;
+        } else if (q.answered) {
+          correctCount++;
+        } else {
+          incorrectCount++;
+        }
+        totalTime += q.timeTaken;
+        if(q.attempts > 0) totalAttempts += q.attempts;
+      }
+      const totalQuestions = questionsFlat.length;
+      const answeredQuestions = correctCount + incorrectCount;
+      const avgTime = answeredQuestions > 0 ? (totalTime / answeredQuestions).toFixed(2) : 0;
+      const avgAttempts = answeredQuestions > 0 ? (totalAttempts / answeredQuestions).toFixed(2) : 0;
+      
+      let overallScoreHTML = `
+        <p style="text-align:center; font-weight:bold;">Overall Score: ${correctCount} out of ${totalQuestions}</p>
+        <p style="text-align:center; font-weight:bold;">Answered: ${answeredQuestions} &nbsp;&nbsp; Incorrect: ${incorrectCount} &nbsp;&nbsp; Unanswered: ${totalQuestions - answeredQuestions}</p>
+        <p style="text-align:center; font-weight:bold;">Total Time Taken: ${totalTime} sec</p>
+        <p style="text-align:center;">Average Time per Answered Question: ${avgTime} sec</p>
+        <p style="text-align:center;">Average Attempts per Answered Question: ${avgAttempts}</p>
+        <p style="text-align:center;">
+          Correct Percentage: ${((correctCount/totalQuestions)*100).toFixed(2)}% &nbsp;&nbsp;
+          Incorrect Percentage: ${((incorrectCount/totalQuestions)*100).toFixed(2)}% &nbsp;&nbsp;
+          Unanswered Percentage: ${((((totalQuestions - answeredQuestions)/totalQuestions))*100).toFixed(2)}%
+        </p>
+      `;
+      
+      let reportHTML = `
+        <html>
+          <head>
+            <title>Analysis Report for ${userName}</title>
+            <style>
+              body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+              h1, h3 { text-align: center; }
+              .questionReport { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px; }
+              .correct { color: green; }
+              .wrong { color: red; }
+              button { 
+                background-color: #007BFF; 
+                color: #fff; 
+                border: none; 
+                border-radius: 4px; 
+                padding: 8px 16px; 
+                margin-top: 20px; 
+                display: block; 
+                margin-left: auto; 
+                margin-right: auto; 
+                cursor: pointer; 
+              }
+              button:hover { background-color: #0056b3; }
+            </style>
+          </head>
+          <body>
+            <h1>Analysis Report for ${userName}</h1>
+            ${overallScoreHTML}
+      `;
+      for (let idx = 0; idx < questionsFlat.length; idx++) {
+        const qt = questionTimesFlat[idx];
+        if (qt && qt.attempts > 0) {
+          const qObj = questionsFlat[idx];
+          const status = qt.answered ? "Correct" : "Incorrect";
+          const colorClass = qt.answered ? "correct" : "wrong";
+          reportHTML += `
+            <div class="questionReport">
+              <p><strong>Question ${idx + 1}:</strong> ${qObj.question}</p>
+              <p class="${colorClass}"><strong>Status:</strong> ${status}</p>
+              <p><strong>Time Taken:</strong> ${qt.timeTaken} sec</p>
+              <p><strong>Attempts:</strong> ${qt.attempts}</p>
+              <p><strong>Explanation:</strong> ${qObj.explanation}</p>
+            </div>
+          `;
+        }
+      }
+      
+      if (mode === "endExam") {
+        reportHTML += `<button onclick="if(window.opener && window.opener.restartExam){window.opener.restartExam();} else {location.reload();} window.close();">Restart Exam</button>`;
+      } else {
+        reportHTML += `<button onclick="window.close()">Back to Exam</button>`;
+      }
+      reportHTML += `</body></html>`;
+      
+      const reportWindow = window.open("", "_blank");
+      reportWindow.document.open();
+      reportWindow.document.write(reportHTML);
+      reportWindow.document.close();
+    }
+    
+    document.getElementById('analysisReportBtn').addEventListener('click', () => showAnalysisReport("normal"));
+    function endExam() {
+      showAnalysisReport("endExam");
+    }
+    document.getElementById('endExamBtn').addEventListener('click', endExam);
+    
+    function restartExam() {
+      if (confirm("Are you sure you want to restart the exam?")) {
+        examStartTime = Date.now();
+        totalCorrect = 0;
+        totalAnswered = 0;
+        currentQuestionIndex = 0;
+        flattenQuestions();
+        updateScoreDisplay();
+        renderQuestion();
+        updateVerticalNav();
+      }
+    }
+    window.restartExam = restartExam;
+    document.getElementById('restartExamBtn').addEventListener('click', restartExam);
+    
+    flattenQuestions();
+    renderQuestion();
+    updateVerticalNav();
+  </script>
+</body>
+</html>
