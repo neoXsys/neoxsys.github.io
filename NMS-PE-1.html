@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<!-- saved from url=(0074)file:///C:/Users/hdalwadi/Downloads/National_Math_Stars_Practice_Exam.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>National Math Stars Practice Exam</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #182033;
+      --muted: #62708a;
+      --line: #dfe6f0;
+      --accent: #2454d6;
+      --accent-dark: #163ca7;
+      --correct: #d9f8df;
+      --correct-border: #29a34a;
+      --wrong: #ffe0e0;
+      --wrong-border: #d93025;
+      --unanswered: #e4f0ff;
+      --unanswered-border: #2472d8;
+      --shadow: 0 10px 30px rgba(20, 37, 63, 0.10);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #eaf1ff 0, #f4f7fb 38%, #f8fafc 100%);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 18px 50px; }
+    header {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 40px); letter-spacing: -0.02em; }
+    .sub { color: var(--muted); margin: 0 0 14px; }
+    .meta, .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+    .pill {
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+    .g { background: var(--correct-border); }
+    .r { background: var(--wrong-border); }
+    .b { background: var(--unanswered-border); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; }
+    button {
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+      box-shadow: 0 4px 12px rgba(36, 84, 214, .22);
+    }
+    button:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    button.secondary { background: #eef3ff; color: var(--accent-dark); box-shadow: none; border: 1px solid #cddafe; }
+    button.secondary:hover { background: #e0e9ff; }
+    button.danger { background: #bd2d22; }
+    button.danger:hover { background: #982116; }
+    .progressOuter { height: 12px; background: #e8eef7; border-radius: 999px; overflow: hidden; margin-top: 16px; }
+    .progressInner { height: 100%; width: 0%; background: linear-gradient(90deg, #2454d6, #29a34a); transition: width .2s ease; }
+    .section-title { margin: 26px 0 12px; font-size: 22px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
+    .grid { display: grid; gap: 14px; }
+    .qcard {
+      background: var(--card);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 5px 18px rgba(20, 37, 63, 0.06);
+      padding: 17px;
+      transition: border-color .18s ease, background .18s ease;
+    }
+    .qcard.correct { background: var(--correct); border-color: var(--correct-border); }
+    .qcard.wrong { background: var(--wrong); border-color: var(--wrong-border); }
+    .qcard.unanswered { background: var(--unanswered); border-color: var(--unanswered-border); }
+    .qtop { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+    .qnum { font-weight: 800; color: var(--accent-dark); }
+    .status { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+    .question { font-size: 17px; margin: 0 0 12px; }
+    .answerRow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    input[type="text"] {
+      flex: 1 1 260px;
+      min-width: 180px;
+      border: 1px solid #cdd6e4;
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 16px;
+      outline: none;
+      background: #fff;
+    }
+    input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(36, 84, 214, .14); }
+    .small { font-size: 13px; color: var(--muted); margin-top: 8px; }
+    .report {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-top: 18px;
+      overflow-x: auto;
+    }
+    .report.show { display: block; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 10px; vertical-align: top; }
+    th { background: #f5f8fd; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+    tr.correctRow td { background: var(--correct); }
+    tr.wrongRow td { background: var(--wrong); }
+    tr.unansweredRow td { background: var(--unanswered); }
+    footer { color: var(--muted); font-size: 13px; margin-top: 20px; text-align: center; }
+    @media (max-width: 640px) {
+      header, .qcard, .report { border-radius: 12px; }
+      .wrap { padding: 16px 12px 36px; }
+      button { width: 100%; }
+      .qtop { flex-direction: column; }
+    }
+    @media print {
+      body { background: #fff; }
+      header, .qcard, .report { box-shadow: none; }
+      .toolbar, .answerRow button, .progressOuter { display: none; }
+      input { border: 0; border-bottom: 1px solid #000; border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>National Math Stars Practice Exam</h1>
+      <p class="sub">Suggested level: Advanced Grade 2 / Grade 3 · 60 minutes · 30 questions</p>
+      <div class="meta" aria-live="polite">
+        <span class="pill">Version: 1.7.0</span>
+        <span class="pill">Timer: <span id="timer">1 min 2 sec</span></span>
+        <span class="pill">Score: <span id="score">0/30</span></span>
+      </div>
+      <div class="legend" style="margin-top:12px">
+        <span><span class="swatch g"></span>Green = Correct</span>
+        <span><span class="swatch r"></span>Red = Wrong</span>
+        <span><span class="swatch b"></span>Blue = Unanswered</span>
+      </div>
+      <div class="toolbar">
+        <button type="button" onclick="toggleQuestions()">Show/Hide Question</button>
+        <button type="button" class="secondary" onclick="showReport()">Show Analysis Report</button>
+        <button type="button" class="secondary" onclick="restartExam()">Restart Exam</button>
+        <button type="button" class="danger" onclick="endExam()">End Exam</button>
+      </div>
+      <div class="progressOuter" aria-label="progress"><div id="progress" class="progressInner" style="width: 0%;"></div></div>
+    </header>
+
+    <main id="exam" class="grid"><h2 class="section-title">Section A: Number Sense and Arithmetic</h2><article class="qcard unanswered" id="card-0">
+          <div class="qtop">
+            <div class="qnum">Question 1</div>
+            <div class="status" id="status-0">Unanswered</div>
+          </div>
+          <p class="question">What is 348 + 275?</p>
+          <div class="answerRow">
+            <input id="ans-0" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 1">
+            <button type="button" class="secondary" onclick="checkOne(0)">Check</button>
+          </div>
+          <div class="small" id="feedback-0"></div>
+        </article><article class="qcard unanswered" id="card-1">
+          <div class="qtop">
+            <div class="qnum">Question 2</div>
+            <div class="status" id="status-1">Unanswered</div>
+          </div>
+          <p class="question">What is 900 - 476?</p>
+          <div class="answerRow">
+            <input id="ans-1" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 2">
+            <button type="button" class="secondary" onclick="checkOne(1)">Check</button>
+          </div>
+          <div class="small" id="feedback-1"></div>
+        </article><article class="qcard unanswered" id="card-2">
+          <div class="qtop">
+            <div class="qnum">Question 3</div>
+            <div class="status" id="status-2">Unanswered</div>
+          </div>
+          <p class="question">Fill in the blank: 36 + 36 + 36 + 36 = 4 x ___</p>
+          <div class="answerRow">
+            <input id="ans-2" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 3">
+            <button type="button" class="secondary" onclick="checkOne(2)">Check</button>
+          </div>
+          <div class="small" id="feedback-2"></div>
+        </article><article class="qcard unanswered" id="card-3">
+          <div class="qtop">
+            <div class="qnum">Question 4</div>
+            <div class="status" id="status-3">Unanswered</div>
+          </div>
+          <p class="question">Which is larger: 7 x 8 or 9 x 6?</p>
+          <div class="answerRow">
+            <input id="ans-3" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 4">
+            <button type="button" class="secondary" onclick="checkOne(3)">Check</button>
+          </div>
+          <div class="small" id="feedback-3"></div>
+        </article><article class="qcard unanswered" id="card-4">
+          <div class="qtop">
+            <div class="qnum">Question 5</div>
+            <div class="status" id="status-4">Unanswered</div>
+          </div>
+          <p class="question">A number is 12 more than 89. What is the number?</p>
+          <div class="answerRow">
+            <input id="ans-4" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 5">
+            <button type="button" class="secondary" onclick="checkOne(4)">Check</button>
+          </div>
+          <div class="small" id="feedback-4"></div>
+        </article><article class="qcard unanswered" id="card-5">
+          <div class="qtop">
+            <div class="qnum">Question 6</div>
+            <div class="status" id="status-5">Unanswered</div>
+          </div>
+          <p class="question">What is the missing number? 6, 12, 18, 24, ___, 36</p>
+          <div class="answerRow">
+            <input id="ans-5" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 6">
+            <button type="button" class="secondary" onclick="checkOne(5)">Check</button>
+          </div>
+          <div class="small" id="feedback-5"></div>
+        </article><article class="qcard unanswered" id="card-6">
+          <div class="qtop">
+            <div class="qnum">Question 7</div>
+            <div class="status" id="status-6">Unanswered</div>
+          </div>
+          <p class="question">Write the number that has 4 hundreds, 13 tens, and 5 ones.</p>
+          <div class="answerRow">
+            <input id="ans-6" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 7">
+            <button type="button" class="secondary" onclick="checkOne(6)">Check</button>
+          </div>
+          <div class="small" id="feedback-6"></div>
+        </article><article class="qcard unanswered" id="card-7">
+          <div class="qtop">
+            <div class="qnum">Question 8</div>
+            <div class="status" id="status-7">Unanswered</div>
+          </div>
+          <p class="question">Maya has 3 packs of stickers. Each pack has 18 stickers. She gives away 20 stickers. How many stickers does she have left?</p>
+          <div class="answerRow">
+            <input id="ans-7" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 8">
+            <button type="button" class="secondary" onclick="checkOne(7)">Check</button>
+          </div>
+          <div class="small" id="feedback-7"></div>
+        </article><h2 class="section-title">Section B: Patterns and Logic</h2><article class="qcard unanswered" id="card-8">
+          <div class="qtop">
+            <div class="qnum">Question 9</div>
+            <div class="status" id="status-8">Unanswered</div>
+          </div>
+          <p class="question">Find the next two numbers: 2, 5, 11, 23, 47, ___, ___</p>
+          <div class="answerRow">
+            <input id="ans-8" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 9">
+            <button type="button" class="secondary" onclick="checkOne(8)">Check</button>
+          </div>
+          <div class="small" id="feedback-8"></div>
+        </article><article class="qcard unanswered" id="card-9">
+          <div class="qtop">
+            <div class="qnum">Question 10</div>
+            <div class="status" id="status-9">Unanswered</div>
+          </div>
+          <p class="question">Which number does not belong? 16, 25, 36, 45, 49</p>
+          <div class="answerRow">
+            <input id="ans-9" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 10">
+            <button type="button" class="secondary" onclick="checkOne(9)">Check</button>
+          </div>
+          <div class="small" id="feedback-9"></div>
+        </article><article class="qcard unanswered" id="card-10">
+          <div class="qtop">
+            <div class="qnum">Question 11</div>
+            <div class="status" id="status-10">Unanswered</div>
+          </div>
+          <p class="question">A secret rule changes 4 into 13, 5 into 16, and 6 into 19. What does it change 9 into?</p>
+          <div class="answerRow">
+            <input id="ans-10" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 11">
+            <button type="button" class="secondary" onclick="checkOne(10)">Check</button>
+          </div>
+          <div class="small" id="feedback-10"></div>
+        </article><article class="qcard unanswered" id="card-11">
+          <div class="qtop">
+            <div class="qnum">Question 12</div>
+            <div class="status" id="status-11">Unanswered</div>
+          </div>
+          <p class="question">If A + A = 14 and A + B = 20, what is B?</p>
+          <div class="answerRow">
+            <input id="ans-11" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 12">
+            <button type="button" class="secondary" onclick="checkOne(11)">Check</button>
+          </div>
+          <div class="small" id="feedback-11"></div>
+        </article><article class="qcard unanswered" id="card-12">
+          <div class="qtop">
+            <div class="qnum">Question 13</div>
+            <div class="status" id="status-12">Unanswered</div>
+          </div>
+          <p class="question">Three children - Lina, Omar, and Priya - stand in a line. Lina is not first. Omar is last. Who is first?</p>
+          <div class="answerRow">
+            <input id="ans-12" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 13">
+            <button type="button" class="secondary" onclick="checkOne(12)">Check</button>
+          </div>
+          <div class="small" id="feedback-12"></div>
+        </article><article class="qcard unanswered" id="card-13">
+          <div class="qtop">
+            <div class="qnum">Question 14</div>
+            <div class="status" id="status-13">Unanswered</div>
+          </div>
+          <p class="question">A pattern repeats: circle, square, triangle, circle, square, triangle, ... What is the 20th shape?</p>
+          <div class="answerRow">
+            <input id="ans-13" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 14">
+            <button type="button" class="secondary" onclick="checkOne(13)">Check</button>
+          </div>
+          <div class="small" id="feedback-13"></div>
+        </article><h2 class="section-title">Section C: Word Problems</h2><article class="qcard unanswered" id="card-14">
+          <div class="qtop">
+            <div class="qnum">Question 15</div>
+            <div class="status" id="status-14">Unanswered</div>
+          </div>
+          <p class="question">A library has 126 books on one shelf and 97 books on another shelf. Then 58 books are checked out. How many books are left?</p>
+          <div class="answerRow">
+            <input id="ans-14" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 15">
+            <button type="button" class="secondary" onclick="checkOne(14)">Check</button>
+          </div>
+          <div class="small" id="feedback-14"></div>
+        </article><article class="qcard unanswered" id="card-15">
+          <div class="qtop">
+            <div class="qnum">Question 16</div>
+            <div class="status" id="status-15">Unanswered</div>
+          </div>
+          <p class="question">A box holds 8 crayons. How many full boxes can be made from 70 crayons? How many crayons are left over?</p>
+          <div class="answerRow">
+            <input id="ans-15" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 16">
+            <button type="button" class="secondary" onclick="checkOne(15)">Check</button>
+          </div>
+          <div class="small" id="feedback-15"></div>
+        </article><article class="qcard unanswered" id="card-16">
+          <div class="qtop">
+            <div class="qnum">Question 17</div>
+            <div class="status" id="status-16">Unanswered</div>
+          </div>
+          <p class="question">Noah saves $5 each week. After 9 weeks, he spends $18. How much money does he have left?</p>
+          <div class="answerRow">
+            <input id="ans-16" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 17">
+            <button type="button" class="secondary" onclick="checkOne(16)">Check</button>
+          </div>
+          <div class="small" id="feedback-16"></div>
+        </article><article class="qcard unanswered" id="card-17">
+          <div class="qtop">
+            <div class="qnum">Question 18</div>
+            <div class="status" id="status-17">Unanswered</div>
+          </div>
+          <p class="question">A train has 6 cars. Each car has 12 seats. If 59 seats are filled, how many empty seats are there?</p>
+          <div class="answerRow">
+            <input id="ans-17" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 18">
+            <button type="button" class="secondary" onclick="checkOne(17)">Check</button>
+          </div>
+          <div class="small" id="feedback-17"></div>
+        </article><article class="qcard unanswered" id="card-18">
+          <div class="qtop">
+            <div class="qnum">Question 19</div>
+            <div class="status" id="status-18">Unanswered</div>
+          </div>
+          <p class="question">A rectangle has a length of 9 units and a width of 4 units. What is its perimeter?</p>
+          <div class="answerRow">
+            <input id="ans-18" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 19">
+            <button type="button" class="secondary" onclick="checkOne(18)">Check</button>
+          </div>
+          <div class="small" id="feedback-18"></div>
+        </article><article class="qcard unanswered" id="card-19">
+          <div class="qtop">
+            <div class="qnum">Question 20</div>
+            <div class="status" id="status-19">Unanswered</div>
+          </div>
+          <p class="question">A number is doubled, then 7 is added. The result is 31. What was the original number?</p>
+          <div class="answerRow">
+            <input id="ans-19" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 20">
+            <button type="button" class="secondary" onclick="checkOne(19)">Check</button>
+          </div>
+          <div class="small" id="feedback-19"></div>
+        </article><h2 class="section-title">Section D: Challenge Problems</h2><article class="qcard unanswered" id="card-20">
+          <div class="qtop">
+            <div class="qnum">Question 21</div>
+            <div class="status" id="status-20">Unanswered</div>
+          </div>
+          <p class="question">How many different two-digit numbers can be made using the digits 2, 5, and 8 if no digit is repeated?</p>
+          <div class="answerRow">
+            <input id="ans-20" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 21">
+            <button type="button" class="secondary" onclick="checkOne(20)">Check</button>
+          </div>
+          <div class="small" id="feedback-20"></div>
+        </article><article class="qcard unanswered" id="card-21">
+          <div class="qtop">
+            <div class="qnum">Question 22</div>
+            <div class="status" id="status-21">Unanswered</div>
+          </div>
+          <p class="question">The sum of three consecutive numbers is 42. What are the three numbers?</p>
+          <div class="answerRow">
+            <input id="ans-21" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 22">
+            <button type="button" class="secondary" onclick="checkOne(21)">Check</button>
+          </div>
+          <div class="small" id="feedback-21"></div>
+        </article><article class="qcard unanswered" id="card-22">
+          <div class="qtop">
+            <div class="qnum">Question 23</div>
+            <div class="status" id="status-22">Unanswered</div>
+          </div>
+          <p class="question">A frog jumps 3 feet forward, then 1 foot backward. If it repeats this pattern, how far from the start is it after 10 jumps?</p>
+          <div class="answerRow">
+            <input id="ans-22" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 23">
+            <button type="button" class="secondary" onclick="checkOne(22)">Check</button>
+          </div>
+          <div class="small" id="feedback-22"></div>
+        </article><article class="qcard unanswered" id="card-23">
+          <div class="qtop">
+            <div class="qnum">Question 24</div>
+            <div class="status" id="status-23">Unanswered</div>
+          </div>
+          <p class="question">There are 24 legs in a room. The room has only cats and birds. There are 7 animals total. How many cats are there?</p>
+          <div class="answerRow">
+            <input id="ans-23" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 24">
+            <button type="button" class="secondary" onclick="checkOne(23)">Check</button>
+          </div>
+          <div class="small" id="feedback-23"></div>
+        </article><article class="qcard unanswered" id="card-24">
+          <div class="qtop">
+            <div class="qnum">Question 25</div>
+            <div class="status" id="status-24">Unanswered</div>
+          </div>
+          <p class="question">Ella writes all the numbers from 1 to 30. How many times does she write the digit 2?</p>
+          <div class="answerRow">
+            <input id="ans-24" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 25">
+            <button type="button" class="secondary" onclick="checkOne(24)">Check</button>
+          </div>
+          <div class="small" id="feedback-24"></div>
+        </article><article class="qcard unanswered" id="card-25">
+          <div class="qtop">
+            <div class="qnum">Question 26</div>
+            <div class="status" id="status-25">Unanswered</div>
+          </div>
+          <p class="question">A square has the same perimeter as a rectangle with length 10 and width 6. What is the side length of the square?</p>
+          <div class="answerRow">
+            <input id="ans-25" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 26">
+            <button type="button" class="secondary" onclick="checkOne(25)">Check</button>
+          </div>
+          <div class="small" id="feedback-25"></div>
+        </article><article class="qcard unanswered" id="card-26">
+          <div class="qtop">
+            <div class="qnum">Question 27</div>
+            <div class="status" id="status-26">Unanswered</div>
+          </div>
+          <p class="question">Find the smallest number greater than 50 that is divisible by both 6 and 8.</p>
+          <div class="answerRow">
+            <input id="ans-26" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 27">
+            <button type="button" class="secondary" onclick="checkOne(26)">Check</button>
+          </div>
+          <div class="small" id="feedback-26"></div>
+        </article><article class="qcard unanswered" id="card-27">
+          <div class="qtop">
+            <div class="qnum">Question 28</div>
+            <div class="status" id="status-27">Unanswered</div>
+          </div>
+          <p class="question">A bag has red, blue, and green marbles. There are twice as many red marbles as blue marbles. There are 3 more green marbles than blue marbles. If there are 23 marbles total, how many blue marbles are there?</p>
+          <div class="answerRow">
+            <input id="ans-27" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 28">
+            <button type="button" class="secondary" onclick="checkOne(27)">Check</button>
+          </div>
+          <div class="small" id="feedback-27"></div>
+        </article><article class="qcard unanswered" id="card-28">
+          <div class="qtop">
+            <div class="qnum">Question 29</div>
+            <div class="status" id="status-28">Unanswered</div>
+          </div>
+          <p class="question">Sam thinks of a number. He subtracts 4, multiplies by 3, and gets 27. What number did Sam think of?</p>
+          <div class="answerRow">
+            <input id="ans-28" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 29">
+            <button type="button" class="secondary" onclick="checkOne(28)">Check</button>
+          </div>
+          <div class="small" id="feedback-28"></div>
+        </article><article class="qcard unanswered" id="card-29">
+          <div class="qtop">
+            <div class="qnum">Question 30</div>
+            <div class="status" id="status-29">Unanswered</div>
+          </div>
+          <p class="question">Four friends share 36 cookies. The first friend gets 2 more cookies than the second. The second gets 2 more than the third. The third gets 2 more than the fourth. How many cookies does each friend get?</p>
+          <div class="answerRow">
+            <input id="ans-29" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 30">
+            <button type="button" class="secondary" onclick="checkOne(29)">Check</button>
+          </div>
+          <div class="small" id="feedback-29"></div>
+        </article></main>
+
+    <section id="report" class="report" aria-live="polite"></section>
+    <footer>Type answers in the boxes, then use Check or End Exam to grade.</footer>
+  </div>
+
+  <script>
+    const questions = [{"section": "Section A: Number Sense and Arithmetic", "q": "What is 348 + 275?", "answer": "623", "accepted": ["623"], "explanation": "348 + 275 = 623."}, {"section": "Section A: Number Sense and Arithmetic", "q": "What is 900 - 476?", "answer": "424", "accepted": ["424"], "explanation": "900 - 476 = 424."}, {"section": "Section A: Number Sense and Arithmetic", "q": "Fill in the blank: 36 + 36 + 36 + 36 = 4 x ___", "answer": "36", "accepted": ["36"], "explanation": "Adding 36 four times is 4 x 36."}, {"section": "Section A: Number Sense and Arithmetic", "q": "Which is larger: 7 x 8 or 9 x 6?", "answer": "7 x 8", "accepted": ["7 x 8", "7x8", "56", "7 x 8 because 56 > 54", "7x8 because 56 > 54"], "explanation": "7 x 8 = 56 and 9 x 6 = 54, so 7 x 8 is larger."}, {"section": "Section A: Number Sense and Arithmetic", "q": "A number is 12 more than 89. What is the number?", "answer": "101", "accepted": ["101"], "explanation": "89 + 12 = 101."}, {"section": "Section A: Number Sense and Arithmetic", "q": "What is the missing number? 6, 12, 18, 24, ___, 36", "answer": "30", "accepted": ["30"], "explanation": "The pattern adds 6 each time."}, {"section": "Section A: Number Sense and Arithmetic", "q": "Write the number that has 4 hundreds, 13 tens, and 5 ones.", "answer": "535", "accepted": ["535"], "explanation": "400 + 130 + 5 = 535."}, {"section": "Section A: Number Sense and Arithmetic", "q": "Maya has 3 packs of stickers. Each pack has 18 stickers. She gives away 20 stickers. How many stickers does she have left?", "answer": "34", "accepted": ["34"], "explanation": "3 x 18 = 54, and 54 - 20 = 34."}, {"section": "Section B: Patterns and Logic", "q": "Find the next two numbers: 2, 5, 11, 23, 47, ___, ___", "answer": "95, 191", "accepted": ["95, 191", "95 191"], "explanation": "Each term is double the previous term plus 1."}, {"section": "Section B: Patterns and Logic", "q": "Which number does not belong? 16, 25, 36, 45, 49", "answer": "45", "accepted": ["45"], "explanation": "16, 25, 36, and 49 are square numbers; 45 is not."}, {"section": "Section B: Patterns and Logic", "q": "A secret rule changes 4 into 13, 5 into 16, and 6 into 19. What does it change 9 into?", "answer": "28", "accepted": ["28"], "explanation": "The rule is multiply by 3, then add 1. 9 x 3 + 1 = 28."}, {"section": "Section B: Patterns and Logic", "q": "If A + A = 14 and A + B = 20, what is B?", "answer": "13", "accepted": ["13"], "explanation": "A = 7, so 7 + B = 20 and B = 13."}, {"section": "Section B: Patterns and Logic", "q": "Three children - Lina, Omar, and Priya - stand in a line. Lina is not first. Omar is last. Who is first?", "answer": "Priya", "accepted": ["Priya"], "explanation": "Omar is last and Lina is not first, so Priya must be first."}, {"section": "Section B: Patterns and Logic", "q": "A pattern repeats: circle, square, triangle, circle, square, triangle, ... What is the 20th shape?", "answer": "square", "accepted": ["square"], "explanation": "The pattern length is 3. The 20th item lands on the 2nd position: square."}, {"section": "Section C: Word Problems", "q": "A library has 126 books on one shelf and 97 books on another shelf. Then 58 books are checked out. How many books are left?", "answer": "165", "accepted": ["165"], "explanation": "126 + 97 = 223, and 223 - 58 = 165."}, {"section": "Section C: Word Problems", "q": "A box holds 8 crayons. How many full boxes can be made from 70 crayons? How many crayons are left over?", "answer": "8 full boxes, 6 left over", "accepted": ["8 full boxes, 6 left over", "8 boxes 6 left over", "8 boxes, 6 left", "8, 6", "8 6"], "explanation": "70 divided by 8 gives 8 full boxes with 6 crayons left over."}, {"section": "Section C: Word Problems", "q": "Noah saves $5 each week. After 9 weeks, he spends $18. How much money does he have left?", "answer": "$27", "accepted": ["$27", "27"], "explanation": "5 x 9 = 45, and 45 - 18 = 27."}, {"section": "Section C: Word Problems", "q": "A train has 6 cars. Each car has 12 seats. If 59 seats are filled, how many empty seats are there?", "answer": "13", "accepted": ["13"], "explanation": "6 x 12 = 72 seats, and 72 - 59 = 13 empty seats."}, {"section": "Section C: Word Problems", "q": "A rectangle has a length of 9 units and a width of 4 units. What is its perimeter?", "answer": "26 units", "accepted": ["26 units", "26"], "explanation": "Perimeter = 2 x (9 + 4) = 26 units."}, {"section": "Section C: Word Problems", "q": "A number is doubled, then 7 is added. The result is 31. What was the original number?", "answer": "12", "accepted": ["12"], "explanation": "31 - 7 = 24, and 24 divided by 2 = 12."}, {"section": "Section D: Challenge Problems", "q": "How many different two-digit numbers can be made using the digits 2, 5, and 8 if no digit is repeated?", "answer": "6", "accepted": ["6"], "explanation": "There are 3 choices for the tens digit and 2 choices for the ones digit: 3 x 2 = 6."}, {"section": "Section D: Challenge Problems", "q": "The sum of three consecutive numbers is 42. What are the three numbers?", "answer": "13, 14, 15", "accepted": ["13, 14, 15", "13 14 15"], "explanation": "42 divided by 3 is 14, so the three consecutive numbers are 13, 14, and 15."}, {"section": "Section D: Challenge Problems", "q": "A frog jumps 3 feet forward, then 1 foot backward. If it repeats this pattern, how far from the start is it after 10 jumps?", "answer": "10 feet", "accepted": ["10 feet", "10"], "explanation": "Every two jumps move the frog forward 2 feet. Ten jumps make five pairs, so 5 x 2 = 10 feet."}, {"section": "Section D: Challenge Problems", "q": "There are 24 legs in a room. The room has only cats and birds. There are 7 animals total. How many cats are there?", "answer": "5 cats", "accepted": ["5 cats", "5"], "explanation": "5 cats have 20 legs and 2 birds have 4 legs, for 24 legs total."}, {"section": "Section D: Challenge Problems", "q": "Ella writes all the numbers from 1 to 30. How many times does she write the digit 2?", "answer": "13 times", "accepted": ["13 times", "13"], "explanation": "The digit 2 appears once in 2 and 12, ten times as the tens digit in 20-29, plus one extra in 22: 13 total."}, {"section": "Section D: Challenge Problems", "q": "A square has the same perimeter as a rectangle with length 10 and width 6. What is the side length of the square?", "answer": "8 units", "accepted": ["8 units", "8"], "explanation": "The rectangle perimeter is 2 x (10 + 6) = 32. A square with perimeter 32 has side length 8."}, {"section": "Section D: Challenge Problems", "q": "Find the smallest number greater than 50 that is divisible by both 6 and 8.", "answer": "72", "accepted": ["72"], "explanation": "The least common multiple of 6 and 8 is 24; the first multiple greater than 50 is 72."}, {"section": "Section D: Challenge Problems", "q": "A bag has red, blue, and green marbles. There are twice as many red marbles as blue marbles. There are 3 more green marbles than blue marbles. If there are 23 marbles total, how many blue marbles are there?", "answer": "5", "accepted": ["5"], "explanation": "Let blue = b. Then red = 2b and green = b + 3. So 2b + b + b + 3 = 23, making b = 5."}, {"section": "Section D: Challenge Problems", "q": "Sam thinks of a number. He subtracts 4, multiplies by 3, and gets 27. What number did Sam think of?", "answer": "13", "accepted": ["13"], "explanation": "27 divided by 3 is 9, and 9 + 4 = 13."}, {"section": "Section D: Challenge Problems", "q": "Four friends share 36 cookies. The first friend gets 2 more cookies than the second. The second gets 2 more than the third. The third gets 2 more than the fourth. How many cookies does each friend get?", "answer": "12, 10, 8, 6", "accepted": ["12, 10, 8, 6", "12 10 8 6", "first 12 second 10 third 8 fourth 6"], "explanation": "The four amounts decrease by 2 and total 36: 12, 10, 8, and 6."}];
+    const stateKey = 'national-math-stars-practice-exam-v1';
+    let examEnded = false;
+    let seconds = 0;
+    let timerId = null;
+
+    function norm(value) {
+      return String(value || '')
+        .toLowerCase()
+        .replace(/[×*]/g, 'x')
+        .replace(/[−–—]/g, '-')
+        .replace(/\$/g, '')
+        .replace(/because.*$/g, '')
+        .replace(/\b(full|boxes?|box|crayons?|left|over|units?|feet|cats?|times|cookies?|friend|friends|first|second|third|fourth|and|the|gets|each|answer|is)\b/g, ' ')
+        .replace(/\s*x\s*/g, 'x')
+        .replace(/[^a-z0-9x-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function isCorrect(index) {
+      const input = document.getElementById('ans-' + index);
+      const user = norm(input ? input.value : '');
+      if (!user) return false;
+      return questions[index].accepted.some(a => norm(a) === user);
+    }
+
+    function getStatus(index) {
+      const value = document.getElementById('ans-' + index)?.value.trim() || '';
+      if (!value) return 'unanswered';
+      return isCorrect(index) ? 'correct' : 'wrong';
+    }
+
+    function renderExam() {
+      const exam = document.getElementById('exam');
+      exam.innerHTML = '';
+      let current = '';
+      questions.forEach((item, i) => {
+        if (item.section !== current) {
+          current = item.section;
+          const h = document.createElement('h2');
+          h.className = 'section-title';
+          h.textContent = current;
+          exam.appendChild(h);
+        }
+        const card = document.createElement('article');
+        card.className = 'qcard unanswered';
+        card.id = 'card-' + i;
+        card.innerHTML = `
+          <div class="qtop">
+            <div class="qnum">Question ${i + 1}</div>
+            <div class="status" id="status-${i}">Unanswered</div>
+          </div>
+          <p class="question">${escapeHTML(item.q)}</p>
+          <div class="answerRow">
+            <input id="ans-${i}" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question ${i + 1}" />
+            <button type="button" class="secondary" onclick="checkOne(${i})">Check</button>
+          </div>
+          <div class="small" id="feedback-${i}"></div>
+        `;
+        exam.appendChild(card);
+      });
+      restoreState();
+      updateAll(false);
+    }
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    }
+
+    function checkOne(index) {
+      updateCard(index, true);
+      updateSummary();
+      saveState();
+    }
+
+    function updateCard(index, reveal) {
+      const status = getStatus(index);
+      const card = document.getElementById('card-' + index);
+      const label = document.getElementById('status-' + index);
+      const feedback = document.getElementById('feedback-' + index);
+      card.className = 'qcard ' + status;
+      label.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+      if (reveal || examEnded) {
+        feedback.textContent = status === 'correct'
+          ? 'Correct.'
+          : status === 'wrong'
+            ? 'Correct answer: ' + questions[index].answer
+            : 'Unanswered. Correct answer: ' + questions[index].answer;
+      } else {
+        feedback.textContent = '';
+      }
+    }
+
+    function updateAll(reveal) {
+      questions.forEach((_, i) => updateCard(i, reveal));
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const answered = questions.filter((_, i) => (document.getElementById('ans-' + i)?.value.trim() || '')).length;
+      const correct = questions.filter((_, i) => isCorrect(i)).length;
+      document.getElementById('score').textContent = correct + '/' + questions.length;
+      document.getElementById('progress').style.width = Math.round(answered / questions.length * 100) + '%';
+      return { answered, correct };
+    }
+
+    function toggleQuestions() {
+      const exam = document.getElementById('exam');
+      exam.style.display = exam.style.display === 'none' ? 'grid' : 'none';
+    }
+
+    function showReport() {
+      updateAll(true);
+      const report = document.getElementById('report');
+      const summary = updateSummary();
+      let rows = questions.map((item, i) => {
+        const user = document.getElementById('ans-' + i)?.value.trim() || '';
+        const status = getStatus(i);
+        const label = status.charAt(0).toUpperCase() + status.slice(1);
+        return `<tr class="${status}Row">
+          <td>${i + 1}</td>
+          <td>${label}</td>
+          <td>${escapeHTML(user || '-')}</td>
+          <td>${escapeHTML(item.answer)}</td>
+          <td>${escapeHTML(item.explanation)}</td>
+        </tr>`;
+      }).join('');
+      report.innerHTML = `
+        <h2>Analysis Report</h2>
+        <p><strong>Score:</strong> ${summary.correct}/${questions.length} · <strong>Answered:</strong> ${summary.answered}/${questions.length} · <strong>Time:</strong> ${formatTime(seconds)}</p>
+        <table>
+          <thead><tr><th>#</th><th>Status</th><th>Your answer</th><th>Correct answer</th><th>Analysis</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      report.classList.toggle('show');
+      report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function restartExam() {
+      if (!confirm('Restart the exam and clear all answers?')) return;
+      localStorage.removeItem(stateKey);
+      examEnded = false;
+      seconds = 0;
+      questions.forEach((_, i) => {
+        const input = document.getElementById('ans-' + i);
+        if (input) input.value = '';
+      });
+      document.getElementById('report').classList.remove('show');
+      document.getElementById('report').innerHTML = '';
+      updateAll(false);
+      startTimer(true);
+    }
+
+    function endExam() {
+      examEnded = true;
+      clearInterval(timerId);
+      updateAll(true);
+      saveState();
+      const report = document.getElementById('report');
+      if (!report.classList.contains('show')) showReport();
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      if (m === 0) return s + ' sec';
+      return m + ' min ' + s + ' sec';
+    }
+
+    function startTimer(reset) {
+      if (timerId) clearInterval(timerId);
+      if (reset) document.getElementById('timer').textContent = '0 sec';
+      timerId = setInterval(() => {
+        if (!examEnded) {
+          seconds += 1;
+          document.getElementById('timer').textContent = formatTime(seconds);
+          saveState();
+        }
+      }, 1000);
+    }
+
+    function saveState() {
+      const answers = questions.map((_, i) => document.getElementById('ans-' + i)?.value || '');
+      localStorage.setItem(stateKey, JSON.stringify({ answers, seconds, examEnded }));
+    }
+
+    function restoreState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(stateKey) || '{}');
+        if (Array.isArray(saved.answers)) {
+          saved.answers.forEach((value, i) => {
+            const input = document.getElementById('ans-' + i);
+            if (input) input.value = value;
+          });
+        }
+        seconds = Number(saved.seconds || 0);
+        examEnded = Boolean(saved.examEnded);
+        document.getElementById('timer').textContent = formatTime(seconds);
+      } catch (e) {}
+      questions.forEach((_, i) => {
+        const input = document.getElementById('ans-' + i);
+        if (input) input.addEventListener('input', () => { updateCard(i, false); updateSummary(); saveState(); });
+      });
+    }
+
+    renderExam();
+    startTimer(false);
+  </script>
+
+
+</body></html>
