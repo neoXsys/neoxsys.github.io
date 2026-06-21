@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<!-- saved from url=(0091)file:///C:/Users/hdalwadi/Downloads/National_Math_Stars_Practice_Exam_Version_B_Visual.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>National Math Stars Practice Exam - Version B Visual Set</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #182033;
+      --muted: #62708a;
+      --line: #dfe6f0;
+      --accent: #2454d6;
+      --accent-dark: #163ca7;
+      --correct: #d9f8df;
+      --correct-border: #29a34a;
+      --wrong: #ffe0e0;
+      --wrong-border: #d93025;
+      --unanswered: #e4f0ff;
+      --unanswered-border: #2472d8;
+      --shadow: 0 10px 30px rgba(20, 37, 63, 0.10);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #eaf1ff 0, #f4f7fb 38%, #f8fafc 100%);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 18px 50px; }
+    header {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 40px); letter-spacing: -0.02em; }
+    .sub { color: var(--muted); margin: 0 0 14px; }
+    .meta, .legend { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; }
+    .pill {
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+    .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+    .g { background: var(--correct-border); }
+    .r { background: var(--wrong-border); }
+    .b { background: var(--unanswered-border); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0 0; }
+    button {
+      border: 0;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+      box-shadow: 0 4px 12px rgba(36, 84, 214, .22);
+    }
+    button:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    button.secondary { background: #eef3ff; color: var(--accent-dark); box-shadow: none; border: 1px solid #cddafe; }
+    button.secondary:hover { background: #e0e9ff; }
+    button.danger { background: #bd2d22; }
+    button.danger:hover { background: #982116; }
+    .progressOuter { height: 12px; background: #e8eef7; border-radius: 999px; overflow: hidden; margin-top: 16px; }
+    .progressInner { height: 100%; width: 0%; background: linear-gradient(90deg, #2454d6, #29a34a); transition: width .2s ease; }
+    .section-title { margin: 26px 0 12px; font-size: 22px; border-bottom: 2px solid var(--line); padding-bottom: 8px; }
+    .grid { display: grid; gap: 14px; }
+    .qcard {
+      background: var(--card);
+      border: 2px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 5px 18px rgba(20, 37, 63, 0.06);
+      padding: 17px;
+      transition: border-color .18s ease, background .18s ease;
+    }
+    .qcard.correct { background: var(--correct); border-color: var(--correct-border); }
+    .qcard.wrong { background: var(--wrong); border-color: var(--wrong-border); }
+    .qcard.unanswered { background: var(--unanswered); border-color: var(--unanswered-border); }
+    .qtop { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+    .qnum { font-weight: 800; color: var(--accent-dark); }
+    .status { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+    .question { font-size: 17px; margin: 0 0 12px; }
+    .answerRow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    input[type="text"] {
+      flex: 1 1 260px;
+      min-width: 180px;
+      border: 1px solid #cdd6e4;
+      border-radius: 10px;
+      padding: 11px 12px;
+      font-size: 16px;
+      outline: none;
+      background: #fff;
+    }
+    input[type="text"]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(36, 84, 214, .14); }
+    .small { font-size: 13px; color: var(--muted); margin-top: 8px; }
+    .graphic { background:#f8fbff; border:1px solid #d8e4f6; border-radius:14px; padding:12px; margin:0 0 12px; overflow:auto; }
+    .graphic svg { display:block; max-width:100%; height:auto; margin:0 auto; }
+    .report {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-top: 18px;
+      overflow-x: auto;
+    }
+    .report.show { display: block; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { text-align: left; border-bottom: 1px solid var(--line); padding: 10px; vertical-align: top; }
+    th { background: #f5f8fd; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+    tr.correctRow td { background: var(--correct); }
+    tr.wrongRow td { background: var(--wrong); }
+    tr.unansweredRow td { background: var(--unanswered); }
+    footer { color: var(--muted); font-size: 13px; margin-top: 20px; text-align: center; }
+    @media (max-width: 640px) {
+      header, .qcard, .report { border-radius: 12px; }
+      .wrap { padding: 16px 12px 36px; }
+      button { width: 100%; }
+      .qtop { flex-direction: column; }
+    }
+    @media print {
+      body { background: #fff; }
+      header, .qcard, .report { box-shadow: none; }
+      .toolbar, .answerRow button, .progressOuter { display: none; }
+      input { border: 0; border-bottom: 1px solid #000; border-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>National Math Stars Practice Exam - Version B Visual Set</h1>
+      <p class="sub">Version B: a fresh, slightly harder category-based practice set with new visual reasoning graphics and no repeated questions from earlier versions.</p>
+      <div class="meta" aria-live="polite">
+        <span class="pill">Version: 3.0.0</span>
+        <span class="pill">Timer: <span id="timer">12 sec</span></span>
+        <span class="pill">Score: <span id="score">0/30</span></span>
+      </div>
+      <div class="legend" style="margin-top:12px">
+        <span><span class="swatch g"></span>Green = Correct</span>
+        <span><span class="swatch r"></span>Red = Wrong</span>
+        <span><span class="swatch b"></span>Blue = Unanswered</span>
+      </div>
+      <div class="toolbar">
+        <button type="button" onclick="toggleQuestions()">Show/Hide Question</button>
+        <button type="button" class="secondary" onclick="showReport()">Show Analysis Report</button>
+        <button type="button" class="secondary" onclick="restartExam()">Restart Exam</button>
+        <button type="button" class="danger" onclick="endExam()">End Exam</button>
+      </div>
+      <div class="progressOuter" aria-label="progress"><div id="progress" class="progressInner" style="width: 0%;"></div></div>
+    </header>
+
+    <main id="exam" class="grid"><h2 class="section-title">Patterns and Sequences</h2><article class="qcard unanswered" id="card-0">
+          <div class="qtop">
+            <div class="qnum">Question 1</div>
+            <div class="status" id="status-0">Unanswered</div>
+          </div>
+          <p class="question">Find the next two numbers: 4, 9, 19, 34, 54, ___, ___.</p>
+          
+          <div class="answerRow">
+            <input id="ans-0" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 1">
+            <button type="button" class="secondary" onclick="checkOne(0)">Check</button>
+          </div>
+          <div class="small" id="feedback-0"></div>
+        </article><article class="qcard unanswered" id="card-1">
+          <div class="qtop">
+            <div class="qnum">Question 2</div>
+            <div class="status" id="status-1">Unanswered</div>
+          </div>
+          <p class="question">Fill in the missing terms: 2, 6, 12, 20, 30, ___, ___.</p>
+          
+          <div class="answerRow">
+            <input id="ans-1" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 2">
+            <button type="button" class="secondary" onclick="checkOne(1)">Check</button>
+          </div>
+          <div class="small" id="feedback-1"></div>
+        </article><article class="qcard unanswered" id="card-2">
+          <div class="qtop">
+            <div class="qnum">Question 3</div>
+            <div class="status" id="status-2">Unanswered</div>
+          </div>
+          <p class="question">A dot pattern is shown. Figure 1 has 3 dots, Figure 2 has 5 dots, and Figure 3 has 10 dots. The rule continues by adding the next row with one more dot each time. How many dots are in Figure 5?</p>
+          <div class="graphic"><svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dot pattern figures 1 through 4"><g fill="#2454d6"><circle cx="40" cy="80" r="6"></circle><circle cx="25" cy="110" r="6"></circle><circle cx="55" cy="110" r="6"></circle><circle cx="115" cy="70" r="6"></circle><circle cx="145" cy="70" r="6"></circle><circle cx="100" cy="100" r="6"></circle><circle cx="130" cy="100" r="6"></circle><circle cx="160" cy="100" r="6"></circle><circle cx="220" cy="50" r="6"></circle><circle cx="205" cy="80" r="6"></circle><circle cx="235" cy="80" r="6"></circle><circle cx="190" cy="110" r="6"></circle><circle cx="220" cy="110" r="6"></circle><circle cx="250" cy="110" r="6"></circle><circle cx="175" cy="140" r="6"></circle><circle cx="205" cy="140" r="6"></circle><circle cx="235" cy="140" r="6"></circle><circle cx="265" cy="140" r="6"></circle></g><g font-family="Arial" font-size="14" fill="#334155"><text x="20" y="180">Fig. 1</text><text x="110" y="180">Fig. 2</text><text x="205" y="180">Fig. 3</text></g></svg></div>
+          <div class="answerRow">
+            <input id="ans-2" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 3">
+            <button type="button" class="secondary" onclick="checkOne(2)">Check</button>
+          </div>
+          <div class="small" id="feedback-2"></div>
+        </article><article class="qcard unanswered" id="card-3">
+          <div class="qtop">
+            <div class="qnum">Question 4</div>
+            <div class="status" id="status-3">Unanswered</div>
+          </div>
+          <p class="question">The first day of a pattern is Monday. Every 5th day is a prize day. What day of the week is the 35th prize day?</p>
+          <div class="graphic"><svg viewBox="0 0 420 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Calendar row with Monday through Sunday boxes"><g font-family="Arial" font-size="15" text-anchor="middle"><rect x="20" y="70" width="52" height="52" fill="#f8fbff" stroke="#94a3b8" stroke-width="2"></rect><text x="46" y="100">Mon</text><rect x="75" y="70" width="52" height="52" fill="#f8fbff" stroke="#94a3b8" stroke-width="2"></rect><text x="101" y="100">Tue</text><rect x="130" y="70" width="52" height="52" fill="#f8fbff" stroke="#94a3b8" stroke-width="2"></rect><text x="156" y="100">Wed</text><rect x="185" y="70" width="52" height="52" fill="#f8fbff" stroke="#94a3b8" stroke-width="2"></rect><text x="211" y="100">Thu</text><rect x="240" y="70" width="52" height="52" fill="#f8fbff" stroke="#94a3b8" stroke-width="2"></rect><text x="266" y="100">Fri</text><rect x="295" y="70" width="52" height="52" fill="#f8fbff" stroke="#94a3b8" stroke-width="2"></rect><text x="321" y="100">Sat</text><rect x="350" y="70" width="52" height="52" fill="#f8fbff" stroke="#94a3b8" stroke-width="2"></rect><text x="376" y="100">Sun</text><text x="210" y="35" font-size="18" font-weight="700" fill="#334155">One Week Pattern</text></g></svg></div>
+          <div class="answerRow">
+            <input id="ans-3" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 4">
+            <button type="button" class="secondary" onclick="checkOne(3)">Check</button>
+          </div>
+          <div class="small" id="feedback-3"></div>
+        </article><article class="qcard unanswered" id="card-4">
+          <div class="qtop">
+            <div class="qnum">Question 5</div>
+            <div class="status" id="status-4">Unanswered</div>
+          </div>
+          <p class="question">A pattern repeats: triangle, circle, square, hexagon, star, triangle, circle, square, hexagon, star, ... What is the 64th shape?</p>
+          
+          <div class="answerRow">
+            <input id="ans-4" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 5">
+            <button type="button" class="secondary" onclick="checkOne(4)">Check</button>
+          </div>
+          <div class="small" id="feedback-4"></div>
+        </article><h2 class="section-title">Logic and Reasoning</h2><article class="qcard unanswered" id="card-5">
+          <div class="qtop">
+            <div class="qnum">Question 6</div>
+            <div class="status" id="status-5">Unanswered</div>
+          </div>
+          <p class="question">Four boxes are labeled A, B, C, and D. B is heavier than A. C is lighter than A. D is heavier than B. Which box is the heaviest?</p>
+          
+          <div class="answerRow">
+            <input id="ans-5" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 6">
+            <button type="button" class="secondary" onclick="checkOne(5)">Check</button>
+          </div>
+          <div class="small" id="feedback-5"></div>
+        </article><article class="qcard unanswered" id="card-6">
+          <div class="qtop">
+            <div class="qnum">Question 7</div>
+            <div class="status" id="status-6">Unanswered</div>
+          </div>
+          <p class="question">A rule changes 6 into 20, 8 into 26, and 10 into 32. What does the rule change 15 into?</p>
+          
+          <div class="answerRow">
+            <input id="ans-6" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 7">
+            <button type="button" class="secondary" onclick="checkOne(6)">Check</button>
+          </div>
+          <div class="small" id="feedback-6"></div>
+        </article><article class="qcard unanswered" id="card-7">
+          <div class="qtop">
+            <div class="qnum">Question 8</div>
+            <div class="status" id="status-7">Unanswered</div>
+          </div>
+          <p class="question">Use the Venn diagram. Which numbers are in both circles?</p>
+          <div class="graphic"><svg viewBox="0 0 460 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two overlapping circles labeled Multiples of 2 and Multiples of 3"><circle cx="190" cy="130" r="95" fill="#dbeafe" fill-opacity=".8" stroke="#2454d6" stroke-width="3"></circle><circle cx="270" cy="130" r="95" fill="#dcfce7" fill-opacity=".8" stroke="#16a34a" stroke-width="3"></circle><g font-family="Arial" font-size="16" fill="#111" text-anchor="middle"><text x="140" y="45">Multiples of 2</text><text x="320" y="45">Multiples of 3</text><text x="145" y="130">8</text><text x="155" y="160">10</text><text x="230" y="120">6</text><text x="230" y="155">12</text><text x="305" y="130">9</text><text x="315" y="160">15</text></g></svg></div>
+          <div class="answerRow">
+            <input id="ans-7" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 8">
+            <button type="button" class="secondary" onclick="checkOne(7)">Check</button>
+          </div>
+          <div class="small" id="feedback-7"></div>
+        </article><article class="qcard unanswered" id="card-8">
+          <div class="qtop">
+            <div class="qnum">Question 9</div>
+            <div class="status" id="status-8">Unanswered</div>
+          </div>
+          <p class="question">A lock code has three digits. The first digit is 2 more than the second. The second digit is 3 less than the third. The third digit is 7. What is the code?</p>
+          
+          <div class="answerRow">
+            <input id="ans-8" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 9">
+            <button type="button" class="secondary" onclick="checkOne(8)">Check</button>
+          </div>
+          <div class="small" id="feedback-8"></div>
+        </article><article class="qcard unanswered" id="card-9">
+          <div class="qtop">
+            <div class="qnum">Question 10</div>
+            <div class="status" id="status-9">Unanswered</div>
+          </div>
+          <p class="question">If LION = 50 using letter positions in the alphabet, what is BEAR?</p>
+          
+          <div class="answerRow">
+            <input id="ans-9" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 10">
+            <button type="button" class="secondary" onclick="checkOne(9)">Check</button>
+          </div>
+          <div class="small" id="feedback-9"></div>
+        </article><h2 class="section-title">Problem-Solving</h2><article class="qcard unanswered" id="card-10">
+          <div class="qtop">
+            <div class="qnum">Question 11</div>
+            <div class="status" id="status-10">Unanswered</div>
+          </div>
+          <p class="question">A school has 184 blue folders, 127 red folders, and 96 green folders. It gives 158 folders to students. How many folders are left?</p>
+          
+          <div class="answerRow">
+            <input id="ans-10" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 11">
+            <button type="button" class="secondary" onclick="checkOne(10)">Check</button>
+          </div>
+          <div class="small" id="feedback-10"></div>
+        </article><article class="qcard unanswered" id="card-11">
+          <div class="qtop">
+            <div class="qnum">Question 12</div>
+            <div class="status" id="status-11">Unanswered</div>
+          </div>
+          <p class="question">A teacher has 118 stickers. She puts 9 stickers on each certificate. How many complete certificates can she make, and how many stickers are left?</p>
+          
+          <div class="answerRow">
+            <input id="ans-11" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 12">
+            <button type="button" class="secondary" onclick="checkOne(11)">Check</button>
+          </div>
+          <div class="small" id="feedback-11"></div>
+        </article><article class="qcard unanswered" id="card-12">
+          <div class="qtop">
+            <div class="qnum">Question 13</div>
+            <div class="status" id="status-12">Unanswered</div>
+          </div>
+          <p class="question">A train leaves at 10:38 a.m. and arrives 3 hours 47 minutes later. What time does it arrive?</p>
+          
+          <div class="answerRow">
+            <input id="ans-12" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 13">
+            <button type="button" class="secondary" onclick="checkOne(12)">Check</button>
+          </div>
+          <div class="small" id="feedback-12"></div>
+        </article><article class="qcard unanswered" id="card-13">
+          <div class="qtop">
+            <div class="qnum">Question 14</div>
+            <div class="status" id="status-13">Unanswered</div>
+          </div>
+          <p class="question">A farm has chickens and goats. There are 11 animals and 34 legs. How many goats are there?</p>
+          
+          <div class="answerRow">
+            <input id="ans-13" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 14">
+            <button type="button" class="secondary" onclick="checkOne(13)">Check</button>
+          </div>
+          <div class="small" id="feedback-13"></div>
+        </article><article class="qcard unanswered" id="card-14">
+          <div class="qtop">
+            <div class="qnum">Question 15</div>
+            <div class="status" id="status-14">Unanswered</div>
+          </div>
+          <p class="question">A necklace pattern uses 3 blue beads, then 2 gold beads, then repeats. If the necklace has 43 beads, how many gold beads are used?</p>
+          
+          <div class="answerRow">
+            <input id="ans-14" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 15">
+            <button type="button" class="secondary" onclick="checkOne(14)">Check</button>
+          </div>
+          <div class="small" id="feedback-14"></div>
+        </article><h2 class="section-title">Quantitative Thinking</h2><article class="qcard unanswered" id="card-15">
+          <div class="qtop">
+            <div class="qnum">Question 16</div>
+            <div class="status" id="status-15">Unanswered</div>
+          </div>
+          <p class="question">The fraction bar below has equal parts. What fraction is shaded? Write it in simplest form.</p>
+          <div class="graphic"><svg viewBox="0 0 520 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fraction bar split into eight equal parts with five shaded"><g stroke="#1e3a8a" stroke-width="3"><rect x="40" y="55" width="55" height="50" fill="#bfdbfe"></rect><rect x="95" y="55" width="55" height="50" fill="#bfdbfe"></rect><rect x="150" y="55" width="55" height="50" fill="#bfdbfe"></rect><rect x="205" y="55" width="55" height="50" fill="#bfdbfe"></rect><rect x="260" y="55" width="55" height="50" fill="#bfdbfe"></rect><rect x="315" y="55" width="55" height="50" fill="#fff"></rect><rect x="370" y="55" width="55" height="50" fill="#fff"></rect><rect x="425" y="55" width="55" height="50" fill="#fff"></rect></g><text x="260" y="130" text-anchor="middle" font-family="Arial" font-size="16" fill="#334155">8 equal parts</text></svg></div>
+          <div class="answerRow">
+            <input id="ans-15" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 16">
+            <button type="button" class="secondary" onclick="checkOne(15)">Check</button>
+          </div>
+          <div class="small" id="feedback-15"></div>
+        </article><article class="qcard unanswered" id="card-16">
+          <div class="qtop">
+            <div class="qnum">Question 17</div>
+            <div class="status" id="status-16">Unanswered</div>
+          </div>
+          <p class="question">A recipe uses 2 cups of oats for every 3 cups of flour. If 12 cups of flour are used, how many cups of oats are needed?</p>
+          
+          <div class="answerRow">
+            <input id="ans-16" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 17">
+            <button type="button" class="secondary" onclick="checkOne(16)">Check</button>
+          </div>
+          <div class="small" id="feedback-16"></div>
+        </article><article class="qcard unanswered" id="card-17">
+          <div class="qtop">
+            <div class="qnum">Question 18</div>
+            <div class="status" id="status-17">Unanswered</div>
+          </div>
+          <p class="question">A square has an area of 49 square units. What is its perimeter?</p>
+          
+          <div class="answerRow">
+            <input id="ans-17" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 18">
+            <button type="button" class="secondary" onclick="checkOne(17)">Check</button>
+          </div>
+          <div class="small" id="feedback-17"></div>
+        </article><article class="qcard unanswered" id="card-18">
+          <div class="qtop">
+            <div class="qnum">Question 19</div>
+            <div class="status" id="status-18">Unanswered</div>
+          </div>
+          <p class="question">Which is greater: 3/4 of 40 or 2/3 of 45?</p>
+          
+          <div class="answerRow">
+            <input id="ans-18" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 19">
+            <button type="button" class="secondary" onclick="checkOne(18)">Check</button>
+          </div>
+          <div class="small" id="feedback-18"></div>
+        </article><article class="qcard unanswered" id="card-19">
+          <div class="qtop">
+            <div class="qnum">Question 20</div>
+            <div class="status" id="status-19">Unanswered</div>
+          </div>
+          <p class="question">A number is rounded to the nearest ten and becomes 370. What is the greatest possible whole number it could have been?</p>
+          
+          <div class="answerRow">
+            <input id="ans-19" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 20">
+            <button type="button" class="secondary" onclick="checkOne(19)">Check</button>
+          </div>
+          <div class="small" id="feedback-19"></div>
+        </article><h2 class="section-title">Spatial or Visual Reasoning</h2><article class="qcard unanswered" id="card-20">
+          <div class="qtop">
+            <div class="qnum">Question 21</div>
+            <div class="status" id="status-20">Unanswered</div>
+          </div>
+          <p class="question">Can this net fold into a cube?</p>
+          <div class="graphic"><svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cube net made from six squares"><g fill="#fef3c7" stroke="#b45309" stroke-width="3"><rect x="120" y="20" width="50" height="50"></rect><rect x="120" y="70" width="50" height="50"></rect><rect x="70" y="120" width="50" height="50"></rect><rect x="120" y="120" width="50" height="50"></rect><rect x="170" y="120" width="50" height="50"></rect><rect x="120" y="170" width="50" height="50"></rect></g></svg></div>
+          <div class="answerRow">
+            <input id="ans-20" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 21">
+            <button type="button" class="secondary" onclick="checkOne(20)">Check</button>
+          </div>
+          <div class="small" id="feedback-20"></div>
+        </article><article class="qcard unanswered" id="card-21">
+          <div class="qtop">
+            <div class="qnum">Question 22</div>
+            <div class="status" id="status-21">Unanswered</div>
+          </div>
+          <p class="question">Reflect the blue squares across the red mirror line. How many blue squares will be in the complete symmetric picture, including the original squares?</p>
+          <div class="graphic"><svg viewBox="0 0 400 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Grid with vertical mirror line and two shaded squares on left"><g stroke="#cbd5e1" stroke-width="2"><line x1="60" y1="30" x2="60" y2="190"></line><line x1="100" y1="30" x2="100" y2="190"></line><line x1="140" y1="30" x2="140" y2="190"></line><line x1="180" y1="30" x2="180" y2="190"></line><line x1="220" y1="30" x2="220" y2="190"></line><line x1="260" y1="30" x2="260" y2="190"></line><line x1="300" y1="30" x2="300" y2="190"></line><line x1="60" y1="30" x2="300" y2="30"></line><line x1="60" y1="70" x2="300" y2="70"></line><line x1="60" y1="110" x2="300" y2="110"></line><line x1="60" y1="150" x2="300" y2="150"></line><line x1="60" y1="190" x2="300" y2="190"></line></g><line x1="180" y1="20" x2="180" y2="205" stroke="#ef4444" stroke-width="4" stroke-dasharray="8 6"></line><rect x="100" y="70" width="40" height="40" fill="#2454d6"></rect><rect x="60" y="150" width="40" height="40" fill="#2454d6"></rect><text x="180" y="220" text-anchor="middle" font-family="Arial" font-size="15">mirror line</text></svg></div>
+          <div class="answerRow">
+            <input id="ans-21" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 22">
+            <button type="button" class="secondary" onclick="checkOne(21)">Check</button>
+          </div>
+          <div class="small" id="feedback-21"></div>
+        </article><article class="qcard unanswered" id="card-22">
+          <div class="qtop">
+            <div class="qnum">Question 23</div>
+            <div class="status" id="status-22">Unanswered</div>
+          </div>
+          <p class="question">The path follows grid lines from S to F. If each grid segment is 1 unit, how long is the path?</p>
+          <div class="graphic"><svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Path along grid from start to finish"><g stroke="#cbd5e1" stroke-width="1"><line x1="40" y1="40" x2="355" y2="40"></line><line x1="40" y1="75" x2="355" y2="75"></line><line x1="40" y1="110" x2="355" y2="110"></line><line x1="40" y1="145" x2="355" y2="145"></line><line x1="40" y1="180" x2="355" y2="180"></line><line x1="40" y1="215" x2="355" y2="215"></line><line x1="40" y1="40" x2="40" y2="215"></line><line x1="75" y1="40" x2="75" y2="215"></line><line x1="110" y1="40" x2="110" y2="215"></line><line x1="145" y1="40" x2="145" y2="215"></line><line x1="180" y1="40" x2="180" y2="215"></line><line x1="215" y1="40" x2="215" y2="215"></line><line x1="250" y1="40" x2="250" y2="215"></line><line x1="285" y1="40" x2="285" y2="215"></line><line x1="320" y1="40" x2="320" y2="215"></line><line x1="355" y1="40" x2="355" y2="215"></line></g><polyline points="40,180 110,180 110,110 215,110 215,75 320,75" fill="none" stroke="#2454d6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></polyline><text x="28" y="185" font-family="Arial" font-size="16">S</text><text x="330" y="80" font-family="Arial" font-size="16">F</text></svg></div>
+          <div class="answerRow">
+            <input id="ans-22" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 23">
+            <button type="button" class="secondary" onclick="checkOne(22)">Check</button>
+          </div>
+          <div class="small" id="feedback-22"></div>
+        </article><article class="qcard unanswered" id="card-23">
+          <div class="qtop">
+            <div class="qnum">Question 24</div>
+            <div class="status" id="status-23">Unanswered</div>
+          </div>
+          <p class="question">The picture shows two layers of a cube stack. How many cubes are there in all?</p>
+          <div class="graphic"><svg viewBox="0 0 420 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Layered cube stack with visible front and hidden back"><g fill="#e0f2fe" stroke="#0369a1" stroke-width="2"><rect x="80" y="150" width="45" height="45"></rect><rect x="125" y="150" width="45" height="45"></rect><rect x="170" y="150" width="45" height="45"></rect><rect x="80" y="105" width="45" height="45"></rect><rect x="125" y="105" width="45" height="45"></rect><rect x="105" y="75" width="45" height="45"></rect><rect x="240" y="150" width="45" height="45"></rect><rect x="285" y="150" width="45" height="45"></rect><rect x="240" y="105" width="45" height="45"></rect></g><text x="140" y="220" text-anchor="middle" font-family="Arial" font-size="15">Front stack</text><text x="285" y="220" text-anchor="middle" font-family="Arial" font-size="15">Back stack</text></svg></div>
+          <div class="answerRow">
+            <input id="ans-23" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 24">
+            <button type="button" class="secondary" onclick="checkOne(23)">Check</button>
+          </div>
+          <div class="small" id="feedback-23"></div>
+        </article><article class="qcard unanswered" id="card-24">
+          <div class="qtop">
+            <div class="qnum">Question 25</div>
+            <div class="status" id="status-24">Unanswered</div>
+          </div>
+          <p class="question">A rectangle has corners at (2,1), (8,1), (8,5), and (2,5). How many unit squares are inside it?</p>
+          
+          <div class="answerRow">
+            <input id="ans-24" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 25">
+            <button type="button" class="secondary" onclick="checkOne(24)">Check</button>
+          </div>
+          <div class="small" id="feedback-24"></div>
+        </article><h2 class="section-title">Creative Mathematical Thinking</h2><article class="qcard unanswered" id="card-25">
+          <div class="qtop">
+            <div class="qnum">Question 26</div>
+            <div class="status" id="status-25">Unanswered</div>
+          </div>
+          <p class="question">Use the digits 1, 2, 3, and 4 exactly once to make two 2-digit numbers with the greatest possible sum. What is the greatest sum?</p>
+          
+          <div class="answerRow">
+            <input id="ans-25" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 26">
+            <button type="button" class="secondary" onclick="checkOne(25)">Check</button>
+          </div>
+          <div class="small" id="feedback-25"></div>
+        </article><article class="qcard unanswered" id="card-26">
+          <div class="qtop">
+            <div class="qnum">Question 27</div>
+            <div class="status" id="status-26">Unanswered</div>
+          </div>
+          <p class="question">Fill the missing center of the magic square. Every row, column, and diagonal totals 15.</p>
+          <div class="graphic"><svg viewBox="0 0 300 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three by three magic square with some numbers filled"><g fill="#fff" stroke="#2454d6" stroke-width="3"><rect x="60" y="30" width="55" height="55"></rect><rect x="115" y="30" width="55" height="55"></rect><rect x="170" y="30" width="55" height="55"></rect><rect x="60" y="85" width="55" height="55"></rect><rect x="115" y="85" width="55" height="55"></rect><rect x="170" y="85" width="55" height="55"></rect><rect x="60" y="140" width="55" height="55"></rect><rect x="115" y="140" width="55" height="55"></rect><rect x="170" y="140" width="55" height="55"></rect></g><g font-family="Arial" font-size="24" text-anchor="middle" dominant-baseline="middle" fill="#111"><text x="87.5" y="57.5">8</text><text x="142.5" y="57.5">1</text><text x="197.5" y="57.5">6</text><text x="87.5" y="112.5">3</text><text x="142.5" y="112.5">?</text><text x="197.5" y="112.5">7</text><text x="87.5" y="167.5">4</text><text x="142.5" y="167.5">9</text><text x="197.5" y="167.5">2</text></g></svg></div>
+          <div class="answerRow">
+            <input id="ans-26" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 27">
+            <button type="button" class="secondary" onclick="checkOne(26)">Check</button>
+          </div>
+          <div class="small" id="feedback-26"></div>
+        </article><article class="qcard unanswered" id="card-27">
+          <div class="qtop">
+            <div class="qnum">Question 28</div>
+            <div class="status" id="status-27">Unanswered</div>
+          </div>
+          <p class="question">How many two-digit numbers have digits that add to 10?</p>
+          
+          <div class="answerRow">
+            <input id="ans-27" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 28">
+            <button type="button" class="secondary" onclick="checkOne(27)">Check</button>
+          </div>
+          <div class="small" id="feedback-27"></div>
+        </article><article class="qcard unanswered" id="card-28">
+          <div class="qtop">
+            <div class="qnum">Question 29</div>
+            <div class="status" id="status-28">Unanswered</div>
+          </div>
+          <p class="question">Place one operation sign between 8 and 4, and one operation sign between 4 and 2, using only +, -, ×, or ÷, to make 10. What expression works?</p>
+          
+          <div class="answerRow">
+            <input id="ans-28" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 29">
+            <button type="button" class="secondary" onclick="checkOne(28)">Check</button>
+          </div>
+          <div class="small" id="feedback-28"></div>
+        </article><article class="qcard unanswered" id="card-29">
+          <div class="qtop">
+            <div class="qnum">Question 30</div>
+            <div class="status" id="status-29">Unanswered</div>
+          </div>
+          <p class="question">A mystery number is between 40 and 70. It is divisible by 6 and by 4, but not by 5. What is the mystery number?</p>
+          
+          <div class="answerRow">
+            <input id="ans-29" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question 30">
+            <button type="button" class="secondary" onclick="checkOne(29)">Check</button>
+          </div>
+          <div class="small" id="feedback-29"></div>
+        </article></main>
+
+    <section id="report" class="report" aria-live="polite"></section>
+    <footer>Type answers in the boxes, then use Check or End Exam to grade.</footer>
+  </div>
+
+  <script>
+    const questions = [{"section": "Patterns and Sequences", "q": "Find the next two numbers: 4, 9, 19, 34, 54, ___, ___.", "answer": "79, 109", "accepted": ["79, 109", "79 109"], "explanation": "The differences are +5, +10, +15, +20, so the next differences are +25 and +30."}, {"section": "Patterns and Sequences", "q": "Fill in the missing terms: 2, 6, 12, 20, 30, ___, ___.", "answer": "42, 56", "accepted": ["42, 56", "42 56"], "explanation": "The pattern adds consecutive even numbers: +4, +6, +8, +10, then +12 and +14."}, {"section": "Patterns and Sequences", "q": "A dot pattern is shown. Figure 1 has 3 dots, Figure 2 has 5 dots, and Figure 3 has 10 dots. The rule continues by adding the next row with one more dot each time. How many dots are in Figure 5?", "graphic": "<svg viewBox=\"0 0 360 260\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Dot pattern figures 1 through 4\"><g fill=\"#2454d6\"><circle cx=\"40\" cy=\"80\" r=\"6\"/><circle cx=\"25\" cy=\"110\" r=\"6\"/><circle cx=\"55\" cy=\"110\" r=\"6\"/><circle cx=\"115\" cy=\"70\" r=\"6\"/><circle cx=\"145\" cy=\"70\" r=\"6\"/><circle cx=\"100\" cy=\"100\" r=\"6\"/><circle cx=\"130\" cy=\"100\" r=\"6\"/><circle cx=\"160\" cy=\"100\" r=\"6\"/><circle cx=\"220\" cy=\"50\" r=\"6\"/><circle cx=\"205\" cy=\"80\" r=\"6\"/><circle cx=\"235\" cy=\"80\" r=\"6\"/><circle cx=\"190\" cy=\"110\" r=\"6\"/><circle cx=\"220\" cy=\"110\" r=\"6\"/><circle cx=\"250\" cy=\"110\" r=\"6\"/><circle cx=\"175\" cy=\"140\" r=\"6\"/><circle cx=\"205\" cy=\"140\" r=\"6\"/><circle cx=\"235\" cy=\"140\" r=\"6\"/><circle cx=\"265\" cy=\"140\" r=\"6\"/></g><g font-family=\"Arial\" font-size=\"14\" fill=\"#334155\"><text x=\"20\" y=\"180\">Fig. 1</text><text x=\"110\" y=\"180\">Fig. 2</text><text x=\"205\" y=\"180\">Fig. 3</text></g></svg>", "answer": "21", "accepted": ["21"], "explanation": "The figures add rows: 3, 6, 10, 15, 21. Figure 5 has 21 dots."}, {"section": "Patterns and Sequences", "q": "The first day of a pattern is Monday. Every 5th day is a prize day. What day of the week is the 35th prize day?", "graphic": "<svg viewBox=\"0 0 420 250\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Calendar row with Monday through Sunday boxes\"><g font-family=\"Arial\" font-size=\"15\" text-anchor=\"middle\"><rect x=\"20\" y=\"70\" width=\"52\" height=\"52\" fill=\"#f8fbff\" stroke=\"#94a3b8\" stroke-width=\"2\"/><text x=\"46\" y=\"100\">Mon</text><rect x=\"75\" y=\"70\" width=\"52\" height=\"52\" fill=\"#f8fbff\" stroke=\"#94a3b8\" stroke-width=\"2\"/><text x=\"101\" y=\"100\">Tue</text><rect x=\"130\" y=\"70\" width=\"52\" height=\"52\" fill=\"#f8fbff\" stroke=\"#94a3b8\" stroke-width=\"2\"/><text x=\"156\" y=\"100\">Wed</text><rect x=\"185\" y=\"70\" width=\"52\" height=\"52\" fill=\"#f8fbff\" stroke=\"#94a3b8\" stroke-width=\"2\"/><text x=\"211\" y=\"100\">Thu</text><rect x=\"240\" y=\"70\" width=\"52\" height=\"52\" fill=\"#f8fbff\" stroke=\"#94a3b8\" stroke-width=\"2\"/><text x=\"266\" y=\"100\">Fri</text><rect x=\"295\" y=\"70\" width=\"52\" height=\"52\" fill=\"#f8fbff\" stroke=\"#94a3b8\" stroke-width=\"2\"/><text x=\"321\" y=\"100\">Sat</text><rect x=\"350\" y=\"70\" width=\"52\" height=\"52\" fill=\"#f8fbff\" stroke=\"#94a3b8\" stroke-width=\"2\"/><text x=\"376\" y=\"100\">Sun</text><text x=\"210\" y=\"35\" font-size=\"18\" font-weight=\"700\" fill=\"#334155\">One Week Pattern</text></g></svg>", "answer": "Sunday", "accepted": ["Sunday", "Sun"], "explanation": "The 35th prize day is day 35 × 5 = 175. Since 175 is a multiple of 7, it falls on Sunday when day 1 is Monday."}, {"section": "Patterns and Sequences", "q": "A pattern repeats: triangle, circle, square, hexagon, star, triangle, circle, square, hexagon, star, ... What is the 64th shape?", "answer": "hexagon", "accepted": ["hexagon"], "explanation": "The cycle length is 5. 64 leaves remainder 4 when divided by 5, so the 64th shape is the 4th item: hexagon."}, {"section": "Logic and Reasoning", "q": "Four boxes are labeled A, B, C, and D. B is heavier than A. C is lighter than A. D is heavier than B. Which box is the heaviest?", "answer": "D", "accepted": ["D", "box D"], "explanation": "D is heavier than B, B is heavier than A, and A is heavier than C. So D is the heaviest."}, {"section": "Logic and Reasoning", "q": "A rule changes 6 into 20, 8 into 26, and 10 into 32. What does the rule change 15 into?", "answer": "47", "accepted": ["47"], "explanation": "The rule is multiply by 3, then add 2. So 15 × 3 + 2 = 47."}, {"section": "Logic and Reasoning", "q": "Use the Venn diagram. Which numbers are in both circles?", "graphic": "<svg viewBox=\"0 0 460 260\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Two overlapping circles labeled Multiples of 2 and Multiples of 3\"><circle cx=\"190\" cy=\"130\" r=\"95\" fill=\"#dbeafe\" fill-opacity=\".8\" stroke=\"#2454d6\" stroke-width=\"3\"/><circle cx=\"270\" cy=\"130\" r=\"95\" fill=\"#dcfce7\" fill-opacity=\".8\" stroke=\"#16a34a\" stroke-width=\"3\"/><g font-family=\"Arial\" font-size=\"16\" fill=\"#111\" text-anchor=\"middle\"><text x=\"140\" y=\"45\">Multiples of 2</text><text x=\"320\" y=\"45\">Multiples of 3</text><text x=\"145\" y=\"130\">8</text><text x=\"155\" y=\"160\">10</text><text x=\"230\" y=\"120\">6</text><text x=\"230\" y=\"155\">12</text><text x=\"305\" y=\"130\">9</text><text x=\"315\" y=\"160\">15</text></g></svg>", "answer": "6, 12", "accepted": ["6, 12", "6 12", "12, 6", "12 6"], "explanation": "Numbers in the overlap are multiples of both 2 and 3: 6 and 12."}, {"section": "Logic and Reasoning", "q": "A lock code has three digits. The first digit is 2 more than the second. The second digit is 3 less than the third. The third digit is 7. What is the code?", "answer": "647", "accepted": ["647"], "explanation": "The third digit is 7, the second is 4, and the first is 6."}, {"section": "Logic and Reasoning", "q": "If LION = 50 using letter positions in the alphabet, what is BEAR?", "answer": "26", "accepted": ["26"], "explanation": "B = 2, E = 5, A = 1, R = 18. The total is 26."}, {"section": "Problem-Solving", "q": "A school has 184 blue folders, 127 red folders, and 96 green folders. It gives 158 folders to students. How many folders are left?", "answer": "249", "accepted": ["249"], "explanation": "184 + 127 + 96 = 407. Then 407 - 158 = 249."}, {"section": "Problem-Solving", "q": "A teacher has 118 stickers. She puts 9 stickers on each certificate. How many complete certificates can she make, and how many stickers are left?", "answer": "13 complete certificates, 1 left", "accepted": ["13 complete certificates, 1 left", "13 certificates, 1 left", "13, 1", "13 1"], "explanation": "118 ÷ 9 = 13 remainder 1."}, {"section": "Problem-Solving", "q": "A train leaves at 10:38 a.m. and arrives 3 hours 47 minutes later. What time does it arrive?", "answer": "2:25", "accepted": ["2:25", "2:25 p.m.", "2:25 pm"], "explanation": "10:38 + 3 hours = 1:38, and 47 more minutes makes 2:25."}, {"section": "Problem-Solving", "q": "A farm has chickens and goats. There are 11 animals and 34 legs. How many goats are there?", "answer": "6", "accepted": ["6", "6 goats"], "explanation": "If all 11 were chickens, there would be 22 legs. The extra 12 legs come from goats replacing chickens, adding 2 extra legs each. So there are 6 goats."}, {"section": "Problem-Solving", "q": "A necklace pattern uses 3 blue beads, then 2 gold beads, then repeats. If the necklace has 43 beads, how many gold beads are used?", "answer": "16", "accepted": ["16", "16 gold beads"], "explanation": "Each group of 5 beads has 2 gold beads. 43 beads make 8 full groups plus 3 extra blue beads, so there are 8 × 2 = 16 gold beads."}, {"section": "Quantitative Thinking", "q": "The fraction bar below has equal parts. What fraction is shaded? Write it in simplest form.", "graphic": "<svg viewBox=\"0 0 520 150\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Fraction bar split into eight equal parts with five shaded\"><g stroke=\"#1e3a8a\" stroke-width=\"3\"><rect x=\"40\" y=\"55\" width=\"55\" height=\"50\" fill=\"#bfdbfe\"/><rect x=\"95\" y=\"55\" width=\"55\" height=\"50\" fill=\"#bfdbfe\"/><rect x=\"150\" y=\"55\" width=\"55\" height=\"50\" fill=\"#bfdbfe\"/><rect x=\"205\" y=\"55\" width=\"55\" height=\"50\" fill=\"#bfdbfe\"/><rect x=\"260\" y=\"55\" width=\"55\" height=\"50\" fill=\"#bfdbfe\"/><rect x=\"315\" y=\"55\" width=\"55\" height=\"50\" fill=\"#fff\"/><rect x=\"370\" y=\"55\" width=\"55\" height=\"50\" fill=\"#fff\"/><rect x=\"425\" y=\"55\" width=\"55\" height=\"50\" fill=\"#fff\"/></g><text x=\"260\" y=\"130\" text-anchor=\"middle\" font-family=\"Arial\" font-size=\"16\" fill=\"#334155\">8 equal parts</text></svg>", "answer": "5/8", "accepted": ["5/8"], "explanation": "Five of the eight equal parts are shaded, so the fraction is 5/8."}, {"section": "Quantitative Thinking", "q": "A recipe uses 2 cups of oats for every 3 cups of flour. If 12 cups of flour are used, how many cups of oats are needed?", "answer": "8", "accepted": ["8", "8 cups"], "explanation": "12 cups of flour is 4 groups of 3, so oats are 4 × 2 = 8 cups."}, {"section": "Quantitative Thinking", "q": "A square has an area of 49 square units. What is its perimeter?", "answer": "28", "accepted": ["28", "28 units"], "explanation": "A square with area 49 has side length 7. Its perimeter is 4 × 7 = 28."}, {"section": "Quantitative Thinking", "q": "Which is greater: 3/4 of 40 or 2/3 of 45?", "answer": "they are equal", "accepted": ["they are equal", "equal", "same", "both 30", "30"], "explanation": "3/4 of 40 is 30, and 2/3 of 45 is also 30."}, {"section": "Quantitative Thinking", "q": "A number is rounded to the nearest ten and becomes 370. What is the greatest possible whole number it could have been?", "answer": "374", "accepted": ["374"], "explanation": "Whole numbers from 365 through 374 round to 370. The greatest is 374."}, {"section": "Spatial or Visual Reasoning", "q": "Can this net fold into a cube?", "graphic": "<svg viewBox=\"0 0 360 260\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Cube net made from six squares\"><g fill=\"#fef3c7\" stroke=\"#b45309\" stroke-width=\"3\"><rect x=\"120\" y=\"20\" width=\"50\" height=\"50\"/><rect x=\"120\" y=\"70\" width=\"50\" height=\"50\"/><rect x=\"70\" y=\"120\" width=\"50\" height=\"50\"/><rect x=\"120\" y=\"120\" width=\"50\" height=\"50\"/><rect x=\"170\" y=\"120\" width=\"50\" height=\"50\"/><rect x=\"120\" y=\"170\" width=\"50\" height=\"50\"/></g></svg>", "answer": "yes", "accepted": ["yes", "y"], "explanation": "This is a valid cube net with six connected squares arranged so the faces can fold without overlapping."}, {"section": "Spatial or Visual Reasoning", "q": "Reflect the blue squares across the red mirror line. How many blue squares will be in the complete symmetric picture, including the original squares?", "graphic": "<svg viewBox=\"0 0 400 230\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Grid with vertical mirror line and two shaded squares on left\"><g stroke=\"#cbd5e1\" stroke-width=\"2\"><line x1=\"60\" y1=\"30\" x2=\"60\" y2=\"190\"/><line x1=\"100\" y1=\"30\" x2=\"100\" y2=\"190\"/><line x1=\"140\" y1=\"30\" x2=\"140\" y2=\"190\"/><line x1=\"180\" y1=\"30\" x2=\"180\" y2=\"190\"/><line x1=\"220\" y1=\"30\" x2=\"220\" y2=\"190\"/><line x1=\"260\" y1=\"30\" x2=\"260\" y2=\"190\"/><line x1=\"300\" y1=\"30\" x2=\"300\" y2=\"190\"/><line x1=\"60\" y1=\"30\" x2=\"300\" y2=\"30\"/><line x1=\"60\" y1=\"70\" x2=\"300\" y2=\"70\"/><line x1=\"60\" y1=\"110\" x2=\"300\" y2=\"110\"/><line x1=\"60\" y1=\"150\" x2=\"300\" y2=\"150\"/><line x1=\"60\" y1=\"190\" x2=\"300\" y2=\"190\"/></g><line x1=\"180\" y1=\"20\" x2=\"180\" y2=\"205\" stroke=\"#ef4444\" stroke-width=\"4\" stroke-dasharray=\"8 6\"/><rect x=\"100\" y=\"70\" width=\"40\" height=\"40\" fill=\"#2454d6\"/><rect x=\"60\" y=\"150\" width=\"40\" height=\"40\" fill=\"#2454d6\"/><text x=\"180\" y=\"220\" text-anchor=\"middle\" font-family=\"Arial\" font-size=\"15\">mirror line</text></svg>", "answer": "4", "accepted": ["4", "4 squares"], "explanation": "There are 2 original squares, and each has 1 reflected partner, for 4 squares total."}, {"section": "Spatial or Visual Reasoning", "q": "The path follows grid lines from S to F. If each grid segment is 1 unit, how long is the path?", "graphic": "<svg viewBox=\"0 0 420 260\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Path along grid from start to finish\"><g stroke=\"#cbd5e1\" stroke-width=\"1\"><line x1=\"40\" y1=\"40\" x2=\"355\" y2=\"40\"/><line x1=\"40\" y1=\"75\" x2=\"355\" y2=\"75\"/><line x1=\"40\" y1=\"110\" x2=\"355\" y2=\"110\"/><line x1=\"40\" y1=\"145\" x2=\"355\" y2=\"145\"/><line x1=\"40\" y1=\"180\" x2=\"355\" y2=\"180\"/><line x1=\"40\" y1=\"215\" x2=\"355\" y2=\"215\"/><line x1=\"40\" y1=\"40\" x2=\"40\" y2=\"215\"/><line x1=\"75\" y1=\"40\" x2=\"75\" y2=\"215\"/><line x1=\"110\" y1=\"40\" x2=\"110\" y2=\"215\"/><line x1=\"145\" y1=\"40\" x2=\"145\" y2=\"215\"/><line x1=\"180\" y1=\"40\" x2=\"180\" y2=\"215\"/><line x1=\"215\" y1=\"40\" x2=\"215\" y2=\"215\"/><line x1=\"250\" y1=\"40\" x2=\"250\" y2=\"215\"/><line x1=\"285\" y1=\"40\" x2=\"285\" y2=\"215\"/><line x1=\"320\" y1=\"40\" x2=\"320\" y2=\"215\"/><line x1=\"355\" y1=\"40\" x2=\"355\" y2=\"215\"/></g><polyline points=\"40,180 110,180 110,110 215,110 215,75 320,75\" fill=\"none\" stroke=\"#2454d6\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><text x=\"28\" y=\"185\" font-family=\"Arial\" font-size=\"16\">S</text><text x=\"330\" y=\"80\" font-family=\"Arial\" font-size=\"16\">F</text></svg>", "answer": "11", "accepted": ["11", "11 units"], "explanation": "Count the grid steps: right 2, up 2, right 3, up 1, right 3. The total is 11 units."}, {"section": "Spatial or Visual Reasoning", "q": "The picture shows two layers of a cube stack. How many cubes are there in all?", "graphic": "<svg viewBox=\"0 0 420 240\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Layered cube stack with visible front and hidden back\"><g fill=\"#e0f2fe\" stroke=\"#0369a1\" stroke-width=\"2\"><rect x=\"80\" y=\"150\" width=\"45\" height=\"45\"/><rect x=\"125\" y=\"150\" width=\"45\" height=\"45\"/><rect x=\"170\" y=\"150\" width=\"45\" height=\"45\"/><rect x=\"80\" y=\"105\" width=\"45\" height=\"45\"/><rect x=\"125\" y=\"105\" width=\"45\" height=\"45\"/><rect x=\"105\" y=\"75\" width=\"45\" height=\"45\"/><rect x=\"240\" y=\"150\" width=\"45\" height=\"45\"/><rect x=\"285\" y=\"150\" width=\"45\" height=\"45\"/><rect x=\"240\" y=\"105\" width=\"45\" height=\"45\"/></g><text x=\"140\" y=\"220\" text-anchor=\"middle\" font-family=\"Arial\" font-size=\"15\">Front stack</text><text x=\"285\" y=\"220\" text-anchor=\"middle\" font-family=\"Arial\" font-size=\"15\">Back stack</text></svg>", "answer": "9", "accepted": ["9"], "explanation": "The front stack has 6 cubes and the back stack has 3 cubes, for 9 total."}, {"section": "Spatial or Visual Reasoning", "q": "A rectangle has corners at (2,1), (8,1), (8,5), and (2,5). How many unit squares are inside it?", "answer": "24", "accepted": ["24"], "explanation": "The rectangle is 6 units long and 4 units wide, so the area is 6 × 4 = 24."}, {"section": "Creative Mathematical Thinking", "q": "Use the digits 1, 2, 3, and 4 exactly once to make two 2-digit numbers with the greatest possible sum. What is the greatest sum?", "answer": "73", "accepted": ["73"], "explanation": "Put the largest digits in the tens places: 4 and 3. Then 41 + 32 = 73, or 42 + 31 = 73."}, {"section": "Creative Mathematical Thinking", "q": "Fill the missing center of the magic square. Every row, column, and diagonal totals 15.", "graphic": "<svg viewBox=\"0 0 300 240\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Three by three magic square with some numbers filled\"><g fill=\"#fff\" stroke=\"#2454d6\" stroke-width=\"3\"><rect x=\"60\" y=\"30\" width=\"55\" height=\"55\"/><rect x=\"115\" y=\"30\" width=\"55\" height=\"55\"/><rect x=\"170\" y=\"30\" width=\"55\" height=\"55\"/><rect x=\"60\" y=\"85\" width=\"55\" height=\"55\"/><rect x=\"115\" y=\"85\" width=\"55\" height=\"55\"/><rect x=\"170\" y=\"85\" width=\"55\" height=\"55\"/><rect x=\"60\" y=\"140\" width=\"55\" height=\"55\"/><rect x=\"115\" y=\"140\" width=\"55\" height=\"55\"/><rect x=\"170\" y=\"140\" width=\"55\" height=\"55\"/></g><g font-family=\"Arial\" font-size=\"24\" text-anchor=\"middle\" dominant-baseline=\"middle\" fill=\"#111\"><text x=\"87.5\" y=\"57.5\">8</text><text x=\"142.5\" y=\"57.5\">1</text><text x=\"197.5\" y=\"57.5\">6</text><text x=\"87.5\" y=\"112.5\">3</text><text x=\"142.5\" y=\"112.5\">?</text><text x=\"197.5\" y=\"112.5\">7</text><text x=\"87.5\" y=\"167.5\">4</text><text x=\"142.5\" y=\"167.5\">9</text><text x=\"197.5\" y=\"167.5\">2</text></g></svg>", "answer": "5", "accepted": ["5"], "explanation": "In the middle row, 3 + ? + 7 = 15, so the missing number is 5."}, {"section": "Creative Mathematical Thinking", "q": "How many two-digit numbers have digits that add to 10?", "answer": "9", "accepted": ["9"], "explanation": "The numbers are 19, 28, 37, 46, 55, 64, 73, 82, and 91."}, {"section": "Creative Mathematical Thinking", "q": "Place one operation sign between 8 and 4, and one operation sign between 4 and 2, using only +, -, ×, or ÷, to make 10. What expression works?", "answer": "8 + 4 - 2", "accepted": ["8 + 4 - 2", "8+4-2"], "explanation": "8 + 4 - 2 = 10."}, {"section": "Creative Mathematical Thinking", "q": "A mystery number is between 40 and 70. It is divisible by 6 and by 4, but not by 5. What is the mystery number?", "answer": "48", "accepted": ["48"], "explanation": "A number divisible by both 6 and 4 must be divisible by 12. Between 40 and 70, the multiples are 48 and 60. Since it is not divisible by 5, the number is 48."}];
+    const stateKey = 'nms-practice-version-b-visual-state-v1';
+    let examEnded = false;
+    let seconds = 0;
+    let timerId = null;
+
+    function norm(value) {
+      return String(value || '')
+        .toLowerCase()
+        .replace(/[×*]/g, 'x')
+        .replace(/[−–—]/g, '-')
+        .replace(/\$/g, '')
+        .replace(/because.*$/g, '')
+        .replace(/(full|cartons?|boxes?|box|eggs?|cans?|notebooks?|pens?|students?|tables?|change|money|dollars?|cents?|dimes?|nickels?|coins?|ways?|left|over|units?|inches?|feet|cats?|birds?|spiders?|cherry|trees?|times|friend|friends|first|second|third|fourth|blue|red|green|yellow|purple|and|the|gets|each|answer|is|a\.?m\.?|am)/g, ' ')
+        .replace(/\s*x\s*/g, 'x')
+        .replace(/[^a-z0-9x-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function isCorrect(index) {
+      const input = document.getElementById('ans-' + index);
+      const user = norm(input ? input.value : '');
+      if (!user) return false;
+      return questions[index].accepted.some(a => norm(a) === user);
+    }
+
+    function getStatus(index) {
+      const value = document.getElementById('ans-' + index)?.value.trim() || '';
+      if (!value) return 'unanswered';
+      return isCorrect(index) ? 'correct' : 'wrong';
+    }
+
+    function renderExam() {
+      const exam = document.getElementById('exam');
+      exam.innerHTML = '';
+      let current = '';
+      questions.forEach((item, i) => {
+        if (item.section !== current) {
+          current = item.section;
+          const h = document.createElement('h2');
+          h.className = 'section-title';
+          h.textContent = current;
+          exam.appendChild(h);
+        }
+        const card = document.createElement('article');
+        card.className = 'qcard unanswered';
+        card.id = 'card-' + i;
+        card.innerHTML = `
+          <div class="qtop">
+            <div class="qnum">Question ${i + 1}</div>
+            <div class="status" id="status-${i}">Unanswered</div>
+          </div>
+          <p class="question">${escapeHTML(item.q)}</p>
+          ${item.graphic ? `<div class="graphic">${item.graphic}</div>` : ``}
+          <div class="answerRow">
+            <input id="ans-${i}" type="text" autocomplete="off" placeholder="Type your answer" aria-label="Answer for question ${i + 1}" />
+            <button type="button" class="secondary" onclick="checkOne(${i})">Check</button>
+          </div>
+          <div class="small" id="feedback-${i}"></div>
+        `;
+        exam.appendChild(card);
+      });
+      restoreState();
+      updateAll(false);
+    }
+
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    }
+
+    function checkOne(index) {
+      updateCard(index, true);
+      updateSummary();
+      saveState();
+    }
+
+    function updateCard(index, reveal) {
+      const status = getStatus(index);
+      const card = document.getElementById('card-' + index);
+      const label = document.getElementById('status-' + index);
+      const feedback = document.getElementById('feedback-' + index);
+      card.className = 'qcard ' + status;
+      label.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+      if (reveal || examEnded) {
+        feedback.textContent = status === 'correct'
+          ? 'Correct.'
+          : status === 'wrong'
+            ? 'Correct answer: ' + questions[index].answer
+            : 'Unanswered. Correct answer: ' + questions[index].answer;
+      } else {
+        feedback.textContent = '';
+      }
+    }
+
+    function updateAll(reveal) {
+      questions.forEach((_, i) => updateCard(i, reveal));
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const answered = questions.filter((_, i) => (document.getElementById('ans-' + i)?.value.trim() || '')).length;
+      const correct = questions.filter((_, i) => isCorrect(i)).length;
+      document.getElementById('score').textContent = correct + '/' + questions.length;
+      document.getElementById('progress').style.width = Math.round(answered / questions.length * 100) + '%';
+      return { answered, correct };
+    }
+
+    function toggleQuestions() {
+      const exam = document.getElementById('exam');
+      exam.style.display = exam.style.display === 'none' ? 'grid' : 'none';
+    }
+
+    function showReport() {
+      updateAll(true);
+      const report = document.getElementById('report');
+      const summary = updateSummary();
+      let rows = questions.map((item, i) => {
+        const user = document.getElementById('ans-' + i)?.value.trim() || '';
+        const status = getStatus(i);
+        const label = status.charAt(0).toUpperCase() + status.slice(1);
+        return `<tr class="${status}Row">
+          <td>${i + 1}</td>
+          <td>${label}</td>
+          <td>${escapeHTML(user || '-')}</td>
+          <td>${escapeHTML(item.answer)}</td>
+          <td>${escapeHTML(item.explanation)}</td>
+        </tr>`;
+      }).join('');
+      report.innerHTML = `
+        <h2>Analysis Report</h2>
+        <p><strong>Score:</strong> ${summary.correct}/${questions.length} · <strong>Answered:</strong> ${summary.answered}/${questions.length} · <strong>Time:</strong> ${formatTime(seconds)}</p>
+        <table>
+          <thead><tr><th>#</th><th>Status</th><th>Your answer</th><th>Correct answer</th><th>Analysis</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      report.classList.toggle('show');
+      report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function restartExam() {
+      if (!confirm('Restart the exam and clear all answers?')) return;
+      localStorage.removeItem(stateKey);
+      examEnded = false;
+      seconds = 0;
+      questions.forEach((_, i) => {
+        const input = document.getElementById('ans-' + i);
+        if (input) input.value = '';
+      });
+      document.getElementById('report').classList.remove('show');
+      document.getElementById('report').innerHTML = '';
+      updateAll(false);
+      startTimer(true);
+    }
+
+    function endExam() {
+      examEnded = true;
+      clearInterval(timerId);
+      updateAll(true);
+      saveState();
+      const report = document.getElementById('report');
+      if (!report.classList.contains('show')) showReport();
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      if (m === 0) return s + ' sec';
+      return m + ' min ' + s + ' sec';
+    }
+
+    function startTimer(reset) {
+      if (timerId) clearInterval(timerId);
+      if (reset) document.getElementById('timer').textContent = '0 sec';
+      timerId = setInterval(() => {
+        if (!examEnded) {
+          seconds += 1;
+          document.getElementById('timer').textContent = formatTime(seconds);
+          saveState();
+        }
+      }, 1000);
+    }
+
+    function saveState() {
+      const answers = questions.map((_, i) => document.getElementById('ans-' + i)?.value || '');
+      localStorage.setItem(stateKey, JSON.stringify({ answers, seconds, examEnded }));
+    }
+
+    function restoreState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(stateKey) || '{}');
+        if (Array.isArray(saved.answers)) {
+          saved.answers.forEach((value, i) => {
+            const input = document.getElementById('ans-' + i);
+            if (input) input.value = value;
+          });
+        }
+        seconds = Number(saved.seconds || 0);
+        examEnded = Boolean(saved.examEnded);
+        document.getElementById('timer').textContent = formatTime(seconds);
+      } catch (e) {}
+      questions.forEach((_, i) => {
+        const input = document.getElementById('ans-' + i);
+        if (input) input.addEventListener('input', () => { updateCard(i, false); updateSummary(); saveState(); });
+      });
+    }
+
+    renderExam();
+    startTimer(false);
+  </script>
+
+
+</body></html>
